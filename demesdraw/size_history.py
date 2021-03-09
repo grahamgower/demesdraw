@@ -1,12 +1,12 @@
-#!/usr/bin/env python
-
 import demes
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
+from demesdraw import utils
 
-def size_of_deme_at_time(deme: demes.Deme, time):
+
+def size_of_deme_at_time(deme: demes.Deme, time: float) -> float:
     """
     Return the population size of the deme at the given time.
     """
@@ -16,10 +16,11 @@ def size_of_deme_at_time(deme: demes.Deme, time):
     else:
         raise ValueError(f"deme {deme.id} doesn't exist at time {time}")
 
-    if np.isclose(time, epoch.end_time):
+    if np.isclose(time, epoch.end_time) or epoch.start_size == epoch.end_size:
         N = epoch.end_size
     else:
-        dt = time - epoch.start_time
+        assert epoch.size_function == "exponential"
+        dt = (time - epoch.start_time) / epoch.time_span
         r = np.log(epoch.end_size / epoch.start_size)
         N = epoch.start_size * np.exp(r * dt)
     return N
@@ -28,15 +29,15 @@ def size_of_deme_at_time(deme: demes.Deme, time):
 def size_history(
     graph: demes.Graph,
     ax: matplotlib.axes.Axes = None,
-    inf_ratio=0.1,
-    inf_label=False,
-    invert_x=False,
-    num_exp_points=100,
-    annotate_epochs=False,
-    cmap=None,
-    log_x=False,
-    log_y=False,
-    title=None,
+    inf_ratio: float = 0.1,
+    inf_label: bool = False,
+    invert_x: bool = False,
+    num_exp_points: int = 100,
+    annotate_epochs: bool = False,
+    cmap: matplotlib.colors.Colormap = None,
+    log_x: bool = False,
+    log_y: bool = False,
+    title: str = None,
 ):
     """
     Plot population size as a function of time for each deme in the graph.
@@ -84,18 +85,7 @@ def size_history(
                 "Graph has more than 20 demes, so cmap must be specified. Good luck!"
             )
 
-    oldest_end_time = max(deme.epochs[0].end_time for deme in graph.demes)
-    if oldest_end_time == 0:
-        # All demes are root demes and have a constant size.
-        # About 100 generations is a nice time scale to draw, and we use 113
-        # specifically so that the infinity line extends slightly beyond the
-        # last xtick that matplotlib autogenerates.
-        inf_start_time = 113
-    else:
-        if log_x:
-            inf_start_time = np.exp(np.log(oldest_end_time) / (1 - inf_ratio))
-        else:
-            inf_start_time = oldest_end_time / (1 - inf_ratio)
+    inf_start_time = utils.inf_start_time(graph, inf_ratio, log_x)
 
     linestyles = ["solid"]  # , "dashed", "dashdot"]
     linewidths = [2, 4, 8, 1]
@@ -135,8 +125,8 @@ def size_history(
                 end_time = 1
 
             if epoch.size_function == "constant":
-                x = [start_time, end_time]
-                y = [epoch.start_size, epoch.end_size]
+                x = np.array([start_time, end_time])
+                y = np.array([epoch.start_size, epoch.end_size])
             elif epoch.size_function == "exponential":
                 x = np.linspace(start_time, end_time, num=num_exp_points)
                 dt = np.linspace(0, 1, num=num_exp_points)
@@ -219,7 +209,7 @@ def size_history(
                 )
 
     if len(graph.demes) > 1:
-        leg = ax.legend(handles=legend_handles)
+        leg = ax.legend(handles=legend_handles, ncol=len(graph.demes) // 2)
         leg.set_zorder(z_top)
 
     if title is not None:
@@ -248,6 +238,7 @@ def size_history(
     if log_y:
         ax.set_yscale("log", base=10)
 
+    ax.figure.tight_layout()
     return ax
 
 
