@@ -1,0 +1,87 @@
+description: |
+  A ten population model of out-of-Africa, including two pulses of
+  Denisovan admixture into Papuans, and several pulses of Neandertal
+  admixture into non-Africans.
+  Most parameters are from Jacobs et al. (2019), Table S5 and Figure S5.
+  This model is an extension of one from Malaspinas et al. (2016), thus
+  some parameters are inherited from there.
+time_units: generations
+doi:
+  - https://doi.org/10.1016/j.cell.2019.02.035
+  - https://doi.org/10.1038/nature18299
+
+demes:
+  - id: YRI
+    epochs:
+    - {end_time: 20225.0, start_size: 32671.0}
+    - {end_time: 2218.0, start_size: 41563.0}
+    - {end_time: 0, start_size: 48433.0}
+  - id: DenA
+    ancestors: [YRI]
+    start_time: 20225.0
+    epochs:
+    - {end_time: 15090.0, start_size: 13249.0}
+    - {end_time: 12500.0, start_size: 100.0}
+    - {end_time: 9750.0, start_size: 100.0}
+    - {end_time: 0, start_size: 5083.0}
+  - id: NeaA
+    ancestors: [DenA]
+    start_time: 15090.0
+    epochs:
+    - {end_time: 3375.0, start_size: 13249.0}
+    - {end_time: 0, start_size: 826.0}
+  - id: Den2
+    ancestors: [DenA]
+    start_time: 12500.0
+    epochs:
+    - start_size: 13249.0
+  - id: Den1
+    ancestors: [DenA]
+    start_time: 9750.0
+    epochs:
+    - start_size: 13249.0
+  - id: Nea1
+    ancestors: [NeaA]
+    start_time: 3375.0
+    epochs:
+    - start_size: 13249.0
+  - id: Ghost
+    ancestors: [YRI]
+    start_time: 2218.0
+    epochs:
+    - {end_time: 2119.0, start_size: 1394.0}
+    - {end_time: 0, start_size: 8516.0}
+  - id: Papuan
+    ancestors: [Ghost]
+    start_time: 1784.0
+    epochs:
+    - {end_time: 1685.0, start_size: 243.0}
+    - {end_time: 0, start_size: 8834.0}
+  - id: CHB
+    ancestors: [Ghost]
+    start_time: 1758.0
+    epochs:
+    - {end_time: 1659.0, start_size: 2231.0}
+    - {end_time: 1293.0, start_size: 12971.0}
+    - {end_time: 0, start_size: 9025.0}
+  - id: CEU
+    ancestors: [CHB]
+    start_time: 1293.0
+    epochs:
+    - start_size: 6962.0
+
+migrations:
+- {demes: [YRI, Ghost], rate: 0.000179, start_time: 1659.0}
+- {demes: [CHB, Papuan], rate: 0.000572, start_time: 1659.0, end_time: 1293.0}
+- {demes: [CHB, Papuan], rate: 5.72e-05, start_time: 1293.0}
+- {demes: [CHB, Ghost], rate: 0.000442, start_time: 1659.0}
+- {demes: [CEU, CHB], rate: 3.14e-05}
+- {demes: [CEU, Ghost], rate: 0.000442}
+
+pulses:
+- {source: Nea1, dest: Ghost, time: 1853.0, proportion: 0.024}
+- {source: Den2, dest: Papuan, time: 1575.8620689655172, proportion: 0.018}
+- {source: Nea1, dest: CHB, time: 1566.0, proportion: 0.011}
+- {source: Nea1, dest: Papuan, time: 1412.0, proportion: 0.002}
+- {source: Den1, dest: Papuan, time: 1027.5862068965516, proportion: 0.022000000000000002}
+- {source: Nea1, dest: CHB, time: 883.0, proportion: 0.002}

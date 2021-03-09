@@ -1,0 +1,14 @@
+description: A single population model with epochs of exponential growth and decay.
+doi:
+  - https://doi.org/10.1038/ng.3015
+time_units: generations
+demes:
+  - id: generic
+    epochs:
+    - {end_time: 34133.31, start_size: 7156}
+    - {end_time: 8533.33, end_size: 71560}
+    - {end_time: 2133.33, end_size: 7156}
+    - {end_time: 533.33, end_size: 71560}
+    - {end_time: 133.33, end_size: 7156}
+    - {end_time: 33.333, end_size: 71560}
+    - {end_time: 0, end_size: 71560}
