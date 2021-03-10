@@ -142,8 +142,8 @@ def interactions_indexes(graph: demes.Graph, *, unique: bool) -> List[Tuple[int,
     interactions = []
     for migration in graph.migrations:
         if isinstance(migration, demes.SymmetricMigration):
-            for a, b in itertools.permutations(migration.demes, 2):
-                interactions.append((idx[a], idx[b]))
+            for source, dest in itertools.permutations(migration.demes, 2):
+                interactions.append((idx[source], idx[dest]))
         elif isinstance(migration, demes.AsymmetricMigration):
             interactions.append((idx[migration.source], idx[migration.dest]))
     for pulse in graph.pulses:
@@ -191,7 +191,6 @@ def find_positions(
     coexist = coexistence_indexes(graph)
     successors = successors_indexes(graph)
     interactions = interactions_indexes(graph, unique=True)
-    idx = {deme.id: j for j, deme in enumerate(graph.demes)}
 
     def fseparation(x):
         """The separation distance between coexisting demes."""
