@@ -382,18 +382,14 @@ def schematic(
         ancestry_kwargs = dict(linestyle=":", **plot_kwargs)
         for ancestor_id in deme.ancestors:
             anc_size1, anc_size2 = tubes[ancestor_id].sizes_at(deme.start_time)
-
             y = [tube.time[0], tube.time[0]]
-            offset = 0
-            if np.isclose(positions[ancestor_id], positions[deme.id]):
+            if anc_size2 < tube.size1[0]:
+                ax.plot([anc_size2, tube.size1[0]], y, **ancestry_kwargs)
+            elif tube.size2[0] < anc_size1:
+                ax.plot([tube.size2[0], anc_size1], y, **ancestry_kwargs)
+            else:
                 ax.plot([anc_size1, tube.size1[0]], y, **ancestry_kwargs)
                 ax.plot([anc_size2, tube.size2[0]], y, **ancestry_kwargs)
-            elif positions[ancestor_id] < positions[deme.id]:
-                x = [anc_size2 + offset, tube.size1[0] - offset]
-                ax.plot(x, y, **ancestry_kwargs)
-            else:
-                x = [tube.size2[0] + offset, anc_size1 - offset]
-                ax.plot(x, y, **ancestry_kwargs)
 
     def migration_line(source, dest, time, **mig_kwargs):
         """Draw a migration line from source to dest at the given time."""
