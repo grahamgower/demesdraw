@@ -33,6 +33,7 @@ class Tube:
         deme: demes.Deme,
         mid: float,
         inf_start_time: float,
+        log_l: bool = False,
         log_w: bool = False,
     ):
         """
@@ -40,15 +41,21 @@ class Tube:
         :param float mid: The mid point of the deme along the non-time dimension.
         :param float inf_start_time: The value along the time dimension which
             is used instead of infinity (for epochs with infinite start times).
+        :param bool log_l: The length axis uses a log-10 scale.
         :param bool log_w: Use log-10 of the deme size for the tube width.
         """
-        self._coords(deme, mid, inf_start_time, log_w)
+        self.deme = deme
+        self.mid = mid
+        self.log_l = log_l
+        self.log_w = log_w
+        self._coords(deme, mid, inf_start_time, log_l, log_w)
 
     def _coords(
         self,
         deme: demes.Deme,
         mid: float,
         inf_start_time: float,
+        log_l: bool,
         log_w: bool,
         num_exp_points: int = 100,
     ):
@@ -71,8 +78,15 @@ class Tube:
                     N1 = [mid - epoch.start_size / 2] * 2
                     N2 = [mid + epoch.end_size / 2] * 2
             elif epoch.size_function == "exponential":
-                t = np.linspace(start_time, end_time, num=num_exp_points)
-                dt = np.linspace(0, 1, num=num_exp_points)
+                if log_l:
+                    t = np.exp(
+                        np.linspace(
+                            np.log(start_time), np.log(1 + end_time), num=num_exp_points
+                        )
+                    )
+                else:
+                    t = np.linspace(start_time, end_time, num=num_exp_points)
+                dt = (start_time - t) / (start_time - end_time)
                 if log_w:
                     # WARNING: this isn't the log of the deme size,
                     # except at the start_time and end_time.
@@ -99,18 +113,14 @@ class Tube:
 
     def sizes_at(self, time):
         """Return the size coordinates of the tube at the given time."""
-        # Find an index into the coords that gives the deme's sizes at the
-        # requested time. We could interpolate between the nearest points,
-        # but this is good enough in the size_function="constant" and
-        # size_function="exponential" cases.
-        # Note that np.searchsorted() does a binary search through an array
-        # in value-ascending order. Our self.time array is value-descending,
-        # so must first be reversed. The result then gives an index relative
-        # to the end of the self.time array.
-        i = len(self.time) - int(np.searchsorted(self.time[::-1], time))
-        if i == len(self.time):
-            i -= 1
-        return self.size1[i], self.size2[i]
+        N = utils.size_of_deme_at_time(self.deme, time)
+        if self.log_w:
+            N1 = self.mid - np.log(N) / 2
+            N2 = self.mid + np.log(N) / 2
+        else:
+            N1 = self.mid - N / 2
+            N2 = self.mid + N / 2
+        return N1, N2
 
 
 def coexistence_indexes(graph: demes.Graph) -> List[Tuple[int, int]]:
@@ -204,10 +214,10 @@ def find_positions(
             a = x[parent]
             b = np.mean([x[child] for child in children])
             z += (a - b) ** 2
+            # z += sum((a - x[child]) ** 2 for child in children)
         # Minimise the distance between interacting demes.
         # (either migrations or pulses).
-        for j, k in interactions:
-            z += (x[j] - x[k]) ** 2
+        z += sum((x[j] - x[k]) ** 2 for j, k in interactions)
         # Also penalise large positions.
         z += sum(x)
         return z
@@ -245,11 +255,9 @@ def find_positions(
                 ub=np.inf,
             ),
         )
-        if res.success:
-            z = fmin(res.x)
-            if z < fmin_best:
-                x_best = res.x
-                fmin_best = z
+        if res.success and res.fun < fmin_best:
+            x_best = res.x
+            fmin_best = res.fun
 
     return {deme.id: position for deme, position in zip(graph.demes, x_best)}
 
@@ -266,6 +274,8 @@ def schematic(
     num_lines_per_migration: int = 10,
     seed: int = None,
     optimisation_rounds: int = None,
+    # TODO: docstring
+    labels: str = "xticks-mid",
 ) -> matplotlib.axes.Axes:
     """
     Plot a schematic of the demes in the graph and their relationships.
@@ -322,9 +332,22 @@ def schematic(
     :return: The matplotlib axes onto which the figure was drawn.
     :rtype: matplotlib.axes.Axes
     """
+    if labels not in (
+        "xticks",
+        "legend",
+        "mid",
+        "xticks-legend",
+        "xticks-mid",
+        None,
+    ):
+        raise ValueError(f"Unexpected value for labels: '{labels}'")
+
     if ax is None:
         fig_w, fig_h = plt.figaspect(9.0 / 16.0)
         _, ax = plt.subplots(figsize=(fig_w, fig_h))
+
+    if log_y:
+        ax.set_yscale("log", base=10)
 
     if cmap is None:
         if len(graph.demes) <= 10:
@@ -352,7 +375,6 @@ def schematic(
         positions = find_positions(
             graph, size_max * 1.1, rounds=optimisation_rounds, seed=seed2
         )
-    width = (max(positions.values()) - min(positions.values())) / len(graph.demes)
 
     tubes = {}
 
@@ -362,7 +384,7 @@ def schematic(
 
         mid = positions[deme.id]
 
-        tube = Tube(deme, mid, inf_start_time, log_w=log_w)
+        tube = Tube(deme, mid, inf_start_time, log_l=log_y, log_w=log_w)
         tubes[deme.id] = tube
 
         ax.plot(tube.size1, tube.time, **plot_kwargs)
@@ -390,12 +412,15 @@ def schematic(
                 ax.plot([anc_size1, tube.size1[0]], y, **ancestry_kwargs)
                 ax.plot([anc_size2, tube.size2[0]], y, **ancestry_kwargs)
 
+    # Calculate an offset for the space between arrowhead and tube.
+    xlim = ax.get_xlim()
+    offset = 0.01 * (xlim[1] - xlim[0])
+
     def migration_line(source, dest, time, **mig_kwargs):
         """Draw a migration line from source to dest at the given time."""
         source_size1, source_size2 = tubes[source].sizes_at(time)
         dest_size1, dest_size2 = tubes[dest].sizes_at(time)
 
-        offset = 0.15 * width  # the space between arrow head and tube
         if positions[source] < positions[dest]:
             x = [source_size2 + offset, dest_size1 - offset]
             arrow = ">k"
@@ -452,36 +477,66 @@ def schematic(
             pulse.source, pulse.dest, pulse.time, linestyle="--", linewidth=1
         )
 
-    # Add legend.
-    if len(graph.demes) > 1:
+    xticks = []
+    xticklabels = []
+    deme_labels = [deme.id for deme in graph.demes]
+
+    if labels in ("xticks", "xticks-legend", "xticks-mid"):
+        # Put labels for the leaf nodes underneath the figure.
+        leaves = [deme.id for deme in graph.demes if deme.end_time == 0]
+        deme_labels = [deme.id for deme in graph.demes if deme.end_time != 0]
+        xticks = [positions[leaf] for leaf in leaves]
+        xticklabels = leaves
+
+    if len(deme_labels) > 0 and labels in ("legend", "xticks-legend"):
+        # Add legend.
         ax.legend(
             handles=[
                 matplotlib.patches.Patch(
-                    edgecolor=matplotlib.colors.to_rgba(colours[deme.id], 1.0),
-                    facecolor=matplotlib.colors.to_rgba(colours[deme.id], 0.3),
-                    label=deme.id,
+                    edgecolor=matplotlib.colors.to_rgba(colours[deme_id], 1.0),
+                    facecolor=matplotlib.colors.to_rgba(colours[deme_id], 0.3),
+                    label=deme_id,
                 )
-                for deme in graph.demes
+                for deme_id in deme_labels
             ],
             # Use a horizontal layout, rather than vertical.
-            ncol=len(graph.demes) // 2,
+            ncol=len(deme_labels) // 2,
         )
+
+    if labels in ("mid", "xticks-mid"):
+        for deme_id in deme_labels:
+            x = positions[deme_id]
+            if log_y:
+                y = np.exp(
+                    (
+                        np.log(tubes[deme_id].time[0])
+                        + np.log(1 + tubes[deme_id].time[-1])
+                    )
+                    / 2
+                )
+            else:
+                y = (tubes[deme_id].time[0] + tubes[deme_id].time[-1]) / 2
+            ax.text(
+                x,
+                y,
+                deme_id,
+                ha="center",
+                va="center",
+                # Give the text some contrast with its background.
+                bbox=dict(boxstyle="round", fc="white", ec="none", alpha=0.6, pad=0.2),
+            )
 
     if title is not None:
         ax.set_title(title)
 
-    # ax.set_xticks([position[deme.id] for deme in graph.demes])
-    # ax.set_xticklabels([deme.id for deme in graph.demes])
-    ax.set_xticks([])
-    ax.set_xticklabels([])
+    ax.set_xticks(xticks)
+    ax.set_xticklabels(xticklabels)
+    ax.tick_params("x", length=0)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["bottom"].set_visible(False)
 
     ax.set_ylabel(f"time ago ({graph.time_units})")
-
-    if log_y:
-        ax.set_yscale("log", base=10)
 
     ax.set_ylim(1 if log_y else 0, None)
 
@@ -513,6 +568,9 @@ def parse_args():
         ),
     )
     parser.add_argument(
+        "--seed", type=int, default=None, help="Seed for the random number generator."
+    )
+    parser.add_argument(
         "--xkcd", action="store_true", help="Plot using the XKCD cartoon style."
     )
     parser.add_argument(
@@ -542,5 +600,6 @@ if __name__ == "__main__":
         log_y=args.log_y,
         log_w=args.log_w,
         optimisation_rounds=args.optimisation_rounds,
+        seed=args.seed,
     )
     ax.figure.savefig(args.plot_filename)

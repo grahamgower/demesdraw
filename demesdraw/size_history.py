@@ -6,26 +6,6 @@ import matplotlib.pyplot as plt
 from demesdraw import utils
 
 
-def size_of_deme_at_time(deme: demes.Deme, time: float) -> float:
-    """
-    Return the population size of the deme at the given time.
-    """
-    for epoch in deme.epochs:
-        if epoch.start_time >= time >= epoch.end_time:
-            break
-    else:
-        raise ValueError(f"deme {deme.id} doesn't exist at time {time}")
-
-    if np.isclose(time, epoch.end_time) or epoch.start_size == epoch.end_size:
-        N = epoch.end_size
-    else:
-        assert epoch.size_function == "exponential"
-        dt = (time - epoch.start_time) / epoch.time_span
-        r = np.log(epoch.end_size / epoch.start_size)
-        N = epoch.start_size * np.exp(r * dt)
-    return N
-
-
 def size_history(
     graph: demes.Graph,
     ax: matplotlib.axes.Axes = None,
@@ -199,7 +179,7 @@ def size_history(
         # Indicate population size discontinuities from ancestor demes.
         for ancestor_id in deme.ancestors:
             anc = graph[ancestor_id]
-            anc_N = size_of_deme_at_time(anc, deme.start_time)
+            anc_N = utils.size_of_deme_at_time(anc, deme.start_time)
             deme_N = deme.epochs[0].start_size
             if anc_N != deme_N:
                 ax.plot(
