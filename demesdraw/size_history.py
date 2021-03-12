@@ -204,7 +204,8 @@ def size_history(
     # Arrange the axes spines, ticks and labels.
 
     ax.set_xlim(1 if log_time else 0, inf_start_time)
-    # ax.set_ylim(1 if log_size else 0, None)
+    if not log_size:
+        ax.set_ylim(bottom=0)
 
     for spine in ax.spines.values():
         spine.set_zorder(z_top)
