@@ -365,7 +365,7 @@ def schematic(
 
         mid = positions[deme.id]
 
-        tube = Tube(deme, mid, inf_start_time)
+        tube = Tube(deme, mid, inf_start_time, log_time=log_time)
         tubes[deme.id] = tube
 
         ax.plot(tube.size1, tube.time, **plot_kwargs)
