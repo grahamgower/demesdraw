@@ -15,8 +15,8 @@ def size_history(
     num_exp_points: int = 100,
     annotate_epochs: bool = False,
     cmap: matplotlib.colors.Colormap = None,
-    log_x: bool = False,
-    log_y: bool = False,
+    log_time: bool = False,
+    log_size: bool = False,
     title: str = None,
 ):
     """
@@ -39,8 +39,8 @@ def size_history(
     :param matplotlib.colors.Colormap cmap: A matplotlib colour map to be used
         for the different demes. Get one with :func:`matplotlib.cm.get_cmap()`.
         If None, tab10 or tab20 will be used, depending on the number of demes.
-    :param bool log_x: Use a log-10 scale for the horizontal axis.
-    :param bool log_y: Use a log-10 scale for the vertical axis.
+    :param bool log_time: Use a log-10 scale for the time axis.
+    :param bool log_size: Use a log-10 scale for the deme size axis.
     :param str title: The title of the figure.
 
     :return: The matplotlib axes onto which the figure was drawn.
@@ -65,7 +65,7 @@ def size_history(
                 "Graph has more than 20 demes, so cmap must be specified. Good luck!"
             )
 
-    inf_start_time = utils.inf_start_time(graph, inf_ratio, log_x)
+    inf_start_time = utils.inf_start_time(graph, inf_ratio, log_time)
 
     linestyles = ["solid"]  # , "dashed", "dashdot"]
     linewidths = [2, 4, 8, 1]
@@ -107,7 +107,7 @@ def size_history(
             if np.isinf(start_time):
                 start_time = inf_start_time
             end_time = epoch.end_time
-            if end_time == 0 and log_x:
+            if end_time == 0 and log_time:
                 end_time = 1
 
             if epoch.size_function == "constant":
@@ -134,11 +134,11 @@ def size_history(
                 )
 
             if annotate_epochs:
-                if log_x:
+                if log_time:
                     text_x = np.exp((np.log(start_time) + np.log(end_time)) / 2)
                 else:
                     text_x = (start_time + end_time) / 2
-                if log_y:
+                if log_size:
                     text_y = np.exp(
                         (np.log(1 + epoch.start_size) + np.log(1 + epoch.end_size)) / 2
                     )
@@ -203,8 +203,8 @@ def size_history(
 
     # Arrange the axes spines, ticks and labels.
 
-    ax.set_xlim(1 if log_x else 0, inf_start_time)
-    # ax.set_ylim(1 if log_y else 0, None)
+    ax.set_xlim(1 if log_time else 0, inf_start_time)
+    # ax.set_ylim(1 if log_size else 0, None)
 
     for spine in ax.spines.values():
         spine.set_zorder(z_top)
@@ -222,9 +222,9 @@ def size_history(
     # ax.set_ylabel("N", rotation=0, ha="left" if invert_x else "right")
     ax.set_ylabel("deme\nsize", rotation=0, labelpad=20)
 
-    if log_x:
+    if log_time:
         ax.set_xscale("log", base=10)
-    if log_y:
+    if log_size:
         ax.set_yscale("log", base=10)
 
     ax.figure.tight_layout()
@@ -257,10 +257,12 @@ def parse_args():
         ),
     )
     parser.add_argument(
-        "--log-x", action="store_true", help="Use a log scale for the horizontal axis."
+        "--log-time", action="store_true", help="Use a log scale for the time axis."
     )
     parser.add_argument(
-        "--log-y", action="store_true", help="Use a log scale for the vertical axis."
+        "--log-size",
+        action="store_true",
+        help="Use a log scale for the deme size axis.",
     )
     parser.add_argument(
         "--annotate-epochs",
@@ -291,8 +293,8 @@ if __name__ == "__main__":
         graph,
         inf_ratio=args.inf_ratio,
         invert_x=args.invert_x,
-        log_x=args.log_x,
-        log_y=args.log_y,
+        log_time=args.log_time,
+        log_size=args.log_size,
         annotate_epochs=args.annotate_epochs,
     )
     ax.figure.savefig(args.plot_filename)

@@ -33,30 +33,25 @@ class Tube:
         deme: demes.Deme,
         mid: float,
         inf_start_time: float,
-        log_l: bool = False,
-        log_w: bool = False,
+        log_time: bool = False,
     ):
         """
         :param demes.Deme deme: The deme for which to calculate coordinates.
         :param float mid: The mid point of the deme along the non-time dimension.
         :param float inf_start_time: The value along the time dimension which
             is used instead of infinity (for epochs with infinite start times).
-        :param bool log_l: The length axis uses a log-10 scale.
-        :param bool log_w: Use log-10 of the deme size for the tube width.
+        :param bool log_time: The time axis uses a log-10 scale.
         """
         self.deme = deme
         self.mid = mid
-        self.log_l = log_l
-        self.log_w = log_w
-        self._coords(deme, mid, inf_start_time, log_l, log_w)
+        self._coords(deme, mid, inf_start_time, log_time)
 
     def _coords(
         self,
         deme: demes.Deme,
         mid: float,
         inf_start_time: float,
-        log_l: bool,
-        log_w: bool,
+        log_time: bool,
         num_exp_points: int = 100,
     ):
         """Calculate tube coordinates."""
@@ -71,14 +66,10 @@ class Tube:
 
             if epoch.size_function == "constant":
                 t = np.array([start_time, end_time])
-                if log_w:
-                    N1 = [mid - np.log(epoch.start_size) / 2] * 2
-                    N2 = [mid + np.log(epoch.end_size) / 2] * 2
-                else:
-                    N1 = [mid - epoch.start_size / 2] * 2
-                    N2 = [mid + epoch.end_size / 2] * 2
+                N1 = [mid - epoch.start_size / 2] * 2
+                N2 = [mid + epoch.end_size / 2] * 2
             elif epoch.size_function == "exponential":
-                if log_l:
+                if log_time:
                     t = np.exp(
                         np.linspace(
                             np.log(start_time), np.log(1 + end_time), num=num_exp_points
@@ -87,14 +78,8 @@ class Tube:
                 else:
                     t = np.linspace(start_time, end_time, num=num_exp_points)
                 dt = (start_time - t) / (start_time - end_time)
-                if log_w:
-                    # WARNING: this isn't the log of the deme size,
-                    # except at the start_time and end_time.
-                    r = np.log(np.log(epoch.end_size) / np.log(epoch.start_size))
-                    N = np.log(epoch.start_size) * np.exp(r * dt)
-                else:
-                    r = np.log(epoch.end_size / epoch.start_size)
-                    N = epoch.start_size * np.exp(r * dt)
+                r = np.log(epoch.end_size / epoch.start_size)
+                N = epoch.start_size * np.exp(r * dt)
                 N1 = mid - N / 2
                 N2 = mid + N / 2
             else:
@@ -114,12 +99,8 @@ class Tube:
     def sizes_at(self, time):
         """Return the size coordinates of the tube at the given time."""
         N = utils.size_of_deme_at_time(self.deme, time)
-        if self.log_w:
-            N1 = self.mid - np.log(N) / 2
-            N2 = self.mid + np.log(N) / 2
-        else:
-            N1 = self.mid - N / 2
-            N2 = self.mid + N / 2
+        N1 = self.mid - N / 2
+        N2 = self.mid + N / 2
         return N1, N2
 
 
@@ -266,8 +247,7 @@ def schematic(
     graph: demes.Graph,
     ax: matplotlib.axes.Axes = None,
     cmap: matplotlib.colors.Colormap = None,
-    log_y: bool = False,
-    log_w: bool = False,
+    log_time: bool = False,
     title: str = None,
     inf_ratio: float = 0.2,
     positions: Dict[str, float] = None,
@@ -305,11 +285,7 @@ def schematic(
     :param matplotlib.colors.Colormap cmap: A matplotlib colour map to be used
         for the different demes. Get one with :func:`matplotlib.cm.get_cmap()`.
         If None, tab10 or tab20 will be used, depending on the number of demes.
-    :param bool log_y: Use a log-10 scale for the vertical axis.
-    :param bool log_w: Use a log-10 scale for the width of demes.
-        Note that exponentially changing epochs are drawn using a heuristic,
-        and are not log-proportional to deme size except at the start/end times
-        of the epoch.
+    :param bool log_time: Use a log-10 scale for the time axis.
     :param str title: The title of the figure.
     :param float inf_ratio: The proportion of the horizontal axis that will be
         used for the time interval which stretches towards infinity.
@@ -346,7 +322,7 @@ def schematic(
         fig_w, fig_h = plt.figaspect(9.0 / 16.0)
         _, ax = plt.subplots(figsize=(fig_w, fig_h))
 
-    if log_y:
+    if log_time:
         ax.set_yscale("log", base=10)
 
     if cmap is None:
@@ -362,15 +338,13 @@ def schematic(
 
     rng = np.random.default_rng(seed)
     seed2 = rng.integers(2 ** 63)
-    inf_start_time = utils.inf_start_time(graph, inf_ratio, log_y)
+    inf_start_time = utils.inf_start_time(graph, inf_ratio, log_time)
 
     size_max = max(
         max(epoch.start_size, epoch.end_size)
         for deme in graph.demes
         for epoch in deme.epochs
     )
-    if log_w:
-        size_max = np.log(size_max)
     if positions is None:
         positions = find_positions(
             graph, size_max * 1.1, rounds=optimisation_rounds, seed=seed2
@@ -391,7 +365,7 @@ def schematic(
 
         mid = positions[deme.id]
 
-        tube = Tube(deme, mid, inf_start_time, log_l=log_y, log_w=log_w)
+        tube = Tube(deme, mid, inf_start_time)
         tubes[deme.id] = tube
 
         ax.plot(tube.size1, tube.time, **plot_kwargs)
@@ -473,11 +447,11 @@ def schematic(
         if isinstance(migration, demes.SymmetricMigration):
             for a, b in itertools.permutations(migration.demes, 2):
                 for _ in range(num_lines_per_migration):
-                    t = random_migration_time(migration, log_y)
+                    t = random_migration_time(migration, log_time)
                     migration_line(a, b, t, **migration_kwargs)
         elif isinstance(migration, demes.AsymmetricMigration):
             for _ in range(num_lines_per_migration):
-                t = random_migration_time(migration, log_y)
+                t = random_migration_time(migration, log_time)
                 migration_line(migration.source, migration.dest, t, **migration_kwargs)
 
     # Plot pulse lines.
@@ -515,7 +489,7 @@ def schematic(
     if labels in ("mid", "xticks-mid"):
         for deme_id in deme_labels:
             x = positions[deme_id]
-            if log_y:
+            if log_time:
                 y = np.exp(
                     (
                         np.log(tubes[deme_id].time[0])
@@ -547,7 +521,7 @@ def schematic(
 
     ax.set_ylabel(f"time ago ({graph.time_units})")
 
-    ax.set_ylim(1 if log_y else 0, None)
+    ax.set_ylim(1 if log_time else 0, None)
 
     ax.figure.tight_layout()
     return ax
@@ -560,12 +534,7 @@ def parse_args():
         description="Plot a schematic of the population relationships in the graph."
     )
     parser.add_argument(
-        "--log-y", action="store_true", help="Use a log scale for the vertical axis."
-    )
-    parser.add_argument(
-        "--log-w",
-        action="store_true",
-        help="Use a log scale for the width of demes (representing deme size).",
+        "--log-time", action="store_true", help="Use a log scale for the time axis."
     )
     parser.add_argument(
         "--optimisation-rounds",
@@ -606,8 +575,7 @@ if __name__ == "__main__":
     graph = demes.load(args.yaml_filename)
     ax = schematic(
         graph,
-        log_y=args.log_y,
-        log_w=args.log_w,
+        log_time=args.log_time,
         optimisation_rounds=args.optimisation_rounds,
         seed=args.seed,
     )
