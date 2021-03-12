@@ -1,0 +1,28 @@
+description: A validation model used by Schiffels and Durbin (2014) and Terhorst and
+  Terhorst, Kamm, and Song (2017) with periods of exponential growth and decline in
+  a single population.
+time_units: generations
+doi:
+- https://doi.org/10.1038/ng.3015
+demes:
+- id: generic
+  epochs:
+  - end_time: 34133.318528
+    start_size: 1431.2
+  - end_time: 8533.329632
+    start_size: 1431.1919995370306
+    end_size: 14311.93185026597
+  - end_time: 2133.3352704
+    start_size: 14311.93185026597
+    end_size: 1431.1999425201257
+  - end_time: 533.33324512
+    start_size: 1431.1999425201257
+    end_size: 14312.043357644909
+  - end_time: 133.3334544
+    start_size: 14312.043357644909
+    end_size: 1431.2058495596248
+  - end_time: 33.333334976
+    start_size: 1431.2058495596248
+    end_size: 14312.0
+  - end_time: 0
+    start_size: 14312.0

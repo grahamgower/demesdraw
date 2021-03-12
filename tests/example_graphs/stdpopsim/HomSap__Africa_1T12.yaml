@@ -1,0 +1,16 @@
+description: The model is a simplification of the two population Tennesen et al. model
+  with the European-American population removed so that we are modeling the African
+  population in isolation.
+time_units: generations
+doi:
+- https://doi.org/10.1126/science.1219240
+demes:
+- id: AFR
+  epochs:
+  - end_time: 5920.0
+    start_size: 7310.0
+  - end_time: 204.6
+    start_size: 14474.0
+  - end_time: 0
+    start_size: 14474.0
+    end_size: 432124.58438330283

@@ -1,0 +1,31 @@
+description: The two orang-utan species, Sumatran (Pongo abelii) and Bornean (Pongo
+  pygmaeus) inferred from the joint-site frequency spectrum with ten individuals from
+  each population. This model is an isolation-with- migration model, with exponential
+  growth or decay in each population after the split. The Sumatran population grows
+  in size, while the Bornean population slightly declines.
+time_units: generations
+doi:
+- http://doi.org/10.1038/nature09687
+demes:
+- id: Bornean
+  epochs:
+  - end_time: 20157.45
+    start_size: 17934.0
+  - end_time: 0
+    start_size: 10616.928
+    end_size: 8805.0
+- id: Sumatran
+  start_time: 20157.45
+  ancestors:
+  - Bornean
+  epochs:
+  - end_time: 0
+    start_size: 7317.072000000001
+    end_size: 37661.0
+migrations:
+- rate: 6.66332106613137e-06
+  source: Bornean
+  dest: Sumatran
+- rate: 1.1012601762016282e-05
+  source: Sumatran
+  dest: Bornean

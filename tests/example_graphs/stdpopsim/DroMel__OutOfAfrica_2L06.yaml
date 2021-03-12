@@ -1,0 +1,23 @@
+description: 'The three epoch (modern, bottleneck, ancestral) model estimated for
+  two Drosophila Melanogaster populations: African (ancestral) and European (derived)
+  from Li and Stephan (2006).'
+time_units: generations
+doi:
+- https://doi.org/10.1371/journal.pgen.0020166
+- https://doi.org/10.1371/journal.pgen.0020166
+demes:
+- id: AFR
+  epochs:
+  - end_time: 600000.0
+    start_size: 1720600.0
+  - end_time: 0
+    start_size: 8603000.0
+- id: EUR
+  start_time: 158000.0
+  ancestors:
+  - AFR
+  epochs:
+  - end_time: 154600.0
+    start_size: 2200.0
+  - end_time: 0
+    start_size: 1075000.0

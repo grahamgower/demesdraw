@@ -1,0 +1,49 @@
+description: The model is derived from the Tennesen et al. analysis of the jSFS from
+  European Americans and African Americans. It describes the ancestral human population
+  in Africa, the out of Africa event, and two distinct periods of subsequent European
+  population growth over the past 23kya. Model parameters are taken from Fig. S5 in
+  Fu et al.
+time_units: generations
+doi:
+- https://doi.org/10.1126/science.1219240
+- https://doi.org/10.1038/nature11690
+demes:
+- id: AFR
+  epochs:
+  - end_time: 5920.0
+    start_size: 7310.0
+  - end_time: 204.6
+    start_size: 14474.0
+  - end_time: 0
+    start_size: 14474.0
+    end_size: 432124.58438330283
+- id: EUR
+  start_time: 2040.0
+  ancestors:
+  - AFR
+  epochs:
+  - end_time: 920.0
+    start_size: 1861.0
+  - end_time: 204.6
+    start_size: 1032.0
+    end_size: 9279.212349452768
+  - end_time: 0
+    start_size: 9279.212349452768
+    end_size: 501436.3434585535
+migrations:
+- end_time: 920.0
+  rate: 0.00015
+  source: AFR
+  dest: EUR
+- start_time: 920.0
+  rate: 2.5e-05
+  source: AFR
+  dest: EUR
+- end_time: 920.0
+  rate: 0.00015
+  source: EUR
+  dest: AFR
+- start_time: 920.0
+  rate: 2.5e-05
+  source: EUR
+  dest: AFR

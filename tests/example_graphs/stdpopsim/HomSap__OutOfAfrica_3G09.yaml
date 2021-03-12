@@ -1,0 +1,61 @@
+description: The three population Out-of-Africa model from Gutenkunst et al. 2009.
+  It describes the ancestral human population in Africa, the out of Africa event,
+  and the subsequent European-Asian population split. Model parameters are the maximum
+  likelihood values of the various parameters given in Table 1 of Gutenkunst et al.
+time_units: generations
+doi:
+- https://doi.org/10.1371/journal.pgen.1000695
+demes:
+- id: YRI
+  epochs:
+  - end_time: 8800.0
+    start_size: 7300.0
+  - end_time: 0
+    start_size: 12300.0
+- id: CEU
+  start_time: 5600.0
+  ancestors:
+  - YRI
+  epochs:
+  - end_time: 848.0
+    start_size: 2100.0
+  - end_time: 0
+    start_size: 1000.0
+    end_size: 29725.343546388514
+- id: CHB
+  start_time: 848.0
+  ancestors:
+  - CEU
+  epochs:
+  - end_time: 0
+    start_size: 510.0
+    end_size: 54090.331077946525
+migrations:
+- end_time: 848.0
+  rate: 0.00025
+  source: YRI
+  dest: CEU
+- start_time: 848.0
+  rate: 3e-05
+  source: YRI
+  dest: CEU
+- end_time: 848.0
+  rate: 0.00025
+  source: CEU
+  dest: YRI
+- start_time: 848.0
+  rate: 3e-05
+  source: CEU
+  dest: YRI
+- rate: 1.9e-05
+  source: YRI
+  dest: CHB
+- rate: 9.6e-05
+  source: CEU
+  dest: CHB
+- rate: 1.9e-05
+  source: CHB
+  dest: YRI
+- rate: 9.6e-05
+  source: CHB
+  dest: CEU

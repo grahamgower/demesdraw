@@ -1,0 +1,20 @@
+description: 'The three epoch (modern, bottleneck, ancestral) model estimated for
+  a single African Drosophila Melanogaster population from Sheehan and Song (2016).
+  Population sizes are estimated by a deep learning model trained on simulation data.
+  NOTE: Due to differences in coalescence units between PSMC (2N) and msms (4N) the
+  number of generations were doubled from PSMC estimates when simulating data from
+  msms in the original publication. We have faithfully represented the published model
+  here.'
+time_units: generations
+doi:
+- https://doi.org/10.1371/journal.pcbi.1004845
+- https://doi.org/10.1371/journal.pgen.0020166
+demes:
+- id: AFR
+  epochs:
+  - end_time: 2200000.0
+    start_size: 652700.0
+  - end_time: 200000.0
+    start_size: 145300.0
+  - end_time: 0
+    start_size: 544200.0

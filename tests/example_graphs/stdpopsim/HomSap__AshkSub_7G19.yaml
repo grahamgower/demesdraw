@@ -1,0 +1,77 @@
+description: This was the best fit model of Ashkenazi Jewish demographic history from
+  Gladstein and Hammer 2019, shown in Figure 1, labeled "Substructure Model". Model
+  choice and parameter estimation were performed with Approximate Bayesian Computation.
+  Parameter values are based on the mode from ABC found in Table S3 of Gladstein and
+  Hammer 2019. In this model, the ancestors of Europeans and Middle Eastern populations
+  diverge. Non-Ashkenazi Jewish populations then diverge from the Middle Eastern population.
+  The Ashkenazi Jews then diverge from the other Jewish populations and experience
+  a substantial reduction in population size and a single pulse of gene flow from
+  Europeans (corresponding to their arrival in Europe). After the gene flow from Europeans
+  to the Ashkenazi Jews, the Ashkenazi Jews split into two groups, the Western and
+  Eastern. Finally, the Western Ashkenazi Jews experience moderate instantaneous population
+  size increase, and the Eastern experience a massive population size increase. In
+  addition to the demographic model Gladstein and Hammer 2019 also incorporated an
+  SNP array ascertainment scheme into the simulation. This demographic model does
+  not include the SNP array ascertainment scheme. It should be noted that Gladstein
+  and Hammer 2019 simulated with a mutation rate of 2.5e-8.
+time_units: generations
+doi:
+- https://doi.org/10.1093/molbev/msz047
+demes:
+- id: YRI
+  epochs:
+  - end_time: 8800.0
+    start_size: 7300.0
+  - end_time: 0
+    start_size: 18197.008586099826
+- id: CHB
+  start_time: 2105.0
+  ancestors:
+  - YRI
+  epochs:
+  - end_time: 0
+    start_size: 4073.802778041126
+- id: CEU
+  start_time: 850.0
+  ancestors:
+  - CHB
+  epochs:
+  - end_time: 0
+    start_size: 33113.112148259075
+- id: ME
+  start_time: 481.0
+  ancestors:
+  - CEU
+  epochs:
+  - end_time: 0
+    start_size: 436515.8322401656
+- id: J
+  start_time: 211.0
+  ancestors:
+  - ME
+  epochs:
+  - end_time: 0
+    start_size: 354813.3892335753
+- id: WAJ
+  start_time: 29.0
+  ancestors:
+  - J
+  epochs:
+  - end_time: 13.0
+    start_size: 1096.4781961431852
+  - end_time: 0
+    start_size: 6606.934480075957
+- id: EAJ
+  start_time: 14.0
+  ancestors:
+  - WAJ
+  epochs:
+  - end_time: 13.0
+    start_size: 1096.4781961431852
+  - end_time: 0
+    start_size: 1949844.5997580455
+pulses:
+- source: CEU
+  dest: WAJ
+  time: 28.0
+  proportion: 0.17

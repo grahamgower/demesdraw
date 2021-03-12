@@ -1,0 +1,92 @@
+description: The three population out-of-African model popularized by Gutenkunst et
+  al. (2009) and augmented by archaic contributions to both Eurasian and African populations.
+  Two archaic populations split early in human history, before the African expansion,
+  and contribute to Eurasian populations (putative Neanderthal branch) and to the
+  African branch (a deep diverging branch within Africa). Admixture is modeled as
+  symmetric migration between the archaic and modern human branches, with contribution
+  ending at a given time in the past.
+time_units: generations
+doi:
+- https://doi.org/10.1371/journal.pgen.1008204
+demes:
+- id: YRI
+  epochs:
+  - end_time: 10344.827586206897
+    start_size: 3600.0
+  - end_time: 0
+    start_size: 13900.0
+- id: Neanderthal
+  start_time: 19275.862068965518
+  ancestors:
+  - YRI
+  epochs:
+  - end_time: 0
+    start_size: 3600.0
+- id: ArchaicAFR
+  start_time: 17206.896551724138
+  ancestors:
+  - YRI
+  epochs:
+  - end_time: 0
+    start_size: 3600.0
+- id: CEU
+  start_time: 2093.103448275862
+  ancestors:
+  - YRI
+  epochs:
+  - end_time: 1241.3793103448277
+    start_size: 880.0
+  - end_time: 0
+    start_size: 2300.0
+    end_size: 10855.080951853866
+- id: CHB
+  start_time: 1241.3793103448277
+  ancestors:
+  - CEU
+  epochs:
+  - end_time: 0
+    start_size: 650.0
+    end_size: 65834.77001122756
+migrations:
+- start_time: 4310.3448275862065
+  rate: 1.98e-05
+  source: YRI
+  dest: ArchaicAFR
+- start_time: 4310.3448275862065
+  rate: 1.98e-05
+  source: ArchaicAFR
+  dest: YRI
+- end_time: 1241.3793103448277
+  rate: 0.000522
+  source: YRI
+  dest: CEU
+- start_time: 1241.3793103448277
+  rate: 2.48e-05
+  source: YRI
+  dest: CEU
+- end_time: 1241.3793103448277
+  rate: 0.000522
+  source: CEU
+  dest: YRI
+- start_time: 1241.3793103448277
+  rate: 2.48e-05
+  source: CEU
+  dest: YRI
+- rate: 8.25e-06
+  source: CEU
+  dest: Neanderthal
+- rate: 8.25e-06
+  source: Neanderthal
+  dest: CEU
+- rate: 0.000113
+  source: CEU
+  dest: CHB
+- rate: 0.000113
+  source: CHB
+  dest: CEU
+- rate: 8.25e-06
+  source: CHB
+  dest: Neanderthal
+- rate: 8.25e-06
+  source: Neanderthal
+  dest: CHB
