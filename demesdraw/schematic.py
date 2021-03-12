@@ -104,17 +104,21 @@ class Tube:
         return N1, N2
 
 
+def coexist(deme_j: demes.Deme, deme_k: demes.Deme) -> bool:
+    """Returns true if deme_j and deme_k exist simultaneously."""
+    return (deme_j.start_time >= deme_k.start_time > deme_j.end_time) or (
+        deme_j.start_time > deme_k.end_time >= deme_j.end_time
+    )
+
+
 def coexistence_indexes(graph: demes.Graph) -> List[Tuple[int, int]]:
     """Pairs of indices of demes that exist simultaneously."""
-    coexist = []
+    contemporaries = []
     for j, deme_j in enumerate(graph.demes):
         for k, deme_k in enumerate(graph.demes[j + 1 :], j + 1):
-            if (deme_j.start_time >= deme_k.start_time > deme_j.end_time) or (
-                deme_j.start_time > deme_k.end_time >= deme_j.end_time
-            ):
-                # Demes j and k are contemporaries.
-                coexist.append((j, k))
-    return coexist
+            if coexist(deme_j, deme_k):
+                contemporaries.append((j, k))
+    return contemporaries
 
 
 def successors_indexes(graph: demes.Graph) -> Dict[int, List[int]]:
@@ -152,6 +156,24 @@ def interactions_indexes(graph: demes.Graph, *, unique: bool) -> List[Tuple[int,
     return interactions
 
 
+def topdown_placement(graph: demes.Graph) -> Dict[str, int]:
+    """
+    Assign integer positions to demes by traversing the graph top down,
+    avoiding positions already given to contemporary demes.
+    """
+    positions: Dict[str, int] = {graph.demes[0].id: 0}
+    for deme in graph.demes[1:]:
+        taken = set()
+        for other, pos in positions.items():
+            if coexist(deme, graph[other]):
+                taken.add(pos)
+        pos = 0
+        while pos in taken:
+            pos += 1
+        positions[deme.id] = pos
+    return positions
+
+
 def find_positions(
     graph: demes.Graph, sep: float, rounds: int = None, seed: int = None
 ) -> Dict[str, float]:
@@ -177,15 +199,16 @@ def find_positions(
     if len(graph.demes) == 1:
         return {graph.demes[0].id: 0}
     if rounds is None:
-        rounds = 100
+        # explore all orderings of 5 demes
+        rounds = 120
 
-    coexist = coexistence_indexes(graph)
+    contemporaries = coexistence_indexes(graph)
     successors = successors_indexes(graph)
     interactions = interactions_indexes(graph, unique=True)
 
     def fseparation(x):
         """The separation distance between coexisting demes."""
-        return np.array([np.abs(x[j] - x[k]) for j, k in coexist])
+        return np.array([np.abs(x[j] - x[k]) for j, k in contemporaries])
 
     def fmin(x):
         """Function to be minimised."""
@@ -203,12 +226,17 @@ def find_positions(
         z += sum(x)
         return z
 
+    topdown_positions = topdown_placement(graph)
+    topdown = np.array(list(topdown_positions.values())) * sep
     x0 = np.arange(len(graph.demes)) * sep
     fmin_best = fmin(x0)
     x_best = x0.copy()
 
     def initial_states(rounds):
         """Generate initial states for the optimisation procedure."""
+        # Try the canonical top-down ordering.
+        yield topdown
+
         n = len(graph.demes)
         if math.factorial(n) <= rounds:
             # generate all permutations
