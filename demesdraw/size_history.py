@@ -85,6 +85,9 @@ def size_history(
             alpha=0.7,
             zorder=z_top - linewidth,
             solid_capstyle="butt",
+            path_effects=[
+                matplotlib.patheffects.withStroke(linewidth=3, foreground="white")
+            ],
         )
         discontinuity_kwargs = dict(
             color=colour,
@@ -93,6 +96,9 @@ def size_history(
             alpha=0.7,
             zorder=z_top - linewidth,
             solid_capstyle="butt",
+            path_effects=[
+                matplotlib.patheffects.withStroke(linewidth=3, foreground="white")
+            ],
         )
         legend_handles.append(matplotlib.lines.Line2D([], [], **plot_kwargs))
 
@@ -199,6 +205,9 @@ def size_history(
 
     ax.set_xlim(1 if log_x else 0, inf_start_time)
     # ax.set_ylim(1 if log_y else 0, None)
+
+    for spine in ax.spines.values():
+        spine.set_zorder(z_top)
 
     ax.spines["top"].set_visible(False)
     if invert_x:

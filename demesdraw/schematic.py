@@ -380,7 +380,14 @@ def schematic(
 
     for j, deme in enumerate(graph.demes):
         colour = colours[deme.id]
-        plot_kwargs = dict(color=colour, solid_capstyle="butt", zorder=1)
+        plot_kwargs = dict(
+            color=colour,
+            solid_capstyle="butt",
+            zorder=1,
+            path_effects=[
+                matplotlib.patheffects.withStroke(linewidth=3, foreground="white")
+            ],
+        )
 
         mid = positions[deme.id]
 
@@ -395,7 +402,7 @@ def schematic(
             tube.size2,
             facecolor=colour,
             edgecolor="none",
-            alpha=0.3,
+            alpha=0.5,
             zorder=1,
         )
 
@@ -429,7 +436,7 @@ def schematic(
             arrow = "<k"
 
         colour = colours[source]
-        ax.plot(
+        lines = ax.plot(
             x,
             [time, time],
             color=colour,
@@ -437,6 +444,8 @@ def schematic(
             zorder=-1,
             **mig_kwargs,
         )
+        for line in lines:
+            line.set_sketch_params(1, 100, 2)
         ax.plot(
             x[1],
             time,
