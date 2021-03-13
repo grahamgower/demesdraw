@@ -8,6 +8,10 @@ import scipy.optimize
 import matplotlib
 import matplotlib.patheffects
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+from matplotlib.patches import Polygon
+
+import scipy.interpolate
 
 from demesdraw import utils
 
@@ -52,7 +56,7 @@ class Tube:
         mid: float,
         inf_start_time: float,
         log_time: bool,
-        num_exp_points: int = 100,
+        num_points: int = 100,
     ):
         """Calculate tube coordinates."""
         time: List[float] = []
@@ -63,20 +67,17 @@ class Tube:
             if np.isinf(start_time):
                 start_time = inf_start_time
             end_time = epoch.end_time
+            if log_time:
+                t = np.logspace(
+                    np.log10(start_time), np.log10(max(1, end_time)), num=num_points
+                )
+            else:
+                t = np.linspace(start_time, end_time, num=num_points)
 
             if epoch.size_function == "constant":
-                t = np.array([start_time, end_time])
-                N1 = [mid - epoch.start_size / 2] * 2
-                N2 = [mid + epoch.end_size / 2] * 2
+                N1 = [mid - epoch.start_size / 2] * len(t)
+                N2 = [mid + epoch.end_size / 2] * len(t)
             elif epoch.size_function == "exponential":
-                if log_time:
-                    t = np.exp(
-                        np.linspace(
-                            np.log(start_time), np.log(1 + end_time), num=num_exp_points
-                        )
-                    )
-                else:
-                    t = np.linspace(start_time, end_time, num=num_exp_points)
                 dt = (start_time - t) / (start_time - end_time)
                 r = np.log(epoch.end_size / epoch.start_size)
                 N = epoch.start_size * np.exp(r * dt)
@@ -88,9 +89,12 @@ class Tube:
                     f'"{epoch.size_function}" size_function.'
                 )
 
-            time.extend(t)
-            size1.extend(N1)
-            size2.extend(N2)
+            ii = 1
+            if len(time) == 0:
+                ii = 0
+            time.extend(t[ii:])
+            size1.extend(N1[ii:])
+            size2.extend(N2[ii:])
 
         self.time = time
         self.size1 = size1
@@ -259,9 +263,7 @@ def find_positions(
             method="SLSQP",
             bounds=scipy.optimize.Bounds(0, max(x0) * 1.01),
             constraints=scipy.optimize.NonlinearConstraint(
-                fseparation,
-                lb=sep,
-                ub=np.inf,
+                fseparation, lb=sep, ub=np.inf,
             ),
         )
         if res.success and res.fun < fmin_best:
@@ -269,6 +271,41 @@ def find_positions(
             fmin_best = res.fun
 
     return {deme.id: position for deme, position in zip(graph.demes, x_best)}
+
+
+def fill_tube_gradient(ax, tube, z, positions, padding=0.02):
+    """
+    For the given tube, fill based on z, which is the **linear** spacing
+    of the gradient from the bottom to the top of the tube. The gradient
+    itself may not be linear, but z must be linear spaced from the bottom
+    to top of tube. pad gives some space between line and fill, based on
+    fraction of max size of that deme.
+    """
+    im = ax.imshow(
+        z,
+        aspect="auto",
+        extent=[min(tube.size1), max(tube.size2), tube.time[-1], tube.time[0]],
+        origin="lower",
+        zorder=1,
+    )
+    pad = padding * (max(tube.size2) - min(tube.size1))
+    xy = np.vstack(
+        [
+            np.column_stack(
+                [
+                    [min(s + pad, positions[tube.deme.id]) for s in tube.size1[::-1]],
+                    tube.time[::-1],
+                ]
+            ),
+            np.column_stack(
+                [[max(s - pad, positions[tube.deme.id]) for s in tube.size2], tube.time]
+            ),
+            [min(tube.size1[-1] + pad, positions[tube.deme.id]), tube.time[-1]],
+        ]
+    )
+    clip_path = Polygon(xy, facecolor="none", edgecolor="none", closed=True)
+    ax.add_patch(clip_path)
+    im.set_clip_path(clip_path)
 
 
 def schematic(
@@ -284,6 +321,9 @@ def schematic(
     optimisation_rounds: int = None,
     # TODO: docstring
     labels: str = "xticks-mid",
+    sampled_deme=None,
+    sampled_deme_colour=None,
+    alpha_max=0.5,
 ) -> matplotlib.axes.Axes:
     """
     Plot a schematic of the demes in the graph and their relationships.
@@ -336,14 +376,7 @@ def schematic(
     :return: The matplotlib axes onto which the figure was drawn.
     :rtype: matplotlib.axes.Axes
     """
-    if labels not in (
-        "xticks",
-        "legend",
-        "mid",
-        "xticks-legend",
-        "xticks-mid",
-        None,
-    ):
+    if labels not in ("xticks", "legend", "mid", "xticks-legend", "xticks-mid", None,):
         raise ValueError(f"Unexpected value for labels: '{labels}'")
 
     if ax is None:
@@ -363,6 +396,13 @@ def schematic(
                 "Graph has more than 20 demes, so cmap must be specified. Good luck!"
             )
     colours = {deme.id: cmap(j) for j, deme in enumerate(graph.demes)}
+    if sampled_deme is None:
+        fill_colours = colours
+    else:
+        sampled_deme_idx = [d.id for d in graph.demes].index(sampled_deme)
+        if sampled_deme_colour is None:
+            sampled_deme_colour = cmap(sampled_deme_idx)
+        fill_colours = {deme.id: sampled_deme_colour for deme in graph.demes}
 
     rng = np.random.default_rng(seed)
     seed2 = rng.integers(2 ** 63)
@@ -382,6 +422,7 @@ def schematic(
 
     for j, deme in enumerate(graph.demes):
         colour = colours[deme.id]
+        fill_colour = fill_colours[deme.id]
         plot_kwargs = dict(
             color=colour,
             solid_capstyle="butt",
@@ -398,15 +439,34 @@ def schematic(
 
         ax.plot(tube.size1, tube.time, **plot_kwargs)
         ax.plot(tube.size2, tube.time, **plot_kwargs)
-        ax.fill_betweenx(
-            tube.time,
-            tube.size1,
-            tube.size2,
-            facecolor=colour,
-            edgecolor="none",
-            alpha=0.5,
-            zorder=1,
-        )
+
+        if sampled_deme is not None:
+            times = np.array(tube.time[::-1])
+            if graph.time_units == "generations":
+                factor = 1
+            else:
+                factor = graph.generation_time
+            ## gradient fill by alpha
+            # imshow works linearly, so need to compute gradient over linear time values
+            times = np.linspace(tube.time[-1], tube.time[0], 1000)
+            alphas = utils.get_lineage_probs(graph, times / factor, sampled_deme_idx, j)
+            alphas *= alpha_max
+            z = np.empty((len(alphas), 1, 4), dtype=float)
+            rgb = mcolors.colorConverter.to_rgb(fill_colour)
+            z[:, :, :3] = rgb
+            z[:, :, -1] = np.array(alphas)[:, None]
+            fill_tube_gradient(ax, tube, z, positions, padding=0.02)
+
+        else:
+            ax.fill_betweenx(
+                tube.time,
+                tube.size1,
+                tube.size2,
+                facecolor=fill_colour,
+                edgecolor="none",
+                alpha=alpha_max,
+                zorder=1,
+            )
 
         # Indicate ancestry from ancestor demes.
         ancestry_kwargs = dict(linestyle=":", **plot_kwargs)
@@ -580,9 +640,7 @@ def parse_args():
         "--xkcd", action="store_true", help="Plot using the XKCD cartoon style."
     )
     parser.add_argument(
-        "yaml_filename",
-        metavar="demes.yaml",
-        help="The Demes graph to plot.",
+        "yaml_filename", metavar="demes.yaml", help="The Demes graph to plot.",
     )
     parser.add_argument(
         "plot_filename",
