@@ -11,8 +11,6 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from matplotlib.patches import Polygon
 
-import scipy.interpolate
-
 from demesdraw import utils
 
 
