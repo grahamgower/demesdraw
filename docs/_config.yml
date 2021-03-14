@@ -1,0 +1,32 @@
+# Book settings
+# Learn more at https://jupyterbook.org/customize/config.html
+
+title: DemesDraw
+author: Graham Gower
+copyright: "2021"
+only_build_toc_files: true
+
+execute:
+  execute_notebooks: auto
+
+repository:
+  url: https://github.com/grahamgower/demesdraw
+  path_to_book: docs
+  branch: main
+
+html:
+  use_issues_button: true
+  use_repository_button: true
+  use_edit_page_button: true
+
+sphinx:
+  extra_extensions:
+  - sphinx.ext.autodoc
+  - sphinx.ext.viewcode
+  - sphinx.ext.intersphinx
+
+  config:
+    intersphinx_mapping:
+      python: ["https://docs.python.org/3/", null]
+      demes: ["https://popsim-consortium.github.io/demes-docs/main/", null]
+      matplotlib: ["https://matplotlib.org/stable/", null]
