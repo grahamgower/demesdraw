@@ -1,0 +1,40 @@
+description: An example demography to play around with cloning attributes.
+generation_time: 1
+time_units: generations
+defaults:
+  epoch:
+    # Note this value isn't actually inherited by any of the epochs
+    # because we set cloning_rate values locally in all cases.
+    cloning_rate: 0.05
+
+demes:
+  - id: root
+    description: Root population
+    epochs:
+    - start_size: 1e3
+      end_time: 1000
+      cloning_rate: 0.1
+  - id: pop1
+    description: Population with epochs and changing cloning rates
+    ancestors: [root]
+    defaults:
+      epoch:
+        cloning_rate: 0.2
+    epochs:
+    - start_size: 1e4
+      end_time: 500
+    - start_size: 1e2
+      end_time: 100
+    - start_size: 1e4
+      end_time: 0
+      cloning_rate: 0.5
+  - id: pop2
+    description: Population with epochs and changing cloning rates
+    ancestors: [root]
+    epochs:
+    - start_size: 1e4
+      end_time: 500
+      cloning_rate: 0.9
+    - start_size: 1e2
+      end_time: 0
+      cloning_rate: 1.0

@@ -1,0 +1,51 @@
+description: The Browning et al. (2011) model of admixture in the Americas.
+doi:
+  - https://doi.org/10.1371/journal.pgen.1007385
+time_units: generations
+# TODO the parser currently raises an error if we set this value. See the
+# note in the code for details.
+# generation_time: 25
+
+demes:
+- id: ancestral
+  description: Equilibrium/root population
+  epochs:
+  - {end_time: 5920, start_size: 7310}
+- id: AMH
+  description: Anatomically modern humans
+  ancestors: [ancestral]
+  epochs:
+  - {end_time: 2040, start_size: 14474}
+- id: OOA
+  description: Bottleneck out-of-Africa population
+  ancestors: [AMH]
+  epochs:
+  - {end_time: 920, start_size: 1861}
+- id: AFR
+  description: African population
+  ancestors: [AMH]
+  epochs:
+  - start_size: 14474
+- id: EUR
+  description: European population
+  ancestors: [OOA]
+  epochs:
+  - {start_size: 1000, end_size: 34039}
+- id: EAS
+  description: East Asian population
+  ancestors: [OOA]
+  epochs:
+  - {start_size: 510, end_size: 45852}
+- id: ADMIX
+  description: Admixed America
+  ancestors: [AFR, EUR, EAS]
+  proportions: [0.167, 0.333, 0.5]
+  start_time: 12
+  epochs:
+  - {start_size: 30000, end_size: 54664}
+
+migrations:
+- {demes: [AFR, OOA], rate: 15e-5}
+- {demes: [AFR, EUR], rate: 2.5e-5}
+- {demes: [AFR, EAS], rate: 0.78e-5}
+- {demes: [EUR, EAS], rate: 3.11e-5}

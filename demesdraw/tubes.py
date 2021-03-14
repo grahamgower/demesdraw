@@ -1,4 +1,4 @@
-from typing import List, Tuple, Dict
+from typing import Mapping, List, Tuple
 import itertools
 import math
 
@@ -105,6 +105,23 @@ class Tube:
         N2 = self.mid + N / 2
         return N1, N2
 
+    def to_path(self):
+        """Return a matplotlib.path.Path for the tube outline."""
+        # Compared with separately drawing each side of the tube,
+        # drawing a path that includes both sides of the tube means:
+        #  * vector formats use one "stroke" rather than two; and
+        #  * matplotlib path effects apply once, avoiding artifacts for
+        #    very narrow tubes, where the path effect from the side
+        #    drawn second is on top of the line drawn for the first side.
+        N = list(self.size1) + list(self.size2)
+        t = list(self.time) * 2
+        vertices = list(zip(N, t))
+        codes = (
+            [matplotlib.path.Path.MOVETO]
+            + [matplotlib.path.Path.LINETO] * (len(self.time) - 1)
+        ) * 2
+        return matplotlib.path.Path(vertices, codes)
+
 
 def coexist(deme_j: demes.Deme, deme_k: demes.Deme) -> bool:
     """Returns true if deme_j and deme_k exist simultaneously."""
@@ -123,7 +140,7 @@ def coexistence_indexes(graph: demes.Graph) -> List[Tuple[int, int]]:
     return contemporaries
 
 
-def successors_indexes(graph: demes.Graph) -> Dict[int, List[int]]:
+def successors_indexes(graph: demes.Graph) -> Mapping[int, List[int]]:
     """Graph successors, but use indexes rather than deme IDs"""
     idx = {deme.id: j for j, deme in enumerate(graph.demes)}
     successors = dict()
@@ -158,12 +175,12 @@ def interactions_indexes(graph: demes.Graph, *, unique: bool) -> List[Tuple[int,
     return interactions
 
 
-def topdown_placement(graph: demes.Graph) -> Dict[str, int]:
+def topdown_placement(graph: demes.Graph) -> Mapping[str, int]:
     """
     Assign integer positions to demes by traversing the graph top down,
     avoiding positions already given to contemporary demes.
     """
-    positions: Dict[str, int] = {graph.demes[0].id: 0}
+    positions = {graph.demes[0].id: 0}
     for deme in graph.demes[1:]:
         taken = set()
         for other, pos in positions.items():
@@ -178,7 +195,7 @@ def topdown_placement(graph: demes.Graph) -> Dict[str, int]:
 
 def find_positions(
     graph: demes.Graph, sep: float, rounds: int = None, seed: int = None
-) -> Dict[str, float]:
+) -> Mapping[str, float]:
     """
     Find optimal positions for the demes along a single dimension by minimising:
 
@@ -198,13 +215,14 @@ def find_positions(
     :return: A dictionary mapping deme IDs to positions.
     :rtype: dict
     """
-    if len(graph.demes) == 1:
-        return {graph.demes[0].id: 0}
     if rounds is None:
         # explore all orderings of 5 demes
         rounds = 120
 
     contemporaries = coexistence_indexes(graph)
+    if len(contemporaries) == 0:
+        # There are no constraints, so stack demes on top of each other.
+        return {deme.id: 0 for deme in graph.demes}
     successors = successors_indexes(graph)
     interactions = interactions_indexes(graph, unique=True)
 
@@ -259,7 +277,7 @@ def find_positions(
             fmin,
             x,
             method="SLSQP",
-            bounds=scipy.optimize.Bounds(0, max(x0) * 1.01),
+            bounds=scipy.optimize.Bounds(0, np.inf),
             constraints=scipy.optimize.NonlinearConstraint(
                 fseparation, lb=sep, ub=np.inf,
             ),
@@ -324,25 +342,24 @@ def blend_colors(zs):
     return znew
 
 
-def schematic(
+def tubes(
     graph: demes.Graph,
     ax: matplotlib.axes.Axes = None,
-    cmap: matplotlib.colors.Colormap = None,
+    colours: utils.ColourOrColourMapping = None,
     log_time: bool = False,
     title: str = None,
     inf_ratio: float = 0.2,
-    positions: Dict[str, float] = None,
+    positions: Mapping[str, float] = None,
     num_lines_per_migration: int = 10,
     seed: int = None,
     optimisation_rounds: int = None,
     # TODO: docstring
     labels: str = "xticks-mid",
-    deme_colours: Dict[str, str] = None,
+    fill: bool = True,
     sampled: List[str] = None,
-    alpha_max=0.5,
 ) -> matplotlib.axes.Axes:
     """
-    Plot a schematic of the demes in the graph and their relationships.
+    Plot a demes-as-tubes schematic of the graph and the demes' relationships.
 
     The width of each deme is proportional to its size, and ancestor/descendant
     relationships are drawn as dotted lines.
@@ -366,12 +383,12 @@ def schematic(
     :param demes.Graph graph: The demes graph to plot.
     :param matplotlib.axes.Axes ax: The matplotlib axes onto which the figure
         will be drawn. If None, an empty axes will be created for the figure.
-    :param matplotlib.colors.Colormap cmap: A matplotlib colour map to be used
-        for the different demes. Get one with :func:`matplotlib.cm.get_cmap()`.
-        If None, tab10 or tab20 will be used, depending on the number of demes.
+    :param colours: A mapping from deme ID to matplotlib colour. Alternately,
+        ``colours`` may be a named colour that will be used for all demes.
+    :type colours: dict or str
     :param bool log_time: Use a log-10 scale for the time axis.
     :param str title: The title of the figure.
-    :param float inf_ratio: The proportion of the horizontal axis that will be
+    :param float inf_ratio: The proportion of the time axis that will be
         used for the time interval which stretches towards infinity.
     :param dict positions: A dictionary mapping deme IDs to horizontal
         coordinates. Note that the width of a deme is the deme's (max) size,
@@ -395,30 +412,12 @@ def schematic(
     if labels not in ("xticks", "legend", "mid", "xticks-legend", "xticks-mid", None,):
         raise ValueError(f"Unexpected value for labels: '{labels}'")
 
-    if ax is None:
-        fig_w, fig_h = plt.figaspect(9.0 / 16.0)
-        _, ax = plt.subplots(figsize=(fig_w, fig_h))
+    ax = utils.get_axes(ax)
 
     if log_time:
         ax.set_yscale("log", base=10)
 
-    if deme_colours is None:
-        if cmap is None:
-            if len(graph.demes) <= 10:
-                cmap = matplotlib.cm.get_cmap("tab10")
-            elif len(graph.demes) <= 20:
-                cmap = matplotlib.cm.get_cmap("tab20")
-            else:
-                raise ValueError(
-                    "Graph has more than 20 demes, so deme_colours or "
-                    "cmap must be specified. Good luck!"
-                )
-        colours = {deme.id: cmap(j) for j, deme in enumerate(graph.demes)}
-    else:
-        colours = deme_colours
-        for deme in graph.demes:
-            if deme.id not in colours:
-                colours[deme.id] = "gray" 
+    colours = utils.get_colours(graph, colours)
 
     rng = np.random.default_rng(seed)
     seed2 = rng.integers(2 ** 63)
@@ -440,7 +439,8 @@ def schematic(
         colour = colours[deme.id]
         plot_kwargs = dict(
             color=colour,
-            solid_capstyle="butt",
+            # solid_capstyle="butt",
+            # capstyle="butt",
             zorder=1,
             path_effects=[
                 matplotlib.patheffects.withStroke(linewidth=3, foreground="white")
@@ -452,54 +452,60 @@ def schematic(
         tube = Tube(deme, mid, inf_start_time, log_time=log_time)
         tubes[deme.id] = tube
 
-        ax.plot(tube.size1, tube.time, **plot_kwargs)
-        ax.plot(tube.size2, tube.time, **plot_kwargs)
+        path_patch = matplotlib.patches.PathPatch(
+            tube.to_path(), capstyle="butt", fill=False, **plot_kwargs
+        )
+        ax.add_patch(path_patch)
 
-        if sampled is not None:
-            graph_ids = [d.id for d in graph.demes]
-            sampled_deme_idx = [graph_ids.index(s) for s in sampled]
-            fill_colour = [colours[s] for s in sampled]
-            # plot single population lineage probabilities
-            if graph.time_units == "generations":
-                factor = 1
+        if fill:
+            if sampled is not None:
+                graph_ids = [d.id for d in graph.demes]
+                sampled_deme_idx = [graph_ids.index(s) for s in sampled]
+                fill_colour = [colours[s] for s in sampled]
+                # plot single population lineage probabilities
+                if graph.time_units == "generations":
+                    factor = 1
+                else:
+                    factor = graph.generation_time
+                ## gradient fill by alphas and sampled colors
+                # imshow works linearly, so need to compute gradient over linear time values
+                times = np.linspace(tube.time[-1], tube.time[0], 2000)
+                alphas = utils.get_lineage_probs(graph, times / factor, sampled_deme_idx, j)
+                alphas = [a * 0.5 for a in alphas]
+                zs = [np.empty((len(alphas[0]), 1, 4), dtype=float) for s in sampled]
+                for i, s in enumerate(sampled):
+                    rgb = mcolors.colorConverter.to_rgb(fill_colour[i])
+                    zs[i][:, :, :3] = rgb
+                    zs[i][:, :, -1] = np.array(alphas[i])[:, None]
+                z = blend_colors(zs)
+                fill_tube_gradient(ax, tube, z, positions)
+
             else:
-                factor = graph.generation_time
-            ## gradient fill by alphas and sampled colors
-            # imshow works linearly, so need to compute gradient over linear time values
-            times = np.linspace(tube.time[-1], tube.time[0], 2000)
-            alphas = utils.get_lineage_probs(graph, times / factor, sampled_deme_idx, j)
-            alphas = [a * alpha_max for a in alphas]
-            zs = [np.empty((len(alphas[0]), 1, 4), dtype=float) for s in sampled]
-            for i, s in enumerate(sampled):
-                rgb = mcolors.colorConverter.to_rgb(fill_colour[i])
-                zs[i][:, :, :3] = rgb
-                zs[i][:, :, -1] = np.array(alphas[i])[:, None]
-            z = blend_colors(zs)
-            fill_tube_gradient(ax, tube, z, positions)
-        else:
-            fill_colour = colours[deme.id]
-            ax.fill_betweenx(
-                tube.time,
-                tube.size1,
-                tube.size2,
-                facecolor=fill_colour,
-                edgecolor="none",
-                alpha=alpha_max,
-                zorder=1,
-            )
+                ax.fill_betweenx(
+                    tube.time,
+                    tube.size1,
+                    tube.size2,
+                    facecolor=colour,
+                    edgecolor="none",
+                    alpha=0.5,
+                    zorder=1,
+                )
 
         # Indicate ancestry from ancestor demes.
-        ancestry_kwargs = dict(linestyle=":", **plot_kwargs)
+        ancestry_kwargs = dict(linestyle=":", solid_capstyle="butt", **plot_kwargs)
         for ancestor_id in deme.ancestors:
             anc_size1, anc_size2 = tubes[ancestor_id].sizes_at(deme.start_time)
-            y = [tube.time[0], tube.time[0]]
+            time = [tube.time[0], tube.time[0]]
             if anc_size2 < tube.size1[0]:
-                ax.plot([anc_size2, tube.size1[0]], y, **ancestry_kwargs)
+                ax.plot([anc_size2, tube.size1[0]], time, **ancestry_kwargs)
             elif tube.size2[0] < anc_size1:
-                ax.plot([tube.size2[0], anc_size1], y, **ancestry_kwargs)
+                ax.plot([tube.size2[0], anc_size1], time, **ancestry_kwargs)
             else:
-                ax.plot([anc_size1, tube.size1[0]], y, **ancestry_kwargs)
-                ax.plot([anc_size2, tube.size2[0]], y, **ancestry_kwargs)
+                ax.plot([anc_size1, tube.size1[0]], time, **ancestry_kwargs)
+                ax.plot([anc_size2, tube.size2[0]], time, **ancestry_kwargs)
+
+    # Update the axes view. ax.add_patch() doesn't do this itself.
+    ax.autoscale_view()
 
     # Calculate an offset for the space between arrowhead and tube.
     xlim = ax.get_xlim()
@@ -539,14 +545,13 @@ def schematic(
         )
 
     def random_migration_time(migration, log_scale):
+        start_time = migration.start_time
+        if np.isinf(start_time):
+            start_time = inf_start_time
         if log_scale:
-            t = np.exp(
-                rng.uniform(
-                    np.log(migration.start_time), np.log(1 + migration.end_time)
-                )
-            )
+            t = np.exp(rng.uniform(np.log(start_time), np.log(1 + migration.end_time)))
         else:
-            t = rng.uniform(migration.start_time, migration.end_time)
+            t = rng.uniform(start_time, migration.end_time)
         return t
 
     # Plot migration lines.
@@ -585,7 +590,9 @@ def schematic(
             handles=[
                 matplotlib.patches.Patch(
                     edgecolor=matplotlib.colors.to_rgba(colours[deme_id], 1.0),
-                    facecolor=matplotlib.colors.to_rgba(colours[deme_id], 0.3),
+                    facecolor=matplotlib.colors.to_rgba(colours[deme_id], 0.3)
+                    if fill
+                    else None,
                     label=deme_id,
                 )
                 for deme_id in deme_labels
@@ -596,9 +603,8 @@ def schematic(
 
     if labels in ("mid", "xticks-mid"):
         for deme_id in deme_labels:
-            x = positions[deme_id]
             if log_time:
-                y = np.exp(
+                tmid = np.exp(
                     (
                         np.log(tubes[deme_id].time[0])
                         + np.log(1 + tubes[deme_id].time[-1])
@@ -606,10 +612,10 @@ def schematic(
                     / 2
                 )
             else:
-                y = (tubes[deme_id].time[0] + tubes[deme_id].time[-1]) / 2
+                tmid = (tubes[deme_id].time[0] + tubes[deme_id].time[-1]) / 2
             ax.text(
-                x,
-                y,
+                positions[deme_id],
+                tmid,
                 deme_id,
                 ha="center",
                 va="center",
@@ -631,7 +637,6 @@ def schematic(
 
     ax.set_ylim(1 if log_time else 0, None)
 
-    ax.figure.tight_layout()
     return ax
 
 
@@ -686,3 +691,4 @@ if __name__ == "__main__":
         seed=args.seed,
     )
     ax.figure.savefig(args.plot_filename)
+

@@ -14,7 +14,7 @@ scale = 1.5
 with PdfPages("examples.pdf") as pdf:
 
     for filename in sorted(example_files()):
-        title = filename.name.replace("__", " / ")[: -len(".yaml")]
+        title = filename.name
         graph = demes.load(filename)
         sizes = []
         times = []
@@ -30,7 +30,7 @@ with PdfPages("examples.pdf") as pdf:
             log_size = True
         else:
             log_size = False
-        if max(times) / min(times) > 4:
+        if len(times) > 0 and max(times) / min(times) > 4:
             log_time = True
         else:
             log_time = False
@@ -52,17 +52,14 @@ with PdfPages("examples.pdf") as pdf:
             title=title,
         )
 
-        if title.endswith("AncientEurasia_9K19"):
-            print("AncientEurasia_9K19 legend hack!")
-            # ax1.legend_.set_visible(False)
-            ax1.legend(
-                handles=ax1.legend_.get_lines(),
-                ncol=len(graph.demes) // 2,
-                loc="lower left",
-                bbox_to_anchor=(0.1, 0.1),
-            )
-
-        demesdraw.schematic(graph, ax=ax2, log_time=log_time)
+        demesdraw.tubes(
+            graph,
+            ax=ax2,
+            log_time=log_time,
+            # fill=False,
+            # colours="black",
+            # optimisation_rounds=0,
+        )
 
         pdf.savefig(fig)
         plt.close(fig)

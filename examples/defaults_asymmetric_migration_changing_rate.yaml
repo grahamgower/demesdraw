@@ -1,0 +1,11 @@
+description: Set migration source and dest using defaults.
+time_units: generations
+defaults:
+  epoch: {start_size: 1}
+  migration: {dest: deme1, source: deme0}
+
+demes: [{id: deme0}, {id: deme1}]
+
+migrations:
+- {end_time: 1, rate: 1, start_time: 2}
+- {end_time: 0, rate: 0.5, start_time: 1}

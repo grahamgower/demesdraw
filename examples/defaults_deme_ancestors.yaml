@@ -1,0 +1,26 @@
+description: Setting deme ancestor and proportion values using defaults.
+time_units: generations
+
+defaults:
+  deme:
+    ancestors: [deme0, deme1]
+    proportions: [0.5, 0.5]
+    start_time: 1
+  epoch: {start_size: 1}
+
+demes:
+# Two ancestor demes. We must set the ancestor and proportion values
+# explicitly to the empty list because the defaults fields override
+# the static defaults from the schema.
+- id: deme0
+  ancestors: []
+  proportions: []
+  start_time: .inf
+- ancestors: []
+  id: deme1
+  proportions: []
+  start_time: .inf
+# Two child demes, both of which inherit from deme0 and deme1, as set
+# by the defaults.
+- id: deme2
+- id: deme3

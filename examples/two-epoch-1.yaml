@@ -1,0 +1,9 @@
+time_units: generations
+demes:
+- id: A
+  start_time: .inf
+  epochs:
+  - start_size: 2000
+    end_time: 500
+  - start_size: 100
+    end_time: 0

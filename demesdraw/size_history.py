@@ -1,7 +1,6 @@
 import demes
 import numpy as np
 import matplotlib
-import matplotlib.pyplot as plt
 
 from demesdraw import utils
 
@@ -12,12 +11,12 @@ def size_history(
     inf_ratio: float = 0.1,
     inf_label: bool = False,
     invert_x: bool = False,
-    num_exp_points: int = 100,
     annotate_epochs: bool = False,
-    cmap: matplotlib.colors.Colormap = None,
+    colours: utils.ColourOrColourMapping = None,
     log_time: bool = False,
     log_size: bool = False,
     title: str = None,
+    num_points: int = 100,
 ):
     """
     Plot population size as a function of time for each deme in the graph.
@@ -25,20 +24,18 @@ def size_history(
     :param demes.Graph graph: The demes graph to plot.
     :param matplotlib.axes.Axes ax: The matplotlib axes onto which the figure
         will be drawn. If None, an empty axes will be created for the figure.
-    :param float inf_ratio: The proportion of the horizontal axis that will be
+    :param float inf_ratio: The proportion of the time axis that will be
         used for the time interval which stretches towards infinity.
     :param bool inf_label: Write "inf" by the arrow that points towards infinity.
     :param bool invert_x: If true, the horizontal axis will have infinity
         on the left and zero on the right, and the vertical axis will be drawn
         on the right.
-    :param int num_exp_points: The number of points used to approximate
-        size changes in each epoch with exponential size_function.
     :param bool annotate_epochs: Annotate the figure with epoch indices
         over the relevant parts of the lines. This is mostly useful as a
         pedagogical tool.
-    :param matplotlib.colors.Colormap cmap: A matplotlib colour map to be used
-        for the different demes. Get one with :func:`matplotlib.cm.get_cmap()`.
-        If None, tab10 or tab20 will be used, depending on the number of demes.
+    :param colours: A mapping from deme ID to matplotlib colour. Alternately,
+        ``colours`` may be a named colour that will be used for all demes.
+    :type colours: dict or str
     :param bool log_time: Use a log-10 scale for the time axis.
     :param bool log_size: Use a log-10 scale for the deme size axis.
     :param str title: The title of the figure.
@@ -46,25 +43,14 @@ def size_history(
     :return: The matplotlib axes onto which the figure was drawn.
     :rtype: matplotlib.axes.Axes
     """
-    if ax is None:
-        fig_w, fig_h = plt.figaspect(9.0 / 16.0)
-        _, ax = plt.subplots(figsize=(fig_w, fig_h))
+    ax = utils.get_axes(ax)
 
     if invert_x:
         arrowhead = "<k"
     else:
         arrowhead = ">k"
 
-    if cmap is None:
-        if len(graph.demes) <= 10:
-            cmap = matplotlib.cm.get_cmap("tab10")
-        elif len(graph.demes) <= 20:
-            cmap = matplotlib.cm.get_cmap("tab20")
-        else:
-            raise ValueError(
-                "Graph has more than 20 demes, so cmap must be specified. Good luck!"
-            )
-
+    colours = utils.get_colours(graph, colours)
     inf_start_time = utils.inf_start_time(graph, inf_ratio, log_time)
 
     linestyles = ["solid"]  # , "dashed", "dashdot"]
@@ -74,7 +60,7 @@ def size_history(
     z_top = 1 + len(graph.demes) + max(linewidths)
 
     for j, deme in enumerate(graph.demes):
-        colour = cmap(j)
+        colour = colours[deme.id]
         linestyle = linestyles[j % len(linestyles)]
         linewidth = linewidths[j % len(linewidths)]
         plot_kwargs = dict(
@@ -114,8 +100,8 @@ def size_history(
                 x = np.array([start_time, end_time])
                 y = np.array([epoch.start_size, epoch.end_size])
             elif epoch.size_function == "exponential":
-                x = np.linspace(start_time, end_time, num=num_exp_points)
-                dt = np.linspace(0, 1, num=num_exp_points)
+                x = np.linspace(start_time, end_time, num=num_points)
+                dt = np.linspace(0, 1, num=num_points)
                 r = np.log(epoch.end_size / epoch.start_size)
                 y = epoch.start_size * np.exp(r * dt)
             else:
@@ -204,7 +190,8 @@ def size_history(
     # Arrange the axes spines, ticks and labels.
 
     ax.set_xlim(1 if log_time else 0, inf_start_time)
-    # ax.set_ylim(1 if log_size else 0, None)
+    if not log_size:
+        ax.set_ylim(bottom=0)
 
     for spine in ax.spines.values():
         spine.set_zorder(z_top)
@@ -227,74 +214,4 @@ def size_history(
     if log_size:
         ax.set_yscale("log", base=10)
 
-    ax.figure.tight_layout()
     return ax
-
-
-def parse_args():
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Plot N(t) for all demes in a Demes graph."
-    )
-    parser.add_argument(
-        "--inf-ratio",
-        type=float,
-        default=0.1,
-        help=(
-            "The proportion of the horizontal axis that will be "
-            "used for the time interval which stretches towards infinity "
-            "[default=%(default)s]."
-        ),
-    )
-    parser.add_argument(
-        "--invert-x",
-        action="store_true",
-        help=(
-            "Invert the horizontal axis. "
-            "I.e. draw the past on the left, the present on the right. "
-            "The vertical axis ticks/labels will also be drawn on the right. "
-        ),
-    )
-    parser.add_argument(
-        "--log-time", action="store_true", help="Use a log scale for the time axis."
-    )
-    parser.add_argument(
-        "--log-size",
-        action="store_true",
-        help="Use a log scale for the deme size axis.",
-    )
-    parser.add_argument(
-        "--annotate-epochs",
-        action="store_true",
-        help=("Label each deme's epochs. " "Not recommended for more than one deme."),
-    )
-    parser.add_argument(
-        "yaml_filename",
-        metavar="demes.yaml",
-        help="The Demes graph to plot.",
-    )
-    parser.add_argument(
-        "plot_filename",
-        metavar="figure.pdf",
-        help=(
-            "Output filename for the figure. "
-            "Any file extension supported by matplotlib may be provided "
-            "(pdf, eps, png, svg)."
-        ),
-    )
-    return parser.parse_args()
-
-
-if __name__ == "__main__":
-    args = parse_args()
-    graph = demes.load(args.yaml_filename)
-    ax = size_history(
-        graph,
-        inf_ratio=args.inf_ratio,
-        invert_x=args.invert_x,
-        log_time=args.log_time,
-        log_size=args.log_size,
-        annotate_epochs=args.annotate_epochs,
-    )
-    ax.figure.savefig(args.plot_filename)
