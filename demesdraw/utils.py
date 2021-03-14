@@ -7,6 +7,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 try:
     import demes.convert
+    import msprime
 except ImportError:
     warnings.warn(
         "demes.convert requires msprime and stdpopsim, computing sampling "

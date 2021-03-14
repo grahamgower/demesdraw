@@ -336,6 +336,7 @@ def blend_colors(zs):
         assert len(z) == len(zs[0]), "zs must all be same length"
     znew = np.zeros(zs[0].shape)
     atot = np.sum([z[:, :, -1] for z in zs], axis=0)
+    atot[atot < 1e-6] = 1e-6
     props = [z[:, :, -1] / atot for z in zs]
     znew[:, :, :3] = np.sqrt(np.sum([p[:, None] * z[:, :, :3] ** 2 for p, z in zip(props, zs)], axis=0))
     znew[:, :, -1] = np.sum([p * z[:, :, -1] for p, z in zip(props, zs)], axis=0)
