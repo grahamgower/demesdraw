@@ -132,7 +132,7 @@ def get_axes(
     Make a default axes if one isn't provided.
     """
     if ax is None:
-        fig_w, fig_h = plt.figaspect(scale)
+        fig_w, fig_h = plt.figaspect(aspect)
         fig, ax = plt.subplots(figsize=(scale * fig_w, scale * fig_h))
         fig.set_tight_layout(True)
     return ax
