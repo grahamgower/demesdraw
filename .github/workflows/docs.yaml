@@ -1,0 +1,38 @@
+name: docs
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Fetch the history for all tags and branches
+          # so that the correct version string can be constructed
+          # by setuptools_scm.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: install demesdraw
+        run: python -m pip install .
+
+      - name: build Docs
+        run: make -C docs
+
+      - name: push to GitHub Pages
+        if: (!github.event.pull_request)
+        uses: peaceiris/actions-gh-pages@v3.6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_build/html
