@@ -30,7 +30,9 @@ class TestSizeHistory:
 
 class TestAsTubes:
     def check_tubes(self, graph, seed=1234, optimisation_rounds=1, **kwargs):
-        ax = demesdraw.tubes(graph, **kwargs)
+        ax = demesdraw.tubes(
+            graph, seed=seed, optimisation_rounds=optimisation_rounds, **kwargs
+        )
         assert isinstance(ax, matplotlib.axes.Axes)
         plt.close(ax.figure)
 
@@ -47,7 +49,7 @@ class TestAsTubes:
         self.check_tubes(graph, labels=labels)
 
 
-class TestInfStartTime:
+class TestUtilsInfStartTime:
     @pytest.mark.parametrize("log_scale", [True, False])
     @pytest.mark.parametrize("graph", tests.example_graphs())
     def test_time_is_reasonable(self, graph, log_scale):
@@ -77,7 +79,7 @@ class TestInfStartTime:
         assert not np.isinf(t)
 
 
-class TestSizeOfDemeAtTime:
+class TestUtilsSizeOfDemeAtTime:
     @pytest.mark.parametrize("deme", tests.example_demes())
     def test_deme_start_and_end_times(self, deme):
         N = demesdraw.utils.size_of_deme_at_time(deme, deme.start_time)
