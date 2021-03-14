@@ -271,7 +271,7 @@ def find_positions(
     return {deme.id: position for deme, position in zip(graph.demes, x_best)}
 
 
-def fill_tube_gradient(ax, tube, z, positions, padding=0.02):
+def fill_tube_gradient(ax, tube, z, positions, padding=0.01):
     """
     For the given tube, fill based on z, which is the **linear** spacing
     of the gradient from the bottom to the top of the tube. The gradient
@@ -306,6 +306,24 @@ def fill_tube_gradient(ax, tube, z, positions, padding=0.02):
     im.set_clip_path(clip_path)
 
 
+def blend_colors(zs):
+    """
+    zs = [z1, z2, ...]
+    each row in z1 and z2 are the [r, g, b, a] colors, which are blended using
+    alpha as the proportions.
+
+    No idea if this is at all proper for blending colors and alphas...
+    """
+    for z in zs[1:]:
+        assert len(z) == len(zs[0]), "zs must all be same length"
+    znew = np.zeros(zs[0].shape)
+    atot = np.sum([z[:, :, -1] for z in zs], axis=0)
+    props = [z[:, :, -1] / atot for z in zs]
+    znew[:, :, :3] = np.sqrt(np.sum([p[:, None] * z[:, :, :3] ** 2 for p, z in zip(props, zs)], axis=0))
+    znew[:, :, -1] = np.sum([p * z[:, :, -1] for p, z in zip(props, zs)], axis=0)
+    return znew
+
+
 def schematic(
     graph: demes.Graph,
     ax: matplotlib.axes.Axes = None,
@@ -319,8 +337,8 @@ def schematic(
     optimisation_rounds: int = None,
     # TODO: docstring
     labels: str = "xticks-mid",
-    sampled_deme=None,
-    sampled_deme_colour=None,
+    deme_colours: Dict[str, str] = None,
+    sampled: List[str] = None,
     alpha_max=0.5,
 ) -> matplotlib.axes.Axes:
     """
@@ -384,23 +402,23 @@ def schematic(
     if log_time:
         ax.set_yscale("log", base=10)
 
-    if cmap is None:
-        if len(graph.demes) <= 10:
-            cmap = matplotlib.cm.get_cmap("tab10")
-        elif len(graph.demes) <= 20:
-            cmap = matplotlib.cm.get_cmap("tab20")
-        else:
-            raise ValueError(
-                "Graph has more than 20 demes, so cmap must be specified. Good luck!"
-            )
-    colours = {deme.id: cmap(j) for j, deme in enumerate(graph.demes)}
-    if sampled_deme is None:
-        fill_colours = colours
+    if deme_colours is None:
+        if cmap is None:
+            if len(graph.demes) <= 10:
+                cmap = matplotlib.cm.get_cmap("tab10")
+            elif len(graph.demes) <= 20:
+                cmap = matplotlib.cm.get_cmap("tab20")
+            else:
+                raise ValueError(
+                    "Graph has more than 20 demes, so deme_colours or "
+                    "cmap must be specified. Good luck!"
+                )
+        colours = {deme.id: cmap(j) for j, deme in enumerate(graph.demes)}
     else:
-        sampled_deme_idx = [d.id for d in graph.demes].index(sampled_deme)
-        if sampled_deme_colour is None:
-            sampled_deme_colour = cmap(sampled_deme_idx)
-        fill_colours = {deme.id: sampled_deme_colour for deme in graph.demes}
+        colours = deme_colours
+        for deme in graph.demes:
+            if deme.id not in colours:
+                colours[deme.id] = "gray" 
 
     rng = np.random.default_rng(seed)
     seed2 = rng.integers(2 ** 63)
@@ -420,7 +438,6 @@ def schematic(
 
     for j, deme in enumerate(graph.demes):
         colour = colours[deme.id]
-        fill_colour = fill_colours[deme.id]
         plot_kwargs = dict(
             color=colour,
             solid_capstyle="butt",
@@ -438,24 +455,29 @@ def schematic(
         ax.plot(tube.size1, tube.time, **plot_kwargs)
         ax.plot(tube.size2, tube.time, **plot_kwargs)
 
-        if sampled_deme is not None:
-            times = np.array(tube.time[::-1])
+        if sampled is not None:
+            graph_ids = [d.id for d in graph.demes]
+            sampled_deme_idx = [graph_ids.index(s) for s in sampled]
+            fill_colour = [colours[s] for s in sampled]
+            # plot single population lineage probabilities
             if graph.time_units == "generations":
                 factor = 1
             else:
                 factor = graph.generation_time
-            ## gradient fill by alpha
+            ## gradient fill by alphas and sampled colors
             # imshow works linearly, so need to compute gradient over linear time values
-            times = np.linspace(tube.time[-1], tube.time[0], 1000)
+            times = np.linspace(tube.time[-1], tube.time[0], 2000)
             alphas = utils.get_lineage_probs(graph, times / factor, sampled_deme_idx, j)
-            alphas *= alpha_max
-            z = np.empty((len(alphas), 1, 4), dtype=float)
-            rgb = mcolors.colorConverter.to_rgb(fill_colour)
-            z[:, :, :3] = rgb
-            z[:, :, -1] = np.array(alphas)[:, None]
-            fill_tube_gradient(ax, tube, z, positions, padding=0.02)
-
+            alphas = [a * alpha_max for a in alphas]
+            zs = [np.empty((len(alphas[0]), 1, 4), dtype=float) for s in sampled]
+            for i, s in enumerate(sampled):
+                rgb = mcolors.colorConverter.to_rgb(fill_colour[i])
+                zs[i][:, :, :3] = rgb
+                zs[i][:, :, -1] = np.array(alphas[i])[:, None]
+            z = blend_colors(zs)
+            fill_tube_gradient(ax, tube, z, positions)
         else:
+            fill_colour = colours[deme.id]
             ax.fill_betweenx(
                 tube.time,
                 tube.size1,
