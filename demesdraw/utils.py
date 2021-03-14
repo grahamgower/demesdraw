@@ -1,7 +1,7 @@
 from typing import Mapping, Tuple, Union
 import warnings
 
-import demes
+import demes, demes.convert
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
