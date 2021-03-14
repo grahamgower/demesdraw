@@ -9,4 +9,4 @@ except ImportError:
     pass
 
 from .size_history import size_history
-from .schematic import schematic, find_positions
+from .tubes import tubes

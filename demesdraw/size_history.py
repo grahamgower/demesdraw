@@ -12,12 +12,12 @@ def size_history(
     inf_ratio: float = 0.1,
     inf_label: bool = False,
     invert_x: bool = False,
-    num_exp_points: int = 100,
     annotate_epochs: bool = False,
     colours: utils.ColourOrColourMapping = None,
     log_time: bool = False,
     log_size: bool = False,
     title: str = None,
+    num_points: int = 100,
 ):
     """
     Plot population size as a function of time for each deme in the graph.
@@ -31,8 +31,6 @@ def size_history(
     :param bool invert_x: If true, the horizontal axis will have infinity
         on the left and zero on the right, and the vertical axis will be drawn
         on the right.
-    :param int num_exp_points: The number of points used to approximate
-        size changes in each epoch with exponential size_function.
     :param bool annotate_epochs: Annotate the figure with epoch indices
         over the relevant parts of the lines. This is mostly useful as a
         pedagogical tool.
@@ -105,8 +103,8 @@ def size_history(
                 x = np.array([start_time, end_time])
                 y = np.array([epoch.start_size, epoch.end_size])
             elif epoch.size_function == "exponential":
-                x = np.linspace(start_time, end_time, num=num_exp_points)
-                dt = np.linspace(0, 1, num=num_exp_points)
+                x = np.linspace(start_time, end_time, num=num_points)
+                dt = np.linspace(0, 1, num=num_points)
                 r = np.log(epoch.end_size / epoch.start_size)
                 y = epoch.start_size * np.exp(r * dt)
             else:

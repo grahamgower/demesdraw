@@ -28,23 +28,23 @@ class TestSizeHistory:
         self.check_size_history(graph, invert_x=True, annotate_epochs=True)
 
 
-class TestSchematic:
-    def check_schematic(self, graph, seed=1234, optimisation_rounds=1, **kwargs):
-        ax = demesdraw.schematic(graph, **kwargs)
+class TestAsTubes:
+    def check_tubes(self, graph, seed=1234, optimisation_rounds=1, **kwargs):
+        ax = demesdraw.tubes(graph, **kwargs)
         assert isinstance(ax, matplotlib.axes.Axes)
         plt.close(ax.figure)
 
     @pytest.mark.parametrize("log_time", [True, False])
     @pytest.mark.parametrize("graph", tests.example_graphs())
     def test_log_params(self, graph, log_time):
-        self.check_schematic(graph, log_time=log_time)
+        self.check_tubes(graph, log_time=log_time)
 
     @pytest.mark.parametrize(
         "labels", ["xticks", "legend", "mid", "xticks-legend", "xticks-mid"]
     )
     @pytest.mark.parametrize("graph", tests.example_graphs())
     def test_labels_params(self, graph, labels):
-        self.check_schematic(graph, labels=labels)
+        self.check_tubes(graph, labels=labels)
 
 
 class TestInfStartTime:

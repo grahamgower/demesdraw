@@ -52,7 +52,7 @@ class Tube:
         mid: float,
         inf_start_time: float,
         log_time: bool,
-        num_exp_points: int = 100,
+        num_points: int = 100,
     ):
         """Calculate tube coordinates."""
         time: List[float] = []
@@ -72,11 +72,11 @@ class Tube:
                 if log_time:
                     t = np.exp(
                         np.linspace(
-                            np.log(start_time), np.log(1 + end_time), num=num_exp_points
+                            np.log(start_time), np.log(1 + end_time), num=num_points
                         )
                     )
                 else:
-                    t = np.linspace(start_time, end_time, num=num_exp_points)
+                    t = np.linspace(start_time, end_time, num=num_points)
                 dt = (start_time - t) / (start_time - end_time)
                 r = np.log(epoch.end_size / epoch.start_size)
                 N = epoch.start_size * np.exp(r * dt)
@@ -289,7 +289,7 @@ def find_positions(
     return {deme.id: position for deme, position in zip(graph.demes, x_best)}
 
 
-def schematic(
+def tubes(
     graph: demes.Graph,
     ax: matplotlib.axes.Axes = None,
     colours: utils.ColourOrColourMapping = None,
@@ -305,7 +305,7 @@ def schematic(
     fill: bool = True,
 ) -> matplotlib.axes.Axes:
     """
-    Plot a schematic of the demes in the graph and their relationships.
+    Plot a demes-as-tubes schematic of the graph and the demes' relationships.
 
     The width of each deme is proportional to its size, and ancestor/descendant
     relationships are drawn as dotted lines.

@@ -52,7 +52,7 @@ with PdfPages("examples.pdf") as pdf:
             title=title,
         )
 
-        demesdraw.schematic(
+        demesdraw.tubes(
             graph,
             ax=ax2,
             log_time=log_time,
