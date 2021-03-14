@@ -1,7 +1,6 @@
 import demes
 import numpy as np
 import matplotlib
-import matplotlib.pyplot as plt
 
 from demesdraw import utils
 
@@ -44,9 +43,7 @@ def size_history(
     :return: The matplotlib axes onto which the figure was drawn.
     :rtype: matplotlib.axes.Axes
     """
-    if ax is None:
-        fig_w, fig_h = plt.figaspect(9.0 / 16.0)
-        _, ax = plt.subplots(figsize=(fig_w, fig_h))
+    ax = utils.get_axes(ax)
 
     if invert_x:
         arrowhead = "<k"
@@ -217,5 +214,4 @@ def size_history(
     if log_size:
         ax.set_yscale("log", base=10)
 
-    ax.figure.tight_layout()
     return ax

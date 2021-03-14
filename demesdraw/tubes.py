@@ -7,7 +7,6 @@ import numpy as np
 import scipy.optimize
 import matplotlib
 import matplotlib.patheffects
-import matplotlib.pyplot as plt
 
 from demesdraw import utils
 
@@ -365,9 +364,7 @@ def tubes(
     ):
         raise ValueError(f"Unexpected value for labels: '{labels}'")
 
-    if ax is None:
-        fig_w, fig_h = plt.figaspect(9.0 / 16.0)
-        _, ax = plt.subplots(figsize=(fig_w, fig_h))
+    ax = utils.get_axes(ax)
 
     if log_time:
         ax.set_yscale("log", base=10)
@@ -568,5 +565,4 @@ def tubes(
 
     ax.set_ylim(1 if log_time else 0, None)
 
-    ax.figure.tight_layout()
     return ax

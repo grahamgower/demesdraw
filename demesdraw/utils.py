@@ -4,6 +4,7 @@ import warnings
 import demes
 import numpy as np
 import matplotlib
+import matplotlib.pyplot as plt
 
 # A colour is either a colour name string (e.g. "blue"), or an RGB triple,
 # or an RGBA triple.
@@ -122,3 +123,16 @@ def get_colours(
             ) from e
         new_colours = {deme.id: colour for deme in graph.demes}
     return new_colours
+
+
+def get_axes(
+    ax: matplotlib.axes.Axes = None, aspect=9.0 / 16.0, scale=1.0
+) -> matplotlib.axes.Axes:
+    """
+    Make a default axes if one isn't provided.
+    """
+    if ax is None:
+        fig_w, fig_h = plt.figaspect(scale)
+        fig, ax = plt.subplots(figsize=(scale * fig_w, scale * fig_h))
+        fig.set_tight_layout(True)
+    return ax
