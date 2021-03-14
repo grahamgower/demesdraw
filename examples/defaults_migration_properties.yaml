@@ -1,0 +1,12 @@
+description: Set general migration properties using defaults.
+time_units: generations
+
+defaults:
+  migration: {end_time: 1, rate: 1, start_time: 2}
+  epoch: {start_size: 1}
+
+demes: [{id: deme0}, {id: deme1}, {id: deme2}]
+
+migrations:
+- {dest: deme1, source: deme0}
+- {dest: deme2, source: deme1}

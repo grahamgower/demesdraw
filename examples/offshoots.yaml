@@ -1,0 +1,39 @@
+description: An example demography with one main population that is unchanged, that
+  spawns multiple offshoot populations.
+time_units: generations
+generation_time: 1
+
+demes:
+  - id: ancestral
+    description: Main population
+    epochs:
+    - start_size: 1000
+  - id: offshoot1
+    description: More recent offshoot population
+    ancestors: [ancestral]
+    start_time: 500
+    epochs:
+    - start_size: 100
+  - id: offshoot2
+    description: More ancient offshoot population
+    ancestors: [ancestral]
+    start_time: 1000
+    epochs:
+     - start_size: 200
+
+migrations:
+- source: ancestral
+  dest: offshoot1
+  start_time: 200
+  end_time: 100
+  rate: 1e-4
+- demes: [ancestral, offshoot2]
+  rate: 1e-5
+- demes: [offshoot1, offshoot2]
+  rate: 2e-5
+
+pulses:
+- source: offshoot1
+  dest: ancestral
+  proportion: 0.1
+  time: 50

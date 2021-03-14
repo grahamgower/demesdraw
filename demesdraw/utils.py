@@ -1,5 +1,15 @@
+from typing import Mapping, Tuple, Union
+import warnings
+
 import demes
 import numpy as np
+import matplotlib
+
+# A colour is either a colour name string (e.g. "blue"), or an RGB triple,
+# or an RGBA triple.
+Colour = Union[str, Tuple[float, float, float], Tuple[float, float, float, float]]
+# A mapping from a string to a colour, or just a single colour
+ColourOrColourMapping = Union[Mapping[str, Colour], Colour]
 
 
 def inf_start_time(graph: demes.Graph, inf_ratio: float, log_scale: bool) -> float:
@@ -11,12 +21,19 @@ def inf_start_time(graph: demes.Graph, inf_ratio: float, log_scale: bool) -> flo
     :return: The time
     :rtype: float
     """
-    epoch0_times = []
+    # Find the oldest non-infinite time in the graph.
+    times = []
     for deme in graph.demes:
-        epoch0_times.append(deme.epochs[0].end_time)
+        times.append(deme.epochs[0].end_time)
         if not np.isinf(deme.epochs[0].start_time):
-            epoch0_times.append(deme.epochs[0].start_time)
-    oldest_noninf_time = max(epoch0_times)
+            times.append(deme.epochs[0].start_time)
+    for migration in graph.migrations:
+        times.append(migration.end_time)
+        if not np.isinf(migration.start_time):
+            times.append(migration.start_time)
+    times.extend([pulse.time for pulse in graph.pulses])
+    oldest_noninf_time = max(times)
+
     if oldest_noninf_time == 0:
         # All demes are root demes and have a constant size.
         # About 100 generations is a nice time scale to draw, and we use 113
@@ -25,6 +42,13 @@ def inf_start_time(graph: demes.Graph, inf_ratio: float, log_scale: bool) -> flo
         inf_start_time: float = 113
     else:
         if log_scale:
+            if oldest_noninf_time <= 1:
+                # A log scale is a terrible choice for this graph.
+                warnings.warn(
+                    "Graph contains features at 0 < time <= 1, which will not "
+                    "be visible on a log scale."
+                )
+                oldest_noninf_time = 2
             inf_start_time = np.exp(np.log(oldest_noninf_time) / (1 - inf_ratio))
         else:
             inf_start_time = oldest_noninf_time / (1 - inf_ratio)
@@ -49,3 +73,52 @@ def size_of_deme_at_time(deme: demes.Deme, time: float) -> float:
         r = np.log(epoch.end_size / epoch.start_size)
         N = epoch.start_size * np.exp(r * dt)
     return N
+
+
+def get_colours(
+    graph: demes.Graph,
+    colours: ColourOrColourMapping = None,
+    default_colour="gray",
+) -> Mapping[str, Colour]:
+    """
+    Convert the polymorphic ``colours`` into a dictionary of colours,
+    keyed by deme ID.
+
+    :param demes.Graph graph: The graph to which colours will apply.
+    :param colours: The colour or colours.
+        * If ``colours`` is ``None``, the default colour map will be used.
+        * If ``colours`` is a dict, it must map deme IDs to colours.
+          All demes not in the dict will be drawn with ``default_colour``.
+        * Otherwise, if ``colours`` can be interpreted as a matplotlib
+          colour, all demes will be drawn with this colour.
+    :type: dict or str
+    """
+    if colours is None:
+        if len(graph.demes) <= 10:
+            cmap = matplotlib.cm.get_cmap("tab10")
+        elif len(graph.demes) <= 20:
+            cmap = matplotlib.cm.get_cmap("tab20")
+        else:
+            raise ValueError(
+                "Graph has more than 20 demes, so colours must be specified."
+            )
+        new_colours = {deme.id: cmap(j) for j, deme in enumerate(graph.demes)}
+    elif isinstance(colours, Mapping):
+        bad_ids = list(colours.keys() - set(graph.demes))
+        if len(bad_ids) > 0:
+            raise ValueError(
+                f"Colours given for deme(s) {bad_ids}, but deme(s) were "
+                "not found in the graph."
+            )
+        new_colours = {deme.id: default_colour for deme in graph.demes}
+        new_colours.update(**colours)
+    else:
+        # Try to interpret as a matplotlib colour.
+        try:
+            colour = matplotlib.colors.to_rgba(colours)
+        except ValueError as e:
+            raise ValueError(
+                f"Colour '{colours}' not interpretable as a matplotlib colour"
+            ) from e
+        new_colours = {deme.id: colour for deme in graph.demes}
+    return new_colours

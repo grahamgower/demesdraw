@@ -1,0 +1,15 @@
+description: Stepping stone model illustrating default value propagation.
+time_units: "years"
+generation_time: 25
+defaults:
+  epoch:
+    start_size: 1000
+  migration:
+    rate: 0.1
+demes:
+  - id: deme1
+  - id: deme2
+  - id: deme3
+migrations:
+  - demes: [deme1, deme2]
+  - demes: [deme2, deme3]

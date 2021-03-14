@@ -1,60 +1,71 @@
+import warnings
+
 import demes
 import pytest
 import numpy as np
 import matplotlib
+import matplotlib.pyplot as plt
 
 import demesdraw
 import demesdraw.utils
-from tests import example_graph, example_deme
+import tests
 
 
 class TestSizeHistory:
-    @pytest.mark.parametrize("annotate_epochs", [True, False])
-    @pytest.mark.parametrize("invert_x", [True, False])
+    def check_size_history(self, graph, **kwargs):
+        ax = demesdraw.size_history(graph, **kwargs)
+        assert isinstance(ax, matplotlib.axes.Axes)
+        plt.close(ax.figure)
+
     @pytest.mark.parametrize("log_size", [True, False])
     @pytest.mark.parametrize("log_time", [True, False])
-    def test_examples(
-        self, example_graph, log_time, log_size, invert_x, annotate_epochs
-    ):
-        ax = demesdraw.size_history(
-            example_graph,
-            log_time=log_time,
-            log_size=log_size,
-            invert_x=invert_x,
-            annotate_epochs=annotate_epochs,
-        )
-        assert isinstance(ax, matplotlib.axes.Axes)
+    @pytest.mark.parametrize("graph", tests.example_graphs())
+    def test_log_params(self, graph, log_time, log_size):
+        self.check_size_history(graph, log_time=log_time, log_size=log_size)
+
+    @pytest.mark.parametrize("graph", tests.example_graphs())
+    def test_annotate_epochs_invert_x(self, graph):
+        self.check_size_history(graph, invert_x=True, annotate_epochs=True)
 
 
 class TestSchematic:
-    @pytest.mark.parametrize("log_time", [True, False])
-    def test_examples(self, example_graph, log_time):
-        ax = demesdraw.schematic(
-            example_graph,
-            optimisation_rounds=1,
-            log_time=log_time,
-            seed=1234,
-        )
+    def check_schematic(self, graph, seed=1234, optimisation_rounds=1, **kwargs):
+        ax = demesdraw.schematic(graph, **kwargs)
         assert isinstance(ax, matplotlib.axes.Axes)
+        plt.close(ax.figure)
+
+    @pytest.mark.parametrize("log_time", [True, False])
+    @pytest.mark.parametrize("graph", tests.example_graphs())
+    def test_log_params(self, graph, log_time):
+        self.check_schematic(graph, log_time=log_time)
+
+    @pytest.mark.parametrize(
+        "labels", ["xticks", "legend", "mid", "xticks-legend", "xticks-mid"]
+    )
+    @pytest.mark.parametrize("graph", tests.example_graphs())
+    def test_labels_params(self, graph, labels):
+        self.check_schematic(graph, labels=labels)
 
 
 class TestInfStartTime:
     @pytest.mark.parametrize("log_scale", [True, False])
-    def test_examples(self, example_graph, log_scale):
-        t = demesdraw.utils.inf_start_time(example_graph, 0.1, log_scale)
+    @pytest.mark.parametrize("graph", tests.example_graphs())
+    def test_time_is_reasonable(self, graph, log_scale):
+        t = demesdraw.utils.inf_start_time(graph, 0.1, log_scale)
         assert t > 0
         assert not np.isinf(t)
-        start_times = [
-            epoch.start_time
-            for deme in example_graph.demes
-            for epoch in deme.epochs
-            if not np.isinf(epoch.start_time)
-        ]
-        end_times = [
-            epoch.end_time for deme in example_graph.demes for epoch in deme.epochs
-        ]
-        assert t > np.max(start_times)
-        assert t > np.max(end_times)
+
+        times = []
+        for deme in graph.demes:
+            for epoch in deme.epochs:
+                times.extend([epoch.start_time, epoch.end_time])
+        for migration in graph.migrations:
+            times.extend([migration.start_time, migration.end_time])
+        for pulse in graph.pulses:
+            times.append(pulse.time)
+        time_max = max(time for time in times if not np.isinf(time))
+
+        assert t > time_max
 
     @pytest.mark.parametrize("log_scale", [True, False])
     def test_one_epoch(self, log_scale):
@@ -67,11 +78,38 @@ class TestInfStartTime:
 
 
 class TestSizeOfDemeAtTime:
-    def test_examples(self, example_deme):
-        N = demesdraw.utils.size_of_deme_at_time(example_deme, example_deme.start_time)
-        assert N == example_deme.epochs[0].start_size
-        N = demesdraw.utils.size_of_deme_at_time(example_deme, example_deme.end_time)
-        assert N == example_deme.epochs[-1].end_size
+    @pytest.mark.parametrize("deme", tests.example_demes())
+    def test_deme_start_and_end_times(self, deme):
+        N = demesdraw.utils.size_of_deme_at_time(deme, deme.start_time)
+        assert N == deme.epochs[0].start_size
+        N = demesdraw.utils.size_of_deme_at_time(deme, deme.end_time)
+        assert N == deme.epochs[-1].end_size
+
+    @pytest.mark.parametrize("deme", tests.example_demes())
+    def test_times_within_each_epoch(self, deme):
+        for epoch in deme.epochs:
+            if np.isinf(epoch.start_time):
+                # The deme has the same size from end_time back to infinity.
+                for t in [epoch.end_time, epoch.end_time + 100, np.inf]:
+                    N = demesdraw.utils.size_of_deme_at_time(deme, t)
+                    assert N == epoch.start_size
+            else:
+                # Recalling that an epoch spans over the open-closed interval
+                # (start_time, end_time], we test several times in this range.
+                dt = epoch.start_time - epoch.end_time
+                r = np.log(epoch.end_size / epoch.start_size)
+                for p in [0, 1e-6, 1 / 3, 0.1, 1 - 1e-6]:
+                    t = epoch.end_time + p * dt
+                    N = demesdraw.utils.size_of_deme_at_time(deme, t)
+                    if epoch.size_function == "constant":
+                        assert N == epoch.start_size
+                    elif epoch.size_function == "exponential":
+                        expected_N = epoch.start_size * np.exp(r * (1 - p))
+                        assert np.isclose(N, expected_N)
+                    else:
+                        warnings.warn(
+                            f"No tests for size_function '{epoch.size_function}'"
+                        )
 
     def test_bad_time(self):
         b = demes.Builder()

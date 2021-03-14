@@ -1,0 +1,15 @@
+description: Set epoch values using global defaults.
+time_units: generations
+
+defaults:
+  epoch: {cloning_rate: 0.5, end_size: 2, selfing_rate: 0.1, start_size: 1}
+
+demes:
+- id: deme0
+  epochs:
+  - {end_time: 100, start_size: 1, end_size: 1}
+  - {end_time: 3}
+  - {end_time: 2}
+  - {end_time: 1}
+  - {end_time: 0}
+

@@ -1,0 +1,12 @@
+description: A single-population bottleneck model.
+generation_time: 1
+time_units: generations
+demes:
+  - id: our_population
+    description: Bottleneck population using epochs
+    epochs:
+    - start_size: 1e4
+      end_time: 500
+    - start_size: 1e2
+      end_time: 100
+    - start_size: 1e4

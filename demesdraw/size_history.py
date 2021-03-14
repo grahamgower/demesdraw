@@ -14,7 +14,7 @@ def size_history(
     invert_x: bool = False,
     num_exp_points: int = 100,
     annotate_epochs: bool = False,
-    cmap: matplotlib.colors.Colormap = None,
+    colours: utils.ColourOrColourMapping = None,
     log_time: bool = False,
     log_size: bool = False,
     title: str = None,
@@ -25,7 +25,7 @@ def size_history(
     :param demes.Graph graph: The demes graph to plot.
     :param matplotlib.axes.Axes ax: The matplotlib axes onto which the figure
         will be drawn. If None, an empty axes will be created for the figure.
-    :param float inf_ratio: The proportion of the horizontal axis that will be
+    :param float inf_ratio: The proportion of the time axis that will be
         used for the time interval which stretches towards infinity.
     :param bool inf_label: Write "inf" by the arrow that points towards infinity.
     :param bool invert_x: If true, the horizontal axis will have infinity
@@ -36,9 +36,9 @@ def size_history(
     :param bool annotate_epochs: Annotate the figure with epoch indices
         over the relevant parts of the lines. This is mostly useful as a
         pedagogical tool.
-    :param matplotlib.colors.Colormap cmap: A matplotlib colour map to be used
-        for the different demes. Get one with :func:`matplotlib.cm.get_cmap()`.
-        If None, tab10 or tab20 will be used, depending on the number of demes.
+    :param colours: A mapping from deme ID to matplotlib colour. Alternately,
+        ``colours`` may be a named colour that will be used for all demes.
+    :type colours: dict or str
     :param bool log_time: Use a log-10 scale for the time axis.
     :param bool log_size: Use a log-10 scale for the deme size axis.
     :param str title: The title of the figure.
@@ -55,16 +55,7 @@ def size_history(
     else:
         arrowhead = ">k"
 
-    if cmap is None:
-        if len(graph.demes) <= 10:
-            cmap = matplotlib.cm.get_cmap("tab10")
-        elif len(graph.demes) <= 20:
-            cmap = matplotlib.cm.get_cmap("tab20")
-        else:
-            raise ValueError(
-                "Graph has more than 20 demes, so cmap must be specified. Good luck!"
-            )
-
+    colours = utils.get_colours(graph, colours)
     inf_start_time = utils.inf_start_time(graph, inf_ratio, log_time)
 
     linestyles = ["solid"]  # , "dashed", "dashdot"]
@@ -74,7 +65,7 @@ def size_history(
     z_top = 1 + len(graph.demes) + max(linewidths)
 
     for j, deme in enumerate(graph.demes):
-        colour = cmap(j)
+        colour = colours[deme.id]
         linestyle = linestyles[j % len(linestyles)]
         linewidth = linewidths[j % len(linewidths)]
         plot_kwargs = dict(
