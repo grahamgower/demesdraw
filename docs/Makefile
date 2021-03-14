@@ -1,5 +1,5 @@
 build:
-	jupyter-book build -W -n --keep-going .
+	jupyter-book build -W --keep-going .
 
 clean:
 	# Empty the _build directory except jupyter_cache.
