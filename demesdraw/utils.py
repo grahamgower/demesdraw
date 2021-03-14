@@ -1,11 +1,17 @@
 from typing import Mapping, Tuple, Union
 import warnings
 
-import demes, demes.convert
+import demes
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-
+try:
+    import demes.convert
+except ImportError:
+    warnings.warn(
+        "demes.convert requires msprime and stdpopsim, computing sampling "
+        "probabilities will not be possible."
+    )
 # A colour is either a colour name string (e.g. "blue"), or an RGB triple,
 # or an RGBA triple.
 Colour = Union[str, Tuple[float, float, float], Tuple[float, float, float, float]]
@@ -83,10 +89,6 @@ def get_lineage_probs(
     Return lineage probabilities computed using msprime.lineage_probabilities,
     over time steps determined by steps_per_epoch.
     """
-    try:
-        import msprime
-    except ImportError:
-        raise ValueError("msprime is not installed, need to install msprime >= 1.0.0")
     assert int(msprime.__version__[0]) >= 1, "msprime needs to be version 1.0 or higher"
     # We construct the msprime DemographyDebugger using inputs from demes.convert
     pc, de, mm = demes.convert.to_msprime(graph)
