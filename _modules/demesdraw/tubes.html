@@ -167,7 +167,7 @@
               <div>
                 
   <h1>Source code for demesdraw.tubes</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">math</span>
 
@@ -221,7 +221,7 @@
         <span class="n">inf_start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">log_time</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
         <span class="n">num_points</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
-    <span class="p">):</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Calculate tube coordinates.&quot;&quot;&quot;</span>
         <span class="n">time</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">size1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -264,14 +264,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">size1</span> <span class="o">=</span> <span class="n">size1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size2</span> <span class="o">=</span> <span class="n">size2</span>
 
-    <span class="k">def</span> <span class="nf">sizes_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sizes_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the size coordinates of the tube at the given time.&quot;&quot;&quot;</span>
         <span class="n">N</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_of_deme_at_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deme</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
         <span class="n">N1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid</span> <span class="o">-</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="n">N2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid</span> <span class="o">+</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="k">return</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span>
 
-    <span class="k">def</span> <span class="nf">to_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">to_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Return a matplotlib.path.Path for the tube outline.&quot;&quot;&quot;</span>
         <span class="c1"># Compared with separately drawing each side of the tube,</span>
         <span class="c1"># drawing a path that includes both sides of the tube means:</span>
@@ -392,11 +392,11 @@
     <span class="n">successors</span> <span class="o">=</span> <span class="n">successors_indexes</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
     <span class="n">interactions</span> <span class="o">=</span> <span class="n">interactions_indexes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">fseparation</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fseparation</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;The separation distance between coexisting demes.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">contemporaries</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">fmin</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fmin</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Function to be minimised.&quot;&quot;&quot;</span>
         <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># Minimise the distance from each deme to its children.</span>
@@ -418,7 +418,7 @@
     <span class="n">fmin_best</span> <span class="o">=</span> <span class="n">fmin</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
     <span class="n">x_best</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">initial_states</span><span class="p">(</span><span class="n">rounds</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">initial_states</span><span class="p">(</span><span class="n">rounds</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Generate initial states for the optimisation procedure.&quot;&quot;&quot;</span>
         <span class="c1"># Try the canonical top-down ordering.</span>
         <span class="k">yield</span> <span class="n">topdown</span>
@@ -430,7 +430,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rounds</span><span class="p">):</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                 <span class="n">rng</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
                 <span class="k">yield</span> <span class="n">x</span>
 
@@ -445,9 +445,7 @@
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;SLSQP&quot;</span><span class="p">,</span>
             <span class="n">bounds</span><span class="o">=</span><span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">Bounds</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
             <span class="n">constraints</span><span class="o">=</span><span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">NonlinearConstraint</span><span class="p">(</span>
-                <span class="n">fseparation</span><span class="p">,</span>
-                <span class="n">lb</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span>
-                <span class="n">ub</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+                <span class="n">fseparation</span><span class="p">,</span> <span class="n">lb</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span> <span class="n">ub</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">success</span> <span class="ow">and</span> <span class="n">res</span><span class="o">.</span><span class="n">fun</span> <span class="o">&lt;</span> <span class="n">fmin_best</span><span class="p">:</span>
@@ -523,14 +521,7 @@
 <span class="sd">    :return: The matplotlib axes onto which the figure was drawn.</span>
 <span class="sd">    :rtype: matplotlib.axes.Axes</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">labels</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
-        <span class="s2">&quot;xticks&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;legend&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;mid&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;xticks-legend&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;xticks-mid&quot;</span><span class="p">,</span>
-        <span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
+    <span class="k">if</span> <span class="n">labels</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;xticks&quot;</span><span class="p">,</span> <span class="s2">&quot;legend&quot;</span><span class="p">,</span> <span class="s2">&quot;mid&quot;</span><span class="p">,</span> <span class="s2">&quot;xticks-legend&quot;</span><span class="p">,</span> <span class="s2">&quot;xticks-mid&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected value for labels: &#39;</span><span class="si">{</span><span class="n">labels</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
     <span class="n">ax</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_axes</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
@@ -613,7 +604,7 @@
         <span class="n">source_size1</span><span class="p">,</span> <span class="n">source_size2</span> <span class="o">=</span> <span class="n">tubes</span><span class="p">[</span><span class="n">source</span><span class="p">]</span><span class="o">.</span><span class="n">sizes_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
         <span class="n">dest_size1</span><span class="p">,</span> <span class="n">dest_size2</span> <span class="o">=</span> <span class="n">tubes</span><span class="p">[</span><span class="n">dest</span><span class="p">]</span><span class="o">.</span><span class="n">sizes_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">positions</span><span class="p">[</span><span class="n">source</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">positions</span><span class="p">[</span><span class="n">dest</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">source_size2</span> <span class="o">&lt;</span> <span class="n">dest_size1</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">source_size2</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">dest_size1</span> <span class="o">-</span> <span class="n">offset</span><span class="p">]</span>
             <span class="n">arrow</span> <span class="o">=</span> <span class="s2">&quot;&gt;k&quot;</span>
         <span class="k">else</span><span class="p">:</span>
@@ -641,7 +632,7 @@
             <span class="o">**</span><span class="n">mig_kwargs</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">log_scale</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Migration</span><span class="p">,</span> <span class="n">log_scale</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">migration</span><span class="o">.</span><span class="n">start_time</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">start_time</span><span class="p">):</span>
             <span class="n">start_time</span> <span class="o">=</span> <span class="n">inf_start_time</span>
