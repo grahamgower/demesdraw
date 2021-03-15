@@ -39,7 +39,7 @@ with PdfPages("examples.pdf") as pdf:
             ncols=1,
             nrows=2,
             figsize=(scale * fig_w, scale * fig_h),
-            # constrained_layout=True,
+            constrained_layout=True,
         )
         ax1, ax2 = axs[0], axs[1]
 

@@ -79,7 +79,7 @@ def size_of_deme_at_time(deme: demes.Deme, time: float) -> float:
 def get_colours(
     graph: demes.Graph,
     colours: ColourOrColourMapping = None,
-    default_colour="gray",
+    default_colour: Colour = "gray",
 ) -> Mapping[str, Colour]:
     """
     Convert the polymorphic ``colours`` into a dictionary of colours,
@@ -126,7 +126,7 @@ def get_colours(
 
 
 def get_axes(
-    ax: matplotlib.axes.Axes = None, aspect=9.0 / 16.0, scale=1.0
+    ax: matplotlib.axes.Axes = None, aspect: float = 9.0 / 16.0, scale: float = 1.0
 ) -> matplotlib.axes.Axes:
     """
     Make a default axes if one isn't provided.

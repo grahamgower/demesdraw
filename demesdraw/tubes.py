@@ -1,4 +1,4 @@
-from typing import Mapping, List, Tuple
+from typing import Any, Iterable, Mapping, List, Tuple
 import itertools
 import math
 
@@ -52,7 +52,7 @@ class Tube:
         inf_start_time: float,
         log_time: bool,
         num_points: int = 100,
-    ):
+    ) -> None:
         """Calculate tube coordinates."""
         time: List[float] = []
         size1: List[float] = []
@@ -95,14 +95,14 @@ class Tube:
         self.size1 = size1
         self.size2 = size2
 
-    def sizes_at(self, time):
+    def sizes_at(self, time: float) -> Tuple[float, float]:
         """Return the size coordinates of the tube at the given time."""
         N = utils.size_of_deme_at_time(self.deme, time)
         N1 = self.mid - N / 2
         N2 = self.mid + N / 2
         return N1, N2
 
-    def to_path(self):
+    def to_path(self) -> matplotlib.path.Path:
         """Return a matplotlib.path.Path for the tube outline."""
         # Compared with separately drawing each side of the tube,
         # drawing a path that includes both sides of the tube means:
@@ -223,11 +223,11 @@ def find_positions(
     successors = successors_indexes(graph)
     interactions = interactions_indexes(graph, unique=True)
 
-    def fseparation(x):
+    def fseparation(x: np.ndarray) -> np.ndarray:
         """The separation distance between coexisting demes."""
         return np.array([np.abs(x[j] - x[k]) for j, k in contemporaries])
 
-    def fmin(x):
+    def fmin(x: np.ndarray) -> float:
         """Function to be minimised."""
         z = 0
         # Minimise the distance from each deme to its children.
@@ -249,7 +249,7 @@ def find_positions(
     fmin_best = fmin(x0)
     x_best = x0.copy()
 
-    def initial_states(rounds):
+    def initial_states(rounds: int) -> Iterable[Any]:
         """Generate initial states for the optimisation procedure."""
         # Try the canonical top-down ordering.
         yield topdown
@@ -261,7 +261,7 @@ def find_positions(
         else:
             rng = np.random.default_rng(seed)
             for _ in range(rounds):
-                x = list(x0)
+                x = x0.copy()
                 rng.shuffle(x)
                 yield x
 
@@ -276,9 +276,7 @@ def find_positions(
             method="SLSQP",
             bounds=scipy.optimize.Bounds(0, np.inf),
             constraints=scipy.optimize.NonlinearConstraint(
-                fseparation,
-                lb=sep,
-                ub=np.inf,
+                fseparation, lb=sep, ub=np.inf
             ),
         )
         if res.success and res.fun < fmin_best:
@@ -354,14 +352,7 @@ def tubes(
     :return: The matplotlib axes onto which the figure was drawn.
     :rtype: matplotlib.axes.Axes
     """
-    if labels not in (
-        "xticks",
-        "legend",
-        "mid",
-        "xticks-legend",
-        "xticks-mid",
-        None,
-    ):
+    if labels not in ("xticks", "legend", "mid", "xticks-legend", "xticks-mid", None):
         raise ValueError(f"Unexpected value for labels: '{labels}'")
 
     ax = utils.get_axes(ax)
@@ -444,7 +435,7 @@ def tubes(
         source_size1, source_size2 = tubes[source].sizes_at(time)
         dest_size1, dest_size2 = tubes[dest].sizes_at(time)
 
-        if positions[source] < positions[dest]:
+        if source_size2 < dest_size1:
             x = [source_size2 + offset, dest_size1 - offset]
             arrow = ">k"
         else:
@@ -472,7 +463,7 @@ def tubes(
             **mig_kwargs,
         )
 
-    def random_migration_time(migration, log_scale):
+    def random_migration_time(migration: demes.Migration, log_scale: bool) -> float:
         start_time = migration.start_time
         if np.isinf(start_time):
             start_time = inf_start_time
