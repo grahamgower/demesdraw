@@ -1,2 +1,2 @@
-Drawing functions for [demes](https://github.com/popsim-consortium/demes-python).
-This is very preliminary, so the functionality and API are expected to change.
+Drawing functions for [Demes](https://github.com/popsim-consortium/demes-python).
+See the [DemesDraw documentation](https://grahamgower.github.io/demesdraw) for details.
