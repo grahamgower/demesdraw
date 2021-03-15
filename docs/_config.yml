@@ -26,6 +26,7 @@ sphinx:
   - sphinx.ext.intersphinx
 
   config:
+    autodoc_typehints: "none"
     intersphinx_mapping:
       python: ["https://docs.python.org/3/", null]
       demes: ["https://popsim-consortium.github.io/demes-docs/main/", null]

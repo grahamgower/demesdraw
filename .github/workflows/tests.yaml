@@ -46,7 +46,6 @@ jobs:
       - name: run pytest
         run: |
           python -m pytest \
-            -v \
             -n auto \
             --cov=demesdraw \
             --cov-report=term-missing \

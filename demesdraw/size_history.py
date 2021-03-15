@@ -17,7 +17,7 @@ def size_history(
     log_size: bool = False,
     title: str = None,
     num_points: int = 100,
-):
+) -> matplotlib.axes.Axes:
     """
     Plot population size as a function of time for each deme in the graph.
 
