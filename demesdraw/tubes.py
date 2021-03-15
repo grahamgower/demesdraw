@@ -7,6 +7,9 @@ import numpy as np
 import scipy.optimize
 import matplotlib
 import matplotlib.patheffects
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+from matplotlib.patches import Polygon
 
 from demesdraw import utils
 
@@ -62,20 +65,17 @@ class Tube:
             if np.isinf(start_time):
                 start_time = inf_start_time
             end_time = epoch.end_time
+            if log_time:
+                t = np.logspace(
+                    np.log10(start_time), np.log10(max(1, end_time)), num=num_points
+                )
+            else:
+                t = np.linspace(start_time, end_time, num=num_points)
 
             if epoch.size_function == "constant":
-                t = np.array([start_time, end_time])
-                N1 = [mid - epoch.start_size / 2] * 2
-                N2 = [mid + epoch.end_size / 2] * 2
+                N1 = [mid - epoch.start_size / 2] * len(t)
+                N2 = [mid + epoch.end_size / 2] * len(t)
             elif epoch.size_function == "exponential":
-                if log_time:
-                    t = np.exp(
-                        np.linspace(
-                            np.log(start_time), np.log(1 + end_time), num=num_points
-                        )
-                    )
-                else:
-                    t = np.linspace(start_time, end_time, num=num_points)
                 dt = (start_time - t) / (start_time - end_time)
                 r = np.log(epoch.end_size / epoch.start_size)
                 N = epoch.start_size * np.exp(r * dt)
@@ -87,9 +87,12 @@ class Tube:
                     f'"{epoch.size_function}" size_function.'
                 )
 
-            time.extend(t)
-            size1.extend(N1)
-            size2.extend(N2)
+            ii = 1
+            if len(time) == 0:
+                ii = 0
+            time.extend(t[ii:])
+            size1.extend(N1[ii:])
+            size2.extend(N2[ii:])
 
         self.time = time
         self.size1 = size1
@@ -276,9 +279,7 @@ def find_positions(
             method="SLSQP",
             bounds=scipy.optimize.Bounds(0, np.inf),
             constraints=scipy.optimize.NonlinearConstraint(
-                fseparation,
-                lb=sep,
-                ub=np.inf,
+                fseparation, lb=sep, ub=np.inf,
             ),
         )
         if res.success and res.fun < fmin_best:
@@ -286,6 +287,60 @@ def find_positions(
             fmin_best = res.fun
 
     return {deme.id: position for deme, position in zip(graph.demes, x_best)}
+
+
+def fill_tube_gradient(ax, tube, z, positions, padding=0.01):
+    """
+    For the given tube, fill based on z, which is the **linear** spacing
+    of the gradient from the bottom to the top of the tube. The gradient
+    itself may not be linear, but z must be linear spaced from the bottom
+    to top of tube. pad gives some space between line and fill, based on
+    fraction of max size of that deme.
+    """
+    im = ax.imshow(
+        z,
+        aspect="auto",
+        extent=[min(tube.size1), max(tube.size2), tube.time[-1], tube.time[0]],
+        origin="lower",
+        zorder=1,
+    )
+    pad = padding * (max(tube.size2) - min(tube.size1))
+    xy = np.vstack(
+        [
+            np.column_stack(
+                [
+                    [min(s + pad, positions[tube.deme.id]) for s in tube.size1[::-1]],
+                    tube.time[::-1],
+                ]
+            ),
+            np.column_stack(
+                [[max(s - pad, positions[tube.deme.id]) for s in tube.size2], tube.time]
+            ),
+            [min(tube.size1[-1] + pad, positions[tube.deme.id]), tube.time[-1]],
+        ]
+    )
+    clip_path = Polygon(xy, facecolor="none", edgecolor="none", closed=True)
+    ax.add_patch(clip_path)
+    im.set_clip_path(clip_path)
+
+
+def blend_colors(zs):
+    """
+    zs = [z1, z2, ...]
+    each row in z1 and z2 are the [r, g, b, a] colors, which are blended using
+    alpha as the proportions.
+
+    No idea if this is at all proper for blending colors and alphas...
+    """
+    for z in zs[1:]:
+        assert len(z) == len(zs[0]), "zs must all be same length"
+    znew = np.zeros(zs[0].shape)
+    atot = np.sum([z[:, :, -1] for z in zs], axis=0)
+    atot[atot < 1e-6] = 1e-6
+    props = [z[:, :, -1] / atot for z in zs]
+    znew[:, :, :3] = np.sqrt(np.sum([p[:, None] * z[:, :, :3] ** 2 for p, z in zip(props, zs)], axis=0))
+    znew[:, :, -1] = np.sum([p * z[:, :, -1] for p, z in zip(props, zs)], axis=0)
+    return znew
 
 
 def tubes(
@@ -302,6 +357,7 @@ def tubes(
     # TODO: docstring
     labels: str = "xticks-mid",
     fill: bool = True,
+    sampled: List[str] = None,
 ) -> matplotlib.axes.Axes:
     """
     Plot a demes-as-tubes schematic of the graph and the demes' relationships.
@@ -354,14 +410,7 @@ def tubes(
     :return: The matplotlib axes onto which the figure was drawn.
     :rtype: matplotlib.axes.Axes
     """
-    if labels not in (
-        "xticks",
-        "legend",
-        "mid",
-        "xticks-legend",
-        "xticks-mid",
-        None,
-    ):
+    if labels not in ("xticks", "legend", "mid", "xticks-legend", "xticks-mid", None,):
         raise ValueError(f"Unexpected value for labels: '{labels}'")
 
     ax = utils.get_axes(ax)
@@ -408,16 +457,40 @@ def tubes(
             tube.to_path(), capstyle="butt", fill=False, **plot_kwargs
         )
         ax.add_patch(path_patch)
+
         if fill:
-            ax.fill_betweenx(
-                tube.time,
-                tube.size1,
-                tube.size2,
-                facecolor=colour,
-                edgecolor="none",
-                alpha=0.5,
-                zorder=1,
-            )
+            if sampled is not None:
+                graph_ids = [d.id for d in graph.demes]
+                sampled_deme_idx = [graph_ids.index(s) for s in sampled]
+                fill_colour = [colours[s] for s in sampled]
+                # plot single population lineage probabilities
+                if graph.time_units == "generations":
+                    factor = 1
+                else:
+                    factor = graph.generation_time
+                ## gradient fill by alphas and sampled colors
+                # imshow works linearly, so need to compute gradient over linear time values
+                times = np.linspace(tube.time[-1], tube.time[0], 2000)
+                alphas = utils.get_lineage_probs(graph, times / factor, sampled_deme_idx, j)
+                alphas = [a * 0.5 for a in alphas]
+                zs = [np.empty((len(alphas[0]), 1, 4), dtype=float) for s in sampled]
+                for i, s in enumerate(sampled):
+                    rgb = mcolors.colorConverter.to_rgb(fill_colour[i])
+                    zs[i][:, :, :3] = rgb
+                    zs[i][:, :, -1] = np.array(alphas[i])[:, None]
+                z = blend_colors(zs)
+                fill_tube_gradient(ax, tube, z, positions)
+
+            else:
+                ax.fill_betweenx(
+                    tube.time,
+                    tube.size1,
+                    tube.size2,
+                    facecolor=colour,
+                    edgecolor="none",
+                    alpha=0.5,
+                    zorder=1,
+                )
 
         # Indicate ancestry from ancestor demes.
         ancestry_kwargs = dict(linestyle=":", solid_capstyle="butt", **plot_kwargs)
@@ -566,3 +639,57 @@ def tubes(
     ax.set_ylim(1 if log_time else 0, None)
 
     return ax
+
+
+def parse_args():
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Plot a schematic of the population relationships in the graph."
+    )
+    parser.add_argument(
+        "--log-time", action="store_true", help="Use a log scale for the time axis."
+    )
+    parser.add_argument(
+        "--optimisation-rounds",
+        type=int,
+        default=None,
+        help=(
+            "Number of rounds of optimisation to perform when searching for "
+            "reasonable horizontal positions for the demes. "
+        ),
+    )
+    parser.add_argument(
+        "--seed", type=int, default=None, help="Seed for the random number generator."
+    )
+    parser.add_argument(
+        "--xkcd", action="store_true", help="Plot using the XKCD cartoon style."
+    )
+    parser.add_argument(
+        "yaml_filename", metavar="demes.yaml", help="The Demes graph to plot.",
+    )
+    parser.add_argument(
+        "plot_filename",
+        metavar="figure.pdf",
+        help=(
+            "Output filename for the figure. "
+            "Any file extension supported by matplotlib may be provided "
+            "(pdf, eps, png, svg)."
+        ),
+    )
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    args = parse_args()
+    if args.xkcd:
+        plt.xkcd()
+    graph = demes.load(args.yaml_filename)
+    ax = schematic(
+        graph,
+        log_time=args.log_time,
+        optimisation_rounds=args.optimisation_rounds,
+        seed=args.seed,
+    )
+    ax.figure.savefig(args.plot_filename)
+

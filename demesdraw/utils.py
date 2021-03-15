@@ -5,7 +5,14 @@ import demes
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-
+try:
+    import demes.convert
+    import msprime
+except ImportError:
+    warnings.warn(
+        "demes.convert requires msprime and stdpopsim, computing sampling "
+        "probabilities will not be possible."
+    )
 # A colour is either a colour name string (e.g. "blue"), or an RGB triple,
 # or an RGBA triple.
 Colour = Union[str, Tuple[float, float, float], Tuple[float, float, float, float]]
@@ -74,6 +81,26 @@ def size_of_deme_at_time(deme: demes.Deme, time: float) -> float:
         r = np.log(epoch.end_size / epoch.start_size)
         N = epoch.start_size * np.exp(r * dt)
     return N
+
+
+def get_lineage_probs(
+    graph: demes.Graph, times, sampled_deme_idx, tube_deme_idx
+) -> list:
+    """
+    Return lineage probabilities computed using msprime.lineage_probabilities,
+    over time steps determined by steps_per_epoch.
+    """
+    assert int(msprime.__version__[0]) >= 1, "msprime needs to be version 1.0 or higher"
+    # We construct the msprime DemographyDebugger using inputs from demes.convert
+    pc, de, mm = demes.convert.to_msprime(graph)
+    dd = msprime.DemographyDebugger(
+        population_configurations=pc, demographic_events=de, migration_matrix=mm
+    )
+    lp = dd.lineage_probabilities(times)
+    lp[lp < 0] = 0
+    lp[lp > 1] = 1
+    alphas = [np.array([probs[ii][tube_deme_idx] for probs in lp]) for ii in sampled_deme_idx]
+    return alphas
 
 
 def get_colours(
