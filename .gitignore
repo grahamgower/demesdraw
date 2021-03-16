@@ -1,0 +1,8 @@
+.coverage
+coverage.xml
+__pycache__
+build/
+dist/
+demesdraw.egg-info
+demesdraw/_version.py
+docs/_build
