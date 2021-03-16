@@ -5,3 +5,5 @@ dependencies:
   - pip
   - pip:
     - -r file:requirements/minimal.txt
+    # Install demesdraw from current directory.
+    - .
