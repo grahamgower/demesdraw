@@ -1,0 +1,5 @@
+# Core dependencies.
+demes==0.1.0a3
+matplotlib==3.3.4
+numpy==1.20.1
+scipy==1.6.1
