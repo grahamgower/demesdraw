@@ -70,23 +70,27 @@ def size_history(
             label=deme.id,
             alpha=0.7,
             zorder=z_top - linewidth,
-            solid_capstyle="butt",
+            capstyle="butt",
+            fill=False,
             path_effects=[
                 matplotlib.patheffects.withStroke(linewidth=3, foreground="white")
             ],
         )
-        discontinuity_kwargs = dict(
-            color=colour,
-            linestyle=":",
-            linewidth=linewidth,
-            alpha=0.7,
-            zorder=z_top - linewidth,
-            solid_capstyle="butt",
-            path_effects=[
-                matplotlib.patheffects.withStroke(linewidth=3, foreground="white")
-            ],
-        )
-        legend_handles.append(matplotlib.lines.Line2D([], [], **plot_kwargs))
+        discontinuity_kwargs = plot_kwargs.copy()
+        discontinuity_kwargs.update(linestyle=":")
+        legend_kwargs = plot_kwargs.copy()
+        legend_kwargs.pop("fill")
+        # Line2D and Patch use different keywords for the capstyle. *Sigh*
+        legend_kwargs.update(solid_capstyle=legend_kwargs.pop("capstyle"))
+
+        legend_handles.append(matplotlib.lines.Line2D([], [], **legend_kwargs))
+
+        # Path for the main line (solid).
+        vertices_main = []
+        codes_main = []
+        # Path for the discontinuity lines (dashed).
+        vertices_discontinuity = []
+        codes_discontinuity = []
 
         for k, epoch in enumerate(deme.epochs):
             start_time = epoch.start_time
@@ -110,13 +114,23 @@ def size_history(
                     f'"{epoch.size_function}" size_function.'
                 )
 
-            ax.plot(x, y, **plot_kwargs)
+            vertices_main.extend(list(zip(x, y)))
+            if k == 0 or deme.epochs[k - 1].end_size != epoch.start_size:
+                codes_main.append(matplotlib.path.Path.MOVETO)
+            else:
+                codes_main.append(matplotlib.path.Path.LINETO)
+            codes_main.extend([matplotlib.path.Path.LINETO] * (len(x) - 1))
+
             if k > 0 and deme.epochs[k - 1].end_size != epoch.start_size:
-                # Indicate population size discontinuity.
-                ax.plot(
-                    [deme.epochs[k - 1].end_time, epoch.start_time],
-                    [deme.epochs[k - 1].end_size, epoch.start_size],
-                    **discontinuity_kwargs,
+                # Size discontinuity.
+                vertices_discontinuity.extend(
+                    [
+                        (deme.epochs[k - 1].end_time, deme.epochs[k - 1].end_size),
+                        (epoch.start_time, epoch.start_size),
+                    ]
+                )
+                codes_discontinuity.extend(
+                    [matplotlib.path.Path.MOVETO, matplotlib.path.Path.LINETO]
                 )
 
             if annotate_epochs:
@@ -146,6 +160,30 @@ def size_history(
                     color="black" if len(graph.demes) == 1 else colour,
                 )
 
+        # Indicate population size discontinuities from ancestor demes.
+        for ancestor_id in deme.ancestors:
+            anc = graph[ancestor_id]
+            anc_N = utils.size_of_deme_at_time(anc, deme.start_time)
+            deme_N = deme.epochs[0].start_size
+            if anc_N != deme_N:
+                vertices_discontinuity.extend(
+                    [(deme.start_time, anc_N), (deme.start_time, deme_N)]
+                )
+                codes_discontinuity.extend(
+                    [matplotlib.path.Path.MOVETO, matplotlib.path.Path.LINETO]
+                )
+
+        size_path_patch = matplotlib.patches.PathPatch(
+            matplotlib.path.Path(vertices_main, codes_main), **plot_kwargs
+        )
+        ax.add_patch(size_path_patch)
+        if len(vertices_discontinuity) > 0:
+            discontinuity_path_patch = matplotlib.patches.PathPatch(
+                matplotlib.path.Path(vertices_discontinuity, codes_discontinuity),
+                **discontinuity_kwargs,
+            )
+            ax.add_patch(discontinuity_path_patch)
+
         if np.isinf(deme.start_time):
             # Plot an arrow at the end of the line, to indicate this
             # line extends towards infinity.
@@ -168,17 +206,8 @@ def size_history(
                     va="top",
                 )
 
-        # Indicate population size discontinuities from ancestor demes.
-        for ancestor_id in deme.ancestors:
-            anc = graph[ancestor_id]
-            anc_N = utils.size_of_deme_at_time(anc, deme.start_time)
-            deme_N = deme.epochs[0].start_size
-            if anc_N != deme_N:
-                ax.plot(
-                    [deme.start_time, deme.start_time],
-                    [anc_N, deme_N],
-                    **discontinuity_kwargs,
-                )
+    # Update the axes view. ax.add_patch() doesn't do this itself.
+    ax.autoscale_view()
 
     if len(graph.demes) > 1:
         leg = ax.legend(handles=legend_handles, ncol=len(graph.demes) // 2)
