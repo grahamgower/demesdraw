@@ -1,0 +1,7 @@
+name: demesdraw-binder
+
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+    - -r file:requirements/minimal.txt

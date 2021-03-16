@@ -1,11 +1,5 @@
-black==20.8b1
-demes==0.1.0a3
-flake8==3.9.0
-jupyter-book==0.10.1
-matplotlib==3.3.4
-mypy==0.812
-numpy==1.20.1
-pytest==6.2.2
-pytest-cov==2.11.1
-pytest-xdist==2.1.0
-scipy==1.6.1
+# Requirements for developers.
+-r requirements/minimal.txt
+-r requirements/test.txt
+-r requirements/lint.txt
+-r requirements/docs.txt
