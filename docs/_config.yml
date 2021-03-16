@@ -7,7 +7,8 @@ copyright: "2021"
 only_build_toc_files: true
 
 execute:
-  execute_notebooks: auto
+  execute_notebooks: cache
+  timeout: 100
 
 repository:
   url: https://github.com/grahamgower/demesdraw
