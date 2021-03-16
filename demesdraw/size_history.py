@@ -98,7 +98,7 @@ def size_history(
                 start_time = inf_start_time
             end_time = epoch.end_time
             if end_time == 0 and log_time:
-                end_time = 1
+                end_time = 1e-6
 
             if epoch.size_function == "constant":
                 x = np.array([start_time, end_time])
@@ -140,7 +140,7 @@ def size_history(
                     text_x = (start_time + end_time) / 2
                 if log_size:
                     text_y = np.exp(
-                        (np.log(1 + epoch.start_size) + np.log(1 + epoch.end_size)) / 2
+                        (np.log(epoch.start_size) + np.log(1e-6 + epoch.end_size)) / 2
                     )
                 else:
                     text_y = (epoch.start_size + epoch.end_size) / 2
