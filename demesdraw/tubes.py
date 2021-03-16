@@ -71,7 +71,7 @@ class Tube:
                 if log_time:
                     t = np.exp(
                         np.linspace(
-                            np.log(start_time), np.log(1e-6 + end_time), num=num_points
+                            np.log(start_time), np.log(max(1, end_time)), num=num_points
                         )
                     )
                 else:
@@ -469,7 +469,7 @@ def tubes(
             start_time = inf_start_time
         if log_scale:
             t = np.exp(
-                rng.uniform(np.log(start_time), np.log(1e-6 + migration.end_time))
+                rng.uniform(np.log(start_time), np.log(max(1, migration.end_time)))
             )
         else:
             t = rng.uniform(start_time, migration.end_time)
@@ -528,7 +528,7 @@ def tubes(
                 tmid = np.exp(
                     (
                         np.log(tubes[deme_id].time[0])
-                        + np.log(1e-6 + tubes[deme_id].time[-1])
+                        + np.log(max(1, tubes[deme_id].time[-1]))
                     )
                     / 2
                 )
