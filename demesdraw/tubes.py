@@ -1,4 +1,4 @@
-from typing import Any, Iterable, Mapping, List, Tuple
+from typing import Any, Dict, Iterable, Mapping, List, Tuple
 import itertools
 import math
 
@@ -122,8 +122,8 @@ class Tube:
 
 def coexist(deme_j: demes.Deme, deme_k: demes.Deme) -> bool:
     """Returns true if deme_j and deme_k exist simultaneously."""
-    return (deme_j.start_time >= deme_k.start_time > deme_j.end_time) or (
-        deme_j.start_time > deme_k.end_time >= deme_j.end_time
+    return not (
+        deme_j.end_time >= deme_k.start_time or deme_k.end_time >= deme_j.start_time
     )
 
 
@@ -377,6 +377,7 @@ def tubes(
         )
 
     tubes = {}
+    ancestry_arrows = []
 
     for j, deme in enumerate(graph.demes):
         colour = colours[deme.id]
@@ -411,17 +412,75 @@ def tubes(
             )
 
         # Indicate ancestry from ancestor demes.
-        ancestry_kwargs = dict(linestyle=":", solid_capstyle="butt", **plot_kwargs)
+        tube_frac = np.linspace(
+            tube.size1[0], tube.size2[0], max(2, len(deme.ancestors))
+        )
+        left = 0
+        right = 0
+        arrow_kwargs = dict(
+            arrowstyle="-|>",
+            mutation_scale=10,
+            alpha=1,
+            facecolor=(1, 1, 1, 0),
+            path_effects=[
+                matplotlib.patheffects.withStroke(linewidth=3, foreground="white")
+            ],
+            zorder=2,
+        )
         for ancestor_id in deme.ancestors:
             anc_size1, anc_size2 = tubes[ancestor_id].sizes_at(deme.start_time)
-            time = [tube.time[0], tube.time[0]]
-            if anc_size2 < tube.size1[0]:
-                ax.plot([anc_size2, tube.size1[0]], time, **ancestry_kwargs)
-            elif tube.size2[0] < anc_size1:
-                ax.plot([tube.size2[0], anc_size1], time, **ancestry_kwargs)
+            if anc_size1 + anc_size2 < tube.size1[0] + tube.size2[0]:
+                # Ancestor is to the left.
+                x_pos = [anc_size2, tube_frac[left]]
+                ancestry_arrows.append(
+                    (
+                        tube.time[0],
+                        min(x_pos),
+                        max(x_pos),
+                        colours[ancestor_id],
+                    )
+                )
+                left += 1
             else:
-                ax.plot([anc_size1, tube.size1[0]], time, **ancestry_kwargs)
-                ax.plot([anc_size2, tube.size2[0]], time, **ancestry_kwargs)
+                # Ancestor is to the right.
+                x_pos = [anc_size1, tube_frac[len(tube_frac) - right - 1]]
+                ancestry_arrows.append(
+                    (
+                        tube.time[0],
+                        max(x_pos),
+                        min(x_pos),
+                        colours[ancestor_id],
+                    )
+                )
+                right += 1
+
+    slots: Dict[int, int] = {}
+    for j, (time, x1, x2, colour) in enumerate(ancestry_arrows):
+        taken = set()
+        for k, slot in slots.items():
+            k_time, k_x1, k_x2, _ = ancestry_arrows[k]
+            if np.isclose(time, k_time) and not (
+                min(x1, x2) > max(k_x1, k_x2) or min(k_x1, k_x2) > max(x1, x2)
+            ):
+                taken.add(slot)
+        slot = 0
+        i = 0
+        while slot in taken:
+            i += 1
+            odd = i % 2
+            delta = i // 2
+            slot = -odd * delta + (1 - odd) * delta
+        slots[j] = slot
+        radius = slot * 0.15
+        arr = matplotlib.patches.FancyArrowPatch(
+            (x1, time),
+            (x2, time),
+            connectionstyle=f"arc3,rad={radius}",
+            edgecolor=colour,
+            **arrow_kwargs,
+        )
+        arr.set_sketch_params(1, 100, 2)
+        ax.add_patch(arr)
 
     # Update the axes view. ax.add_patch() doesn't do this itself.
     ax.autoscale_view()
@@ -556,6 +615,6 @@ def tubes(
 
     ax.set_ylabel(f"time ago ({graph.time_units})")
 
-    ax.set_ylim(1 if log_time else 0, None)
+    ax.set_ylim(1 if log_time else 0, inf_start_time)
 
     return ax
