@@ -1,61 +1,42 @@
-description: The three population Out-of-Africa model from Gutenkunst et al. 2009.
-  It describes the ancestral human population in Africa, the out of Africa event,
-  and the subsequent European-Asian population split. Model parameters are the maximum
-  likelihood values of the various parameters given in Table 1 of Gutenkunst et al.
-time_units: generations
+description: The Gutenkunst et al. (2009) OOA model.
 doi:
 - https://doi.org/10.1371/journal.pgen.1000695
+time_units: years
+generation_time: 25
+
 demes:
+- id: ancestral
+  description: Equilibrium/root population
+  epochs:
+  - {end_time: 220e3, start_size: 7300}
+- id: AMH
+  description: Anatomically modern humans
+  ancestors: [ancestral]
+  epochs:
+  - {end_time: 140e3, start_size: 12300}
+- id: OOA
+  description: Bottleneck out-of-Africa population
+  ancestors: [AMH]
+  epochs:
+  - {end_time: 21.2e3, start_size: 2100}
 - id: YRI
+  description: Yoruba in Ibadan, Nigeria
+  ancestors: [AMH]
   epochs:
-  - end_time: 8800.0
-    start_size: 7300.0
-  - end_time: 0
-    start_size: 12300.0
+  - start_size: 12300
 - id: CEU
-  start_time: 5600.0
-  ancestors:
-  - YRI
+  description: Utah Residents (CEPH) with Northern and Western European Ancestry
+  ancestors: [OOA]
   epochs:
-  - end_time: 848.0
-    start_size: 2100.0
-  - end_time: 0
-    start_size: 1000.0
-    end_size: 29725.343546388514
+  - {start_size: 1000, end_size: 29725}
 - id: CHB
-  start_time: 848.0
-  ancestors:
-  - CEU
+  description: Han Chinese in Beijing, China
+  ancestors: [OOA]
   epochs:
-  - end_time: 0
-    start_size: 510.0
-    end_size: 54090.331077946525
+  - {start_size: 510, end_size: 54090}
+
 migrations:
-- end_time: 848.0
-  rate: 0.00025
-  source: YRI
-  dest: CEU
-- start_time: 848.0
-  rate: 3e-05
-  source: YRI
-  dest: CEU
-- end_time: 848.0
-  rate: 0.00025
-  source: CEU
-  dest: YRI
-- start_time: 848.0
-  rate: 3e-05
-  source: CEU
-  dest: YRI
-- rate: 1.9e-05
-  source: YRI
-  dest: CHB
-- rate: 9.6e-05
-  source: CEU
-  dest: CHB
-- rate: 1.9e-05
-  source: CHB
-  dest: YRI
-- rate: 9.6e-05
-  source: CHB
-  dest: CEU
+- {demes: [YRI, OOA], rate: 25e-5}
+- {demes: [YRI, CEU], rate: 3e-5}
+- {demes: [YRI, CHB], rate: 1.9e-5}
+- {demes: [CEU, CHB], rate: 9.6e-5}
