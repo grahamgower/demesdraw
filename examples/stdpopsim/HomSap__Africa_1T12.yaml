@@ -5,7 +5,7 @@ time_units: generations
 doi:
 - https://doi.org/10.1126/science.1219240
 demes:
-- id: AFR
+- name: AFR
   epochs:
   - end_time: 5920.0
     start_size: 7310.0

@@ -1,28 +1,28 @@
 description: K3,3 graph (the so-called utility graph).
 time_units: generations
 demes:
-  - id: A
+  - name: A
     epochs:
       - {end_time: 1000, start_size: 1000}
-  - id: B
+  - name: B
     epochs:
       - {end_time: 1000, start_size: 1000}
-  - id: C
+  - name: C
     epochs:
       - {end_time: 1000, start_size: 1000}
-  - id: X
+  - name: X
     ancestors: [A, B, C]
     proportions: [0.1, 0.3, 0.6]
     start_time: 1000
     epochs: 
       - {start_size: 2000}
-  - id: Y
+  - name: Y
     ancestors: [A, B, C]
     proportions: [0.2, 0.3, 0.5]
     start_time: 1000
     epochs: 
       - {start_size: 2000}
-  - id: Z
+  - name: Z
     ancestors: [A, B, C]
     proportions: [0.3, 0.3, 0.4]
     start_time: 1000

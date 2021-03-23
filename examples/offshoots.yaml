@@ -4,17 +4,17 @@ time_units: generations
 generation_time: 1
 
 demes:
-  - id: ancestral
+  - name: ancestral
     description: Main population
     epochs:
     - start_size: 1000
-  - id: offshoot1
+  - name: offshoot1
     description: More recent offshoot population
     ancestors: [ancestral]
     start_time: 500
     epochs:
     - start_size: 100
-  - id: offshoot2
+  - name: offshoot2
     description: More ancient offshoot population
     ancestors: [ancestral]
     start_time: 1000

@@ -18,41 +18,41 @@ time_units: generations
 doi:
 - https://doi.org/10.1093/molbev/msz047
 demes:
-- id: YRI
+- name: YRI
   epochs:
   - end_time: 8800.0
     start_size: 7300.0
   - end_time: 0
     start_size: 18197.008586099826
-- id: CHB
+- name: CHB
   start_time: 2105.0
   ancestors:
   - YRI
   epochs:
   - end_time: 0
     start_size: 4073.802778041126
-- id: CEU
+- name: CEU
   start_time: 850.0
   ancestors:
   - CHB
   epochs:
   - end_time: 0
     start_size: 33113.112148259075
-- id: ME
+- name: ME
   start_time: 481.0
   ancestors:
   - CEU
   epochs:
   - end_time: 0
     start_size: 436515.8322401656
-- id: J
+- name: J
   start_time: 211.0
   ancestors:
   - ME
   epochs:
   - end_time: 0
     start_size: 354813.3892335753
-- id: WAJ
+- name: WAJ
   start_time: 29.0
   ancestors:
   - J
@@ -61,7 +61,7 @@ demes:
     start_size: 1096.4781961431852
   - end_time: 0
     start_size: 6606.934480075957
-- id: EAJ
+- name: EAJ
   start_time: 14.0
   ancestors:
   - WAJ

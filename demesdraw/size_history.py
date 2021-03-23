@@ -33,7 +33,7 @@ def size_history(
     :param bool annotate_epochs: Annotate the figure with epoch indices
         over the relevant parts of the lines. This is mostly useful as a
         pedagogical tool.
-    :param colours: A mapping from deme ID to matplotlib colour. Alternately,
+    :param colours: A mapping from deme name to matplotlib colour. Alternately,
         ``colours`` may be a named colour that will be used for all demes.
     :type colours: dict or str
     :param bool log_time: Use a log-10 scale for the time axis.
@@ -60,14 +60,14 @@ def size_history(
     z_top = 1 + len(graph.demes) + max(linewidths)
 
     for j, deme in enumerate(graph.demes):
-        colour = colours[deme.id]
+        colour = colours[deme.name]
         linestyle = linestyles[j % len(linestyles)]
         linewidth = linewidths[j % len(linewidths)]
         plot_kwargs = dict(
             color=colour,
             linestyle=linestyle,
             linewidth=linewidth,
-            label=deme.id,
+            label=deme.name,
             alpha=0.7,
             zorder=z_top - linewidth,
             capstyle="butt",

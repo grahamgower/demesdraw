@@ -12,15 +12,15 @@ demes:
 # Two ancestor demes. We must set the ancestor and proportion values
 # explicitly to the empty list because the defaults fields override
 # the static defaults from the schema.
-- id: deme0
+- name: deme0
   ancestors: []
   proportions: []
   start_time: .inf
 - ancestors: []
-  id: deme1
+  name: deme1
   proportions: []
   start_time: .inf
 # Two child demes, both of which inherit from deme0 and deme1, as set
 # by the defaults.
-- id: deme2
-- id: deme3
+- name: deme2
+- name: deme3

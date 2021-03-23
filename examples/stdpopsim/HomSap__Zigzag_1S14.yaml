@@ -3,7 +3,7 @@ doi:
   - https://doi.org/10.1038/ng.3015
 time_units: generations
 demes:
-  - id: generic
+  - name: generic
     epochs:
     - {end_time: 34133.31, start_size: 7156}
     - {end_time: 8533.33, end_size: 71560}

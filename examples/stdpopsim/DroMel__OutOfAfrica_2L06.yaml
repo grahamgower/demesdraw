@@ -6,13 +6,13 @@ doi:
 - https://doi.org/10.1371/journal.pgen.0020166
 - https://doi.org/10.1371/journal.pgen.0020166
 demes:
-- id: AFR
+- name: AFR
   epochs:
   - end_time: 600000.0
     start_size: 1720600.0
   - end_time: 0
     start_size: 8603000.0
-- id: EUR
+- name: EUR
   start_time: 158000.0
   ancestors:
   - AFR

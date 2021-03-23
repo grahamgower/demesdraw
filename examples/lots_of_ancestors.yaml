@@ -2,18 +2,18 @@ time_units: generations
 defaults:
   epoch: {end_time: 1000, start_size: 1000}
 demes:
-  - id: A
-  - id: B
-  - id: C
-  - id: D
-  - id: E
-  - id: F
-  - id: G
+  - name: A
+  - name: B
+  - name: C
+  - name: D
+  - name: E
+  - name: F
+  - name: G
     # G persists until the present
     epochs:
       - {end_time: 0, start_size: 5000}
 
-  - id: X
+  - name: X
     start_time: 1000
     ancestors: [A, B, C, D, E, F, G]
     proportions: [0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3]

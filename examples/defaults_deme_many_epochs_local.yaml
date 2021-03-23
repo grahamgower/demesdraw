@@ -2,7 +2,7 @@ description: Set epoch defaults using deme-local values.
 time_units: generations
 
 demes:
-- id: deme0
+- name: deme0
   defaults:
     epoch: {cloning_rate: 0.5, end_size: 2, selfing_rate: 0.1, start_size: 1}
   epochs:

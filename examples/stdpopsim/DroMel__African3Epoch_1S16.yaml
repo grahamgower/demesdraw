@@ -10,7 +10,7 @@ doi:
 - https://doi.org/10.1371/journal.pcbi.1004845
 - https://doi.org/10.1371/journal.pgen.0020166
 demes:
-- id: AFR
+- name: AFR
   epochs:
   - end_time: 2200000.0
     start_size: 652700.0

@@ -6,3 +6,4 @@ dist/
 demesdraw.egg-info
 demesdraw/_version.py
 docs/_build
+.ipynb_checkpoints

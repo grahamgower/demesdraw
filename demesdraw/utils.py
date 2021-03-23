@@ -64,7 +64,7 @@ def size_of_deme_at_time(deme: demes.Deme, time: float) -> float:
         if epoch.start_time >= time >= epoch.end_time:
             break
     else:
-        raise ValueError(f"deme {deme.id} doesn't exist at time {time}")
+        raise ValueError(f"deme {deme.name} doesn't exist at time {time}")
 
     if np.isclose(time, epoch.end_time) or epoch.start_size == epoch.end_size:
         N = epoch.end_size
@@ -83,12 +83,12 @@ def get_colours(
 ) -> Mapping[str, Colour]:
     """
     Convert the polymorphic ``colours`` into a dictionary of colours,
-    keyed by deme ID.
+    keyed by deme name.
 
     :param demes.Graph graph: The graph to which colours will apply.
     :param colours: The colour or colours.
         * If ``colours`` is ``None``, the default colour map will be used.
-        * If ``colours`` is a dict, it must map deme IDs to colours.
+        * If ``colours`` is a dict, it must map deme names to colours.
           All demes not in the dict will be drawn with ``default_colour``.
         * Otherwise, if ``colours`` can be interpreted as a matplotlib
           colour, all demes will be drawn with this colour.
@@ -103,15 +103,15 @@ def get_colours(
             raise ValueError(
                 "Graph has more than 20 demes, so colours must be specified."
             )
-        new_colours = {deme.id: cmap(j) for j, deme in enumerate(graph.demes)}
+        new_colours = {deme.name: cmap(j) for j, deme in enumerate(graph.demes)}
     elif isinstance(colours, Mapping):
-        bad_ids = list(colours.keys() - set([deme.id for deme in graph.demes]))
-        if len(bad_ids) > 0:
+        bad_names = list(colours.keys() - set([deme.name for deme in graph.demes]))
+        if len(bad_names) > 0:
             raise ValueError(
-                f"Colours given for deme(s) {bad_ids}, but deme(s) were "
+                f"Colours given for deme(s) {bad_names}, but deme(s) were "
                 "not found in the graph."
             )
-        new_colours = {deme.id: default_colour for deme in graph.demes}
+        new_colours = {deme.name: default_colour for deme in graph.demes}
         new_colours.update(**colours)
     else:
         # Try to interpret as a matplotlib colour.
@@ -121,7 +121,7 @@ def get_colours(
             raise ValueError(
                 f"Colour '{colours}' not interpretable as a matplotlib colour"
             ) from e
-        new_colours = {deme.id: colour for deme in graph.demes}
+        new_colours = {deme.name: colour for deme in graph.demes}
     return new_colours
 
 

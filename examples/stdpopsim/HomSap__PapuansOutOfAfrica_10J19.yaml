@@ -11,12 +11,12 @@ doi:
   - https://doi.org/10.1038/nature18299
 
 demes:
-  - id: YRI
+  - name: YRI
     epochs:
     - {end_time: 20225.0, start_size: 32671.0}
     - {end_time: 2218.0, start_size: 41563.0}
     - {end_time: 0, start_size: 48433.0}
-  - id: DenA
+  - name: DenA
     ancestors: [YRI]
     start_time: 20225.0
     epochs:
@@ -24,47 +24,47 @@ demes:
     - {end_time: 12500.0, start_size: 100.0}
     - {end_time: 9750.0, start_size: 100.0}
     - {end_time: 0, start_size: 5083.0}
-  - id: NeaA
+  - name: NeaA
     ancestors: [DenA]
     start_time: 15090.0
     epochs:
     - {end_time: 3375.0, start_size: 13249.0}
     - {end_time: 0, start_size: 826.0}
-  - id: Den2
+  - name: Den2
     ancestors: [DenA]
     start_time: 12500.0
     epochs:
     - start_size: 13249.0
-  - id: Den1
+  - name: Den1
     ancestors: [DenA]
     start_time: 9750.0
     epochs:
     - start_size: 13249.0
-  - id: Nea1
+  - name: Nea1
     ancestors: [NeaA]
     start_time: 3375.0
     epochs:
     - start_size: 13249.0
-  - id: Ghost
+  - name: Ghost
     ancestors: [YRI]
     start_time: 2218.0
     epochs:
     - {end_time: 2119.0, start_size: 1394.0}
     - {end_time: 0, start_size: 8516.0}
-  - id: Papuan
+  - name: Papuan
     ancestors: [Ghost]
     start_time: 1784.0
     epochs:
     - {end_time: 1685.0, start_size: 243.0}
     - {end_time: 0, start_size: 8834.0}
-  - id: CHB
+  - name: CHB
     ancestors: [Ghost]
     start_time: 1758.0
     epochs:
     - {end_time: 1659.0, start_size: 2231.0}
     - {end_time: 1293.0, start_size: 12971.0}
     - {end_time: 0, start_size: 9025.0}
-  - id: CEU
+  - name: CEU
     ancestors: [CHB]
     start_time: 1293.0
     epochs:

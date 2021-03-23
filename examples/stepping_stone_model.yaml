@@ -7,9 +7,9 @@ defaults:
   migration:
     rate: 0.1
 demes:
-  - id: deme1
-  - id: deme2
-  - id: deme3
+  - name: deme1
+  - name: deme2
+  - name: deme3
 migrations:
   - demes: [deme1, deme2]
   - demes: [deme2, deme3]

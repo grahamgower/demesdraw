@@ -7,36 +7,36 @@ time_units: generations
 # generation_time: 25
 
 demes:
-- id: ancestral
+- name: ancestral
   description: Equilibrium/root population
   epochs:
   - {end_time: 5920, start_size: 7310}
-- id: AMH
+- name: AMH
   description: Anatomically modern humans
   ancestors: [ancestral]
   epochs:
   - {end_time: 2040, start_size: 14474}
-- id: OOA
+- name: OOA
   description: Bottleneck out-of-Africa population
   ancestors: [AMH]
   epochs:
   - {end_time: 920, start_size: 1861}
-- id: AFR
+- name: AFR
   description: African population
   ancestors: [AMH]
   epochs:
   - start_size: 14474
-- id: EUR
+- name: EUR
   description: European population
   ancestors: [OOA]
   epochs:
   - {start_size: 1000, end_size: 34039}
-- id: EAS
+- name: EAS
   description: East Asian population
   ancestors: [OOA]
   epochs:
   - {start_size: 510, end_size: 45852}
-- id: ADMIX
+- name: ADMIX
   description: Admixed America
   ancestors: [AFR, EUR, EAS]
   proportions: [0.167, 0.333, 0.5]

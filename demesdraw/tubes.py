@@ -138,8 +138,8 @@ def coexistence_indexes(graph: demes.Graph) -> List[Tuple[int, int]]:
 
 
 def successors_indexes(graph: demes.Graph) -> Mapping[int, List[int]]:
-    """Graph successors, but use indexes rather than deme IDs"""
-    idx = {deme.id: j for j, deme in enumerate(graph.demes)}
+    """Graph successors, but use indexes rather than deme names"""
+    idx = {deme.name: j for j, deme in enumerate(graph.demes)}
     successors = dict()
     for deme, children in graph.successors().items():
         if len(children) > 0:
@@ -149,7 +149,7 @@ def successors_indexes(graph: demes.Graph) -> Mapping[int, List[int]]:
 
 def interactions_indexes(graph: demes.Graph, *, unique: bool) -> List[Tuple[int, int]]:
     """Pairs of indices of demes that exchange migrants (migrations or pulses)."""
-    idx = {deme.id: j for j, deme in enumerate(graph.demes)}
+    idx = {deme.name: j for j, deme in enumerate(graph.demes)}
     interactions = []
     for migration in graph.migrations:
         if isinstance(migration, demes.SymmetricMigration):
@@ -177,7 +177,7 @@ def topdown_placement(graph: demes.Graph) -> Mapping[str, int]:
     Assign integer positions to demes by traversing the graph top down,
     avoiding positions already given to contemporary demes.
     """
-    positions = {graph.demes[0].id: 0}
+    positions = {graph.demes[0].name: 0}
     for deme in graph.demes[1:]:
         taken = set()
         for other, pos in positions.items():
@@ -186,7 +186,7 @@ def topdown_placement(graph: demes.Graph) -> Mapping[str, int]:
         pos = 0
         while pos in taken:
             pos += 1
-        positions[deme.id] = pos
+        positions[deme.name] = pos
     return positions
 
 
@@ -209,7 +209,7 @@ def find_positions(
     :param int rounds: Number of rounds of optimisation to perform.
     :param int seed: Seed for the random number generator.
 
-    :return: A dictionary mapping deme IDs to positions.
+    :return: A dictionary mapping deme names to positions.
     :rtype: dict
     """
     if rounds is None:
@@ -219,7 +219,7 @@ def find_positions(
     contemporaries = coexistence_indexes(graph)
     if len(contemporaries) == 0:
         # There are no constraints, so stack demes on top of each other.
-        return {deme.id: 0 for deme in graph.demes}
+        return {deme.name: 0 for deme in graph.demes}
     successors = successors_indexes(graph)
     interactions = interactions_indexes(graph, unique=True)
 
@@ -283,7 +283,7 @@ def find_positions(
             x_best = res.x
             fmin_best = res.fun
 
-    return {deme.id: position for deme, position in zip(graph.demes, x_best)}
+    return {deme.name: position for deme, position in zip(graph.demes, x_best)}
 
 
 def tubes(
@@ -326,14 +326,14 @@ def tubes(
     :param demes.Graph graph: The demes graph to plot.
     :param matplotlib.axes.Axes ax: The matplotlib axes onto which the figure
         will be drawn. If None, an empty axes will be created for the figure.
-    :param colours: A mapping from deme ID to matplotlib colour. Alternately,
+    :param colours: A mapping from deme name to matplotlib colour. Alternately,
         ``colours`` may be a named colour that will be used for all demes.
     :type colours: dict or str
     :param bool log_time: Use a log-10 scale for the time axis.
     :param str title: The title of the figure.
     :param float inf_ratio: The proportion of the time axis that will be
         used for the time interval which stretches towards infinity.
-    :param dict positions: A dictionary mapping deme IDs to horizontal
+    :param dict positions: A dictionary mapping deme names to horizontal
         coordinates. Note that the width of a deme is the deme's (max) size,
         so the positions should allow sufficient space to avoid overlapping.
     :param int num_lines_per_migration: The number of lines to draw per
@@ -380,7 +380,7 @@ def tubes(
     ancestry_arrows = []
 
     for j, deme in enumerate(graph.demes):
-        colour = colours[deme.id]
+        colour = colours[deme.name]
         plot_kwargs = dict(
             color=colour,
             # solid_capstyle="butt",
@@ -391,10 +391,10 @@ def tubes(
             ],
         )
 
-        mid = positions[deme.id]
+        mid = positions[deme.name]
 
         tube = Tube(deme, mid, inf_start_time, log_time=log_time)
-        tubes[deme.id] = tube
+        tubes[deme.name] = tube
 
         path_patch = matplotlib.patches.PathPatch(
             tube.to_path(), capstyle="butt", fill=False, **plot_kwargs
@@ -555,12 +555,12 @@ def tubes(
 
     xticks = []
     xticklabels = []
-    deme_labels = [deme.id for deme in graph.demes]
+    deme_labels = [deme.name for deme in graph.demes]
 
     if labels in ("xticks", "xticks-legend", "xticks-mid"):
         # Put labels for the leaf nodes underneath the figure.
-        leaves = [deme.id for deme in graph.demes if deme.end_time == 0]
-        deme_labels = [deme.id for deme in graph.demes if deme.end_time != 0]
+        leaves = [deme.name for deme in graph.demes if deme.end_time == 0]
+        deme_labels = [deme.name for deme in graph.demes if deme.end_time != 0]
         xticks = [positions[leaf] for leaf in leaves]
         xticklabels = leaves
 
@@ -569,34 +569,34 @@ def tubes(
         ax.legend(
             handles=[
                 matplotlib.patches.Patch(
-                    edgecolor=matplotlib.colors.to_rgba(colours[deme_id], 1.0),
-                    facecolor=matplotlib.colors.to_rgba(colours[deme_id], 0.3)
+                    edgecolor=matplotlib.colors.to_rgba(colours[deme_name], 1.0),
+                    facecolor=matplotlib.colors.to_rgba(colours[deme_name], 0.3)
                     if fill
                     else None,
-                    label=deme_id,
+                    label=deme_name,
                 )
-                for deme_id in deme_labels
+                for deme_name in deme_labels
             ],
             # Use a horizontal layout, rather than vertical.
             ncol=len(deme_labels) // 2,
         )
 
     if labels in ("mid", "xticks-mid"):
-        for deme_id in deme_labels:
+        for deme_name in deme_labels:
             if log_time:
                 tmid = np.exp(
                     (
-                        np.log(tubes[deme_id].time[0])
-                        + np.log(max(1, tubes[deme_id].time[-1]))
+                        np.log(tubes[deme_name].time[0])
+                        + np.log(max(1, tubes[deme_name].time[-1]))
                     )
                     / 2
                 )
             else:
-                tmid = (tubes[deme_id].time[0] + tubes[deme_id].time[-1]) / 2
+                tmid = (tubes[deme_name].time[0] + tubes[deme_name].time[-1]) / 2
             ax.text(
-                positions[deme_id],
+                positions[deme_name],
                 tmid,
-                deme_id,
+                deme_name,
                 ha="center",
                 va="center",
                 # Give the text some contrast with its background.
