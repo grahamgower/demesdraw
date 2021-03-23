@@ -259,7 +259,7 @@ function of time for each deme in the graph. This is great for single-deme
 graphs like the ZigZag model from Schiffels &amp; Durbin et al. (2014).</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zigzag</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../examples/zigzag.yaml&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zigzag</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../examples/stdpopsim/HomSap__Zigzag_1S14.yaml&quot;</span><span class="p">)</span>
 <span class="n">demesdraw</span><span class="o">.</span><span class="n">size_history</span><span class="p">(</span><span class="n">zigzag</span><span class="p">,</span> <span class="n">invert_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_time</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -274,7 +274,7 @@ with thinner lines drawn on top of thicker lines. Ancestor/descendant
 relationships are indicated as dotted lines.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gutenkunst_ooa</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../examples/gutenkunst_ooa.yaml&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gutenkunst_ooa</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../examples/stdpopsim/HomSap__OutOfAfrica_3G09.yaml&quot;</span><span class="p">)</span>
 <span class="n">demesdraw</span><span class="o">.</span><span class="n">size_history</span><span class="p">(</span><span class="n">gutenkunst_ooa</span><span class="p">,</span> <span class="n">invert_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_size</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -292,7 +292,7 @@ Ancestor/descendant relationships are indicated as dotted lines,
 and migrations are drawn as lines from source to destination.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gutenkunst_ooa</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../examples/gutenkunst_ooa.yaml&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gutenkunst_ooa</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../examples/stdpopsim/HomSap__OutOfAfrica_3G09.yaml&quot;</span><span class="p">)</span>
 <span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">gutenkunst_ooa</span><span class="p">,</span> <span class="n">num_lines_per_migration</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">log_time</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">);</span>
 </pre></div>
 </div>

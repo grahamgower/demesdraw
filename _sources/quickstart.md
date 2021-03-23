@@ -48,7 +48,7 @@ graphs like the ZigZag model from Schiffels & Durbin et al. (2014).
 ```{code-cell}
 :tags: [hide-input]
 
-zigzag = demes.load("../examples/zigzag.yaml")
+zigzag = demes.load("../examples/stdpopsim/HomSap__Zigzag_1S14.yaml")
 demesdraw.size_history(zigzag, invert_x=True, log_time=True);
 ```
 
@@ -61,7 +61,7 @@ relationships are indicated as dotted lines.
 ```{code-cell}
 :tags: [hide-input]
 
-gutenkunst_ooa = demes.load("../examples/gutenkunst_ooa.yaml")
+gutenkunst_ooa = demes.load("../examples/stdpopsim/HomSap__OutOfAfrica_3G09.yaml")
 demesdraw.size_history(gutenkunst_ooa, invert_x=True, log_size=True);
 ```
 
@@ -76,6 +76,6 @@ and migrations are drawn as lines from source to destination.
 ```{code-cell}
 :tags: [hide-input]
 
-gutenkunst_ooa = demes.load("../examples/gutenkunst_ooa.yaml")
+gutenkunst_ooa = demes.load("../examples/stdpopsim/HomSap__OutOfAfrica_3G09.yaml")
 demesdraw.tubes(gutenkunst_ooa, num_lines_per_migration=6, log_time=True, seed=1234);
 ```
