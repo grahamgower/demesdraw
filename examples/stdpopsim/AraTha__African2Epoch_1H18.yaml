@@ -6,7 +6,7 @@ time_units: generations
 doi:
 - https://doi.org/10.1038/s41467-018-05281-7
 demes:
-- id: SouthMiddleAtlas
+- name: SouthMiddleAtlas
   epochs:
   - end_time: 568344.0
     start_size: 746148.0

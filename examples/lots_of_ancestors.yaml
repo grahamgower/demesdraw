@@ -1,0 +1,27 @@
+time_units: generations
+defaults:
+  epoch: {end_time: 1000, start_size: 1000}
+demes:
+  - name: A
+  - name: B
+  - name: C
+  - name: D
+  - name: E
+  - name: F
+  - name: G
+    # G persists until the present
+    epochs:
+      - {end_time: 0, start_size: 5000}
+
+  - name: X
+    start_time: 1000
+    ancestors: [A, B, C, D, E, F, G]
+    proportions: [0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3]
+    epochs:
+      - {end_time: 0, start_size: 3000}
+
+pulses:
+  - {source: X, dest: G, time: 600, proportion: 0.1}
+  - {source: G, dest: X, time: 300, proportion: 0.1}
+migrations:
+  - {source: X, dest: G, rate: 1e-4}

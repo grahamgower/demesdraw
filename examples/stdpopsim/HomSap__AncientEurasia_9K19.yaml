@@ -16,7 +16,7 @@ time_units: generations
 doi:
 - https://doi.org/10.1080/01621459.2019.1635482
 demes:
-- id: Loschbour
+- name: Loschbour
   epochs:
   - end_time: 27840.0
     start_size: 18200.0
@@ -26,7 +26,7 @@ demes:
     start_size: 2340.0
   - end_time: 0
     start_size: 1920.0
-- id: Neanderthal
+- name: Neanderthal
   start_time: 27840.0
   ancestors:
   - Loschbour
@@ -38,42 +38,42 @@ demes:
     end_size: 86.9
   - end_time: 0
     start_size: 86.9
-- id: Mbuti
+- name: Mbuti
   start_time: 3832.0
   ancestors:
   - Loschbour
   epochs:
   - end_time: 0
     start_size: 17300.0
-- id: BasalEurasian
+- name: BasalEurasian
   start_time: 3192.0
   ancestors:
   - Loschbour
   epochs:
   - end_time: 0
     start_size: 1920.0
-- id: UstIshim
+- name: UstIshim
   start_time: 2060.0
   ancestors:
   - Loschbour
   epochs:
   - end_time: 0
     start_size: 1920.0
-- id: Han
+- name: Han
   start_time: 2016.0
   ancestors:
   - Loschbour
   epochs:
   - end_time: 0
     start_size: 6300.0
-- id: MA1
+- name: MA1
   start_time: 1796.0
   ancestors:
   - Loschbour
   epochs:
   - end_time: 0
     start_size: 1920.0
-- id: LBK
+- name: LBK
   start_time: 1508.0
   ancestors:
   - Loschbour
@@ -82,7 +82,7 @@ demes:
     start_size: 12000.0
   - end_time: 0
     start_size: 75.7
-- id: Sardinian
+- name: Sardinian
   start_time: 307.6
   ancestors:
   - LBK

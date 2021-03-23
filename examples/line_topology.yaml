@@ -4,13 +4,13 @@ defaults:
   epoch: {start_size: 1}
 
 demes:
-- id: deme0
+- name: deme0
   epochs:
   - end_time: 20
-- id: deme1
+- name: deme1
   ancestors: [deme0]
   epochs:
   - end_time: 10
-- id: deme2
+- name: deme2
   ancestors: [deme1]
 

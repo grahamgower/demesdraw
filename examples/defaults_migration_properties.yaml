@@ -5,7 +5,7 @@ defaults:
   migration: {end_time: 1, rate: 1, start_time: 2}
   epoch: {start_size: 1}
 
-demes: [{id: deme0}, {id: deme1}, {id: deme2}]
+demes: [{name: deme0}, {name: deme1}, {name: deme2}]
 
 migrations:
 - {dest: deme1, source: deme0}

@@ -7,14 +7,14 @@ time_units: generations
 doi:
 - http://doi.org/10.1038/nature09687
 demes:
-- id: Bornean
+- name: Bornean
   epochs:
   - end_time: 20157.45
     start_size: 17934.0
   - end_time: 0
     start_size: 10616.928
     end_size: 8805.0
-- id: Sumatran
+- name: Sumatran
   start_time: 20157.45
   ancestors:
   - Bornean

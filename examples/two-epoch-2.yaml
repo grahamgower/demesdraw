@@ -1,6 +1,6 @@
 time_units: generations
 demes:
-- id: A
+- name: A
   epochs:
   - start_size: 2000
     end_time: 500

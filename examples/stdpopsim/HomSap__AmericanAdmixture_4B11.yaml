@@ -1,86 +1,51 @@
-description: Demographic model for American admixture, taken from Browning et al.
-  2011. This model extends the Gravel et al. (2011) model of African/European/Asian
-  demographic history to simulate an admixed population with admixture occurring 12
-  generations ago. The admixed population had an initial size of 30,000 and grew at
-  a rate of 5% per generation, with 1/6 of the population of African ancestry, 1/3
-  European, and 1/2 Asian.
-time_units: generations
+description: The Browning et al. (2011) model of admixture in the Americas.
 doi:
-- http://dx.doi.org/10.1371/journal.pgen.1007385
+  - https://doi.org/10.1371/journal.pgen.1007385
+time_units: generations
+# TODO the parser currently raises an error if we set this value. See the
+# note in the code for details.
+# generation_time: 25
+
 demes:
-- id: AFR
+- name: ancestral
+  description: Equilibrium/root population
   epochs:
-  - end_time: 5920.0
-    start_size: 7310.0
-  - end_time: 0
-    start_size: 14474.0
-- id: EUR
-  start_time: 2040.0001
-  ancestors:
-  - AFR
+  - {end_time: 5920, start_size: 7310}
+- name: AMH
+  description: Anatomically modern humans
+  ancestors: [ancestral]
   epochs:
-  - end_time: 920.0002
-    start_size: 1861.0
-  - end_time: 0
-    start_size: 1031.9992156802982
-    end_size: 34038.718872685706
-- id: ASIA
-  start_time: 920.0001
-  ancestors:
-  - EUR
+  - {end_time: 2040, start_size: 14474}
+- name: OOA
+  description: Bottleneck out-of-Africa population
+  ancestors: [AMH]
   epochs:
-  - end_time: 0
-    start_size: 553.999734080064
-    end_size: 45851.568512352045
-- id: ADMIX
-  start_time: 12.0002
-  ancestors:
-  - ASIA
+  - {end_time: 920, start_size: 1861}
+- name: AFR
+  description: African population
+  ancestors: [AMH]
   epochs:
-  - end_time: 0
-    start_size: 29999.700001499998
-    end_size: 54663.56401171527
+  - start_size: 14474
+- name: EUR
+  description: European population
+  ancestors: [OOA]
+  epochs:
+  - {start_size: 1000, end_size: 34039}
+- name: EAS
+  description: East Asian population
+  ancestors: [OOA]
+  epochs:
+  - {start_size: 510, end_size: 45852}
+- name: ADMIX
+  description: Admixed America
+  ancestors: [AFR, EUR, EAS]
+  proportions: [0.167, 0.333, 0.5]
+  start_time: 12
+  epochs:
+  - {start_size: 30000, end_size: 54664}
+
 migrations:
-- start_time: 2040.0
-  end_time: 920.0
-  rate: 0.00015
-  source: AFR
-  dest: EUR
-- start_time: 920.0
-  rate: 2.5e-05
-  source: AFR
-  dest: EUR
-- start_time: 2040.0
-  end_time: 920.0
-  rate: 0.00015
-  source: EUR
-  dest: AFR
-- start_time: 920.0
-  rate: 2.5e-05
-  source: EUR
-  dest: AFR
-- start_time: 920.0
-  rate: 7.8e-06
-  source: AFR
-  dest: ASIA
-- start_time: 920.0
-  rate: 3.11e-05
-  source: EUR
-  dest: ASIA
-- start_time: 920.0
-  rate: 7.8e-06
-  source: ASIA
-  dest: AFR
-- start_time: 920.0
-  rate: 3.11e-05
-  source: ASIA
-  dest: EUR
-pulses:
-- source: EUR
-  dest: ADMIX
-  time: 12.0001
-  proportion: 0.4
-- source: AFR
-  dest: ADMIX
-  time: 12.0
-  proportion: 0.16666666666666666
+- {demes: [AFR, OOA], rate: 15e-5}
+- {demes: [AFR, EUR], rate: 2.5e-5}
+- {demes: [AFR, EAS], rate: 0.78e-5}
+- {demes: [EUR, EAS], rate: 3.11e-5}

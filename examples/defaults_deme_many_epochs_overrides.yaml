@@ -5,12 +5,12 @@ defaults:
   epoch: {cloning_rate: 0.5, end_size: 2, selfing_rate: 0.1, start_size: 1}
 
 demes:
-- id: ancestral
+- name: ancestral
   ancestors: []
   start_time: .inf
   epochs:
   - {start_size: 1, end_size: 1}
-- id: deme0
+- name: deme0
   defaults:
     epoch: {cloning_rate: 0.6, end_size: 3, selfing_rate: 0.2, start_size: 2}
   epochs:
@@ -19,14 +19,14 @@ demes:
   - {end_time: 1}
   - {end_time: 0}
 
-- id: deme1
+- name: deme1
   epochs:
   - {end_time: 3}
   - {end_time: 2}
   - {end_time: 1}
   - {end_time: 0}
 
-- id: deme2
+- name: deme2
   epochs:
   - {end_time: 3}
   - {end_time: 2}
