@@ -74,7 +74,7 @@ migrations:
 - {demes: [YRI, Ghost], rate: 0.000179, start_time: 1659.0}
 - {demes: [CHB, Papuan], rate: 0.000572, start_time: 1659.0, end_time: 1293.0}
 - {demes: [CHB, Papuan], rate: 5.72e-05, start_time: 1293.0}
-- {demes: [CHB, Ghost], rate: 0.000442, start_time: 1659.0}
+- {demes: [CHB, Ghost], rate: 0.000442, start_time: 1659.0, end_time: 1293.0}
 - {demes: [CEU, CHB], rate: 3.14e-05}
 - {demes: [CEU, Ghost], rate: 0.000442}
 
@@ -83,5 +83,5 @@ pulses:
 - {source: Den2, dest: Papuan, time: 1575.8620689655172, proportion: 0.018}
 - {source: Nea1, dest: CHB, time: 1566.0, proportion: 0.011}
 - {source: Nea1, dest: Papuan, time: 1412.0, proportion: 0.002}
-- {source: Den1, dest: Papuan, time: 1027.5862068965516, proportion: 0.022000000000000002}
+- {source: Den1, dest: Papuan, time: 1027.5862068965516, proportion: 0.022}
 - {source: Nea1, dest: CHB, time: 883.0, proportion: 0.002}
