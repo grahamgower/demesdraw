@@ -105,7 +105,7 @@ def get_colours(
             )
         new_colours = {deme.id: cmap(j) for j, deme in enumerate(graph.demes)}
     elif isinstance(colours, Mapping):
-        bad_ids = list(colours.keys() - set(graph.demes))
+        bad_ids = list(colours.keys() - set([deme.id for deme in graph.demes]))
         if len(bad_ids) > 0:
             raise ValueError(
                 f"Colours given for deme(s) {bad_ids}, but deme(s) were "

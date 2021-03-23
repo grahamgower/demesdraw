@@ -1,4 +1,5 @@
 import warnings
+import math
 
 import demes
 import pytest
@@ -47,6 +48,43 @@ class TestAsTubes:
     @pytest.mark.parametrize("graph", tests.example_graphs())
     def test_labels_params(self, graph, labels):
         self.check_tubes(graph, labels=labels)
+
+    @pytest.mark.parametrize(
+        "colours", [None, "black", dict(), dict(A="red", B="blue", C="pink")]
+    )
+    def test_colours_params(self, colours):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=1000)))
+        b.add_deme("A", epochs=[dict(end_time=100)])
+        b.add_deme("B", ancestors=["A"])
+        b.add_deme("C", ancestors=["A"])
+        graph = b.resolve()
+        self.check_tubes(graph, colours=colours)
+
+        for j in range(10):
+            b.add_deme(f"deme{j}", ancestors=["A"])
+        graph = b.resolve()
+        # 13 demes. Also fine.
+        self.check_tubes(graph, colours=colours)
+
+    def test_bad_colours_params(self):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=1000)))
+        b.add_deme("A", epochs=[dict(end_time=100)])
+        b.add_deme("B", ancestors=["A"])
+        b.add_deme("C", ancestors=["A"])
+        graph = b.resolve()
+        for colour in [object(), math.inf, "thisisnotarealcolour"]:
+            with pytest.raises(ValueError, match="not.*a matplotlib colour"):
+                self.check_tubes(graph, colours=colour)
+        with pytest.raises(ValueError, match="deme.*not found in the graph"):
+            self.check_tubes(graph, colours=dict(X="black"))
+
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=1000)))
+        for j in range(25):
+            b.add_deme(f"deme{j}")
+        b.add_migration(demes=[f"deme{j}" for j in range(25)], rate=1e-5)
+        graph = b.resolve()
+        with pytest.raises(ValueError, match="colours must be specified"):
+            self.check_tubes(graph)
 
 
 class TestUtilsInfStartTime:
