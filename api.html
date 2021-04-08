@@ -201,8 +201,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in demes v0.1.0a5.dev2)"><em>demes.Graph</em></a>) – The demes graph to plot.</p></li>
-<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.3.4)"><em>matplotlib.axes.Axes</em></a>) – The matplotlib axes onto which the figure
+<li><p><strong>graph</strong> (<a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><em>demes.Graph</em></a>) – The demes graph to plot.</p></li>
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.4.1)"><em>matplotlib.axes.Axes</em></a>) – The matplotlib axes onto which the figure
 will be drawn. If None, an empty axes will be created for the figure.</p></li>
 <li><p><strong>inf_ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The proportion of the time axis that will be
 used for the time interval which stretches towards infinity.</p></li>
@@ -224,7 +224,7 @@ pedagogical tool.</p></li>
 <dd class="field-even"><p>The matplotlib axes onto which the figure was drawn.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.3.4)">matplotlib.axes.Axes</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.4.1)">matplotlib.axes.Axes</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -233,28 +233,30 @@ pedagogical tool.</p></li>
 <dt id="demesdraw.tubes">
 <code class="sig-prename descclassname"><span class="pre">demesdraw.</span></code><code class="sig-name descname"><span class="pre">tubes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inf_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_lines_per_migration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimisation_rounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xticks-mid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/demesdraw/tubes.html#tubes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#demesdraw.tubes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a demes-as-tubes schematic of the graph and the demes’ relationships.</p>
-<p>The width of each deme is proportional to its size, and ancestor/descendant
-relationships are drawn as dotted lines.
-Pulses of admixture are drawn as dashed lines in the colour of the source
-deme, with an arrow pointing from the source to the destination.
-For each period of continuous migration, multiple thin lines are drawn in
-the colour of the source deme, with an arrow pointing from the source to
-the destination. The time of each migration line is drawn uniformly at
+<p>Each deme is depicted as a tube, where the tube’s width is
+proportional to the deme’s size at any given time.
+Horizontal lines with arrows indicate either:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>an ancestor/descendant relation (thick solid lines, open arrow heads),</p></li>
+<li><p>an admixture pulse (dashed lines, closed arrow heads),</p></li>
+<li><p>or a period of continuous migration (thin solid lines, closed arrow heads).</p></li>
+</ul>
+</div></blockquote>
+<p>Lines are drawn in the colour of the ancestor or source deme, and arrows
+point from ancestor to descendant or from source to dest.
+For each period of continuous migration, multiple thin lines are drawn.
+The time of each migration line is drawn uniformly at
 random from the migration’s time interval (or log-uniformly for a
 log-scaled time axis). Symmetric migrations have lines in both directions.</p>
-<p>The horizontal position of demes are obtained by non-linear optimisation.
-Specifically, we minimise the distance between ancestors and their
-decendants, and the distance between interacting demes (migrations or pulses),
-subject to the contraint that coexisting demes must have a minimum
-separation distance. Larger graphs may benefit from increasing
-<code class="docutils literal notranslate"><span class="pre">optimisation_rounds</span></code>. Note that the optimisation procedure may not work
-well for all graphs, so users may prefer to manually specify the
-<code class="docutils literal notranslate"><span class="pre">positions</span></code> instead.</p>
+<p>We encourage users to manually specify the horizontal <code class="docutils literal notranslate"><span class="pre">positions</span></code>
+for demes. If not specified, the positions will be chosen automatically,
+but these positions may be unexpected or otherwise non-optimal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in demes v0.1.0a5.dev2)"><em>demes.Graph</em></a>) – The demes graph to plot.</p></li>
-<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.3.4)"><em>matplotlib.axes.Axes</em></a>) – The matplotlib axes onto which the figure
+<li><p><strong>graph</strong> (<a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><em>demes.Graph</em></a>) – The demes graph to plot.</p></li>
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.4.1)"><em>matplotlib.axes.Axes</em></a>) – The matplotlib axes onto which the figure
 will be drawn. If None, an empty axes will be created for the figure.</p></li>
 <li><p><strong>colours</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – A mapping from deme name to matplotlib colour. Alternately,
 <code class="docutils literal notranslate"><span class="pre">colours</span></code> may be a named colour that will be used for all demes.</p></li>
@@ -283,7 +285,7 @@ procedure used to determine deme positions on the horizontal axis.</p></li>
 <dd class="field-even"><p>The matplotlib axes onto which the figure was drawn.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.3.4)">matplotlib.axes.Axes</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.4.1)">matplotlib.axes.Axes</a></p>
 </dd>
 </dl>
 </dd></dl>

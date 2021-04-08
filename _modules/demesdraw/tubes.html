@@ -326,11 +326,13 @@
     <span class="n">idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">j</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
     <span class="n">interactions</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">migration</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">migrations</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">demes</span><span class="o">.</span><span class="n">SymmetricMigration</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">source</span><span class="p">,</span> <span class="n">dest</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">permutations</span><span class="p">(</span><span class="n">migration</span><span class="o">.</span><span class="n">demes</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-                <span class="n">interactions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">idx</span><span class="p">[</span><span class="n">source</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="n">dest</span><span class="p">]))</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">demes</span><span class="o">.</span><span class="n">AsymmetricMigration</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">demes</span><span class="o">.</span><span class="n">AsymmetricMigration</span><span class="p">):</span>
             <span class="n">interactions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">idx</span><span class="p">[</span><span class="n">migration</span><span class="o">.</span><span class="n">source</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="n">migration</span><span class="o">.</span><span class="n">dest</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">source</span><span class="p">,</span> <span class="n">dest</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">permutations</span><span class="p">(</span>
+                <span class="n">migration</span><span class="o">.</span><span class="n">demes</span><span class="p">,</span> <span class="mi">2</span>  <span class="c1"># type:ignore  # noqa</span>
+            <span class="p">):</span>
+                <span class="n">interactions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">idx</span><span class="p">[</span><span class="n">source</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="n">dest</span><span class="p">]))</span>
     <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
         <span class="n">interactions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">idx</span><span class="p">[</span><span class="n">pulse</span><span class="o">.</span><span class="n">source</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="n">pulse</span><span class="o">.</span><span class="n">dest</span><span class="p">]))</span>
 
@@ -387,8 +389,12 @@
 <span class="sd">    :rtype: dict</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">rounds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># explore all orderings of 5 demes</span>
-        <span class="n">rounds</span> <span class="o">=</span> <span class="mi">120</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="c1"># explore all orderings of 5 demes</span>
+            <span class="n">rounds</span> <span class="o">=</span> <span class="mi">120</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># just use topdown placement</span>
+            <span class="n">rounds</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="n">contemporaries</span> <span class="o">=</span> <span class="n">coexistence_indexes</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contemporaries</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -419,7 +425,7 @@
 
     <span class="n">topdown_positions</span> <span class="o">=</span> <span class="n">topdown_placement</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
     <span class="n">topdown</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">topdown_positions</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="o">*</span> <span class="n">sep</span>
-    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">))</span> <span class="o">*</span> <span class="n">sep</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">topdown</span>
     <span class="n">fmin_best</span> <span class="o">=</span> <span class="n">fmin</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
     <span class="n">x_best</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
@@ -478,24 +484,24 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot a demes-as-tubes schematic of the graph and the demes&#39; relationships.</span>
 
-<span class="sd">    The width of each deme is proportional to its size, and ancestor/descendant</span>
-<span class="sd">    relationships are drawn as dotted lines.</span>
-<span class="sd">    Pulses of admixture are drawn as dashed lines in the colour of the source</span>
-<span class="sd">    deme, with an arrow pointing from the source to the destination.</span>
-<span class="sd">    For each period of continuous migration, multiple thin lines are drawn in</span>
-<span class="sd">    the colour of the source deme, with an arrow pointing from the source to</span>
-<span class="sd">    the destination. The time of each migration line is drawn uniformly at</span>
+<span class="sd">    Each deme is depicted as a tube, where the tube’s width is</span>
+<span class="sd">    proportional to the deme’s size at any given time.</span>
+<span class="sd">    Horizontal lines with arrows indicate either:</span>
+
+<span class="sd">     * an ancestor/descendant relation (thick solid lines, open arrow heads),</span>
+<span class="sd">     * an admixture pulse (dashed lines, closed arrow heads),</span>
+<span class="sd">     * or a period of continuous migration (thin solid lines, closed arrow heads).</span>
+
+<span class="sd">    Lines are drawn in the colour of the ancestor or source deme, and arrows</span>
+<span class="sd">    point from ancestor to descendant or from source to dest.</span>
+<span class="sd">    For each period of continuous migration, multiple thin lines are drawn.</span>
+<span class="sd">    The time of each migration line is drawn uniformly at</span>
 <span class="sd">    random from the migration&#39;s time interval (or log-uniformly for a</span>
 <span class="sd">    log-scaled time axis). Symmetric migrations have lines in both directions.</span>
 
-<span class="sd">    The horizontal position of demes are obtained by non-linear optimisation.</span>
-<span class="sd">    Specifically, we minimise the distance between ancestors and their</span>
-<span class="sd">    decendants, and the distance between interacting demes (migrations or pulses),</span>
-<span class="sd">    subject to the contraint that coexisting demes must have a minimum</span>
-<span class="sd">    separation distance. Larger graphs may benefit from increasing</span>
-<span class="sd">    ``optimisation_rounds``. Note that the optimisation procedure may not work</span>
-<span class="sd">    well for all graphs, so users may prefer to manually specify the</span>
-<span class="sd">    ``positions`` instead.</span>
+<span class="sd">    We encourage users to manually specify the horizontal ``positions``</span>
+<span class="sd">    for demes. If not specified, the positions will be chosen automatically,</span>
+<span class="sd">    but these positions may be unexpected or otherwise non-optimal.</span>
 
 <span class="sd">    :param demes.Graph graph: The demes graph to plot.</span>
 <span class="sd">    :param matplotlib.axes.Axes ax: The matplotlib axes onto which the figure</span>
@@ -696,7 +702,7 @@
             <span class="o">**</span><span class="n">mig_kwargs</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Migration</span><span class="p">,</span> <span class="n">log_scale</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">log_scale</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">migration</span><span class="o">.</span><span class="n">start_time</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">start_time</span><span class="p">):</span>
             <span class="n">start_time</span> <span class="o">=</span> <span class="n">inf_start_time</span>
@@ -711,15 +717,15 @@
     <span class="c1"># Plot migration lines.</span>
     <span class="n">migration_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">migration</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">migrations</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">demes</span><span class="o">.</span><span class="n">SymmetricMigration</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">permutations</span><span class="p">(</span><span class="n">migration</span><span class="o">.</span><span class="n">demes</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_lines_per_migration</span><span class="p">):</span>
-                    <span class="n">t</span> <span class="o">=</span> <span class="n">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">log_time</span><span class="p">)</span>
-                    <span class="n">migration_line</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">migration_kwargs</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">demes</span><span class="o">.</span><span class="n">AsymmetricMigration</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">demes</span><span class="o">.</span><span class="n">AsymmetricMigration</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_lines_per_migration</span><span class="p">):</span>
                 <span class="n">t</span> <span class="o">=</span> <span class="n">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">log_time</span><span class="p">)</span>
                 <span class="n">migration_line</span><span class="p">(</span><span class="n">migration</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">migration</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">migration_kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">permutations</span><span class="p">(</span><span class="n">migration</span><span class="o">.</span><span class="n">demes</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>  <span class="c1"># type: ignore  # noqa</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_lines_per_migration</span><span class="p">):</span>
+                    <span class="n">t</span> <span class="o">=</span> <span class="n">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">log_time</span><span class="p">)</span>
+                    <span class="n">migration_line</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">migration_kwargs</span><span class="p">)</span>
 
     <span class="c1"># Plot pulse lines.</span>
     <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>

@@ -70,8 +70,9 @@ demesdraw.size_history(gutenkunst_ooa, invert_x=True, log_size=True);
 The {func}`.tubes()` function plots a "demes as tubes"-style schematic
 overview. Compared with the size-history figure above, this more fully
 captures the relationships between demes.
-Ancestor/descendant relationships are indicated as dotted lines,
-and migrations are drawn as lines from source to destination.
+Ancestor/descendant relationships are indicated as solid lines with
+open arrow heads pointing from ancestor to descendant, and migrations are drawn
+as thin lines with closed arrow heads pointing from source to destination.
 
 ```{code-cell}
 :tags: [hide-input]
