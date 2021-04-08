@@ -30,7 +30,7 @@ class TestSizeHistory:
 
 
 class TestAsTubes:
-    def check_tubes(self, graph, seed=1234, optimisation_rounds=1, **kwargs):
+    def check_tubes(self, graph, seed=1234, optimisation_rounds=None, **kwargs):
         ax = demesdraw.tubes(
             graph, seed=seed, optimisation_rounds=optimisation_rounds, **kwargs
         )

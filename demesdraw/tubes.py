@@ -213,8 +213,12 @@ def find_positions(
     :rtype: dict
     """
     if rounds is None:
-        # explore all orderings of 5 demes
-        rounds = 120
+        if len(graph.demes) <= 5:
+            # explore all orderings of 5 demes
+            rounds = 120
+        else:
+            # just use topdown placement
+            rounds = 0
 
     contemporaries = coexistence_indexes(graph)
     if len(contemporaries) == 0:
@@ -245,7 +249,7 @@ def find_positions(
 
     topdown_positions = topdown_placement(graph)
     topdown = np.array(list(topdown_positions.values())) * sep
-    x0 = np.arange(len(graph.demes)) * sep
+    x0 = topdown
     fmin_best = fmin(x0)
     x_best = x0.copy()
 
@@ -304,24 +308,24 @@ def tubes(
     """
     Plot a demes-as-tubes schematic of the graph and the demes' relationships.
 
-    The width of each deme is proportional to its size, and ancestor/descendant
-    relationships are drawn as dotted lines.
-    Pulses of admixture are drawn as dashed lines in the colour of the source
-    deme, with an arrow pointing from the source to the destination.
-    For each period of continuous migration, multiple thin lines are drawn in
-    the colour of the source deme, with an arrow pointing from the source to
-    the destination. The time of each migration line is drawn uniformly at
+    Each deme is depicted as a tube, where the tube’s width is
+    proportional to the deme’s size at any given time.
+    Horizontal lines with arrows indicate either:
+
+     * an ancestor/descendant relation (thick solid lines, open arrow heads),
+     * an admixture pulse (dashed lines, closed arrow heads),
+     * or a period of continuous migration (thin solid lines, closed arrow heads).
+
+    Lines are drawn in the colour of the ancestor or source deme, and arrows
+    point from ancestor to descendant or from source to dest.
+    For each period of continuous migration, multiple thin lines are drawn.
+    The time of each migration line is drawn uniformly at
     random from the migration's time interval (or log-uniformly for a
     log-scaled time axis). Symmetric migrations have lines in both directions.
 
-    The horizontal position of demes are obtained by non-linear optimisation.
-    Specifically, we minimise the distance between ancestors and their
-    decendants, and the distance between interacting demes (migrations or pulses),
-    subject to the contraint that coexisting demes must have a minimum
-    separation distance. Larger graphs may benefit from increasing
-    ``optimisation_rounds``. Note that the optimisation procedure may not work
-    well for all graphs, so users may prefer to manually specify the
-    ``positions`` instead.
+    We encourage users to manually specify the horizontal ``positions``
+    for demes. If not specified, the positions will be chosen automatically,
+    but these positions may be unexpected or otherwise non-optimal.
 
     :param demes.Graph graph: The demes graph to plot.
     :param matplotlib.axes.Axes ax: The matplotlib axes onto which the figure
