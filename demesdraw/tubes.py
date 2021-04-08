@@ -152,11 +152,13 @@ def interactions_indexes(graph: demes.Graph, *, unique: bool) -> List[Tuple[int,
     idx = {deme.name: j for j, deme in enumerate(graph.demes)}
     interactions = []
     for migration in graph.migrations:
-        if isinstance(migration, demes.SymmetricMigration):
-            for source, dest in itertools.permutations(migration.demes, 2):
-                interactions.append((idx[source], idx[dest]))
-        elif isinstance(migration, demes.AsymmetricMigration):
+        if isinstance(migration, demes.AsymmetricMigration):
             interactions.append((idx[migration.source], idx[migration.dest]))
+        else:
+            for source, dest in itertools.permutations(
+                migration.demes, 2  # type:ignore  # noqa
+            ):
+                interactions.append((idx[source], idx[dest]))
     for pulse in graph.pulses:
         interactions.append((idx[pulse.source], idx[pulse.dest]))
 
@@ -526,7 +528,7 @@ def tubes(
             **mig_kwargs,
         )
 
-    def random_migration_time(migration: demes.Migration, log_scale: bool) -> float:
+    def random_migration_time(migration, log_scale: bool) -> float:
         start_time = migration.start_time
         if np.isinf(start_time):
             start_time = inf_start_time
@@ -541,15 +543,15 @@ def tubes(
     # Plot migration lines.
     migration_kwargs = dict(linewidth=0.2, alpha=0.5)
     for migration in graph.migrations:
-        if isinstance(migration, demes.SymmetricMigration):
-            for a, b in itertools.permutations(migration.demes, 2):
-                for _ in range(num_lines_per_migration):
-                    t = random_migration_time(migration, log_time)
-                    migration_line(a, b, t, **migration_kwargs)
-        elif isinstance(migration, demes.AsymmetricMigration):
+        if isinstance(migration, demes.AsymmetricMigration):
             for _ in range(num_lines_per_migration):
                 t = random_migration_time(migration, log_time)
                 migration_line(migration.source, migration.dest, t, **migration_kwargs)
+        else:
+            for a, b in itertools.permutations(migration.demes, 2):  # type: ignore  # noqa
+                for _ in range(num_lines_per_migration):
+                    t = random_migration_time(migration, log_time)
+                    migration_line(a, b, t, **migration_kwargs)
 
     # Plot pulse lines.
     for pulse in graph.pulses:
