@@ -4,8 +4,10 @@
 # saved reports, which makes it difficult to debug the reasons for 
 # build failures in CI. This is a simple wrapper to handle that.
 
-REPORTDIR=_build/html/reports
+# Use package from parent directory.
+export PYTHONPATH=$(realpath ..):$PYTHONPATH
 
+REPORTDIR=_build/html/reports
 jupyter-book build -W --keep-going .
 RETVAL=$?
 if [ $RETVAL -ne 0 ]; then
