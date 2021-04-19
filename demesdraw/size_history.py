@@ -158,6 +158,7 @@ def size_history(
                     # This is only really a useful feature with 1 deme,
                     # but at least try to do something reasonable for more demes.
                     color="black" if len(graph.demes) == 1 else colour,
+                    zorder=z_top,
                 )
 
         # Indicate population size discontinuities from ancestor demes.
