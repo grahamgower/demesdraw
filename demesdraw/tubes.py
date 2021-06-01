@@ -81,6 +81,19 @@ class Tube:
                 N = epoch.start_size * np.exp(r * dt)
                 N1 = mid - N / 2
                 N2 = mid + N / 2
+            elif epoch.size_function == "linear":
+                if log_time:
+                    t = np.exp(
+                        np.linspace(
+                            np.log(start_time), np.log(max(1, end_time)), num=num_points
+                        )
+                    )
+                else:
+                    t = np.linspace(start_time, end_time, num=num_points)
+                dt = (start_time - t) / (start_time - end_time)
+                N = epoch.start_size + (epoch.end_size - epoch.start_size) * dt
+                N1 = mid - N / 2
+                N2 = mid + N / 2
             else:
                 raise ValueError(
                     f"Don't know how to draw epoch {k} with "

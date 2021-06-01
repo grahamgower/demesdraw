@@ -108,6 +108,10 @@ def size_history(
                 dt = np.linspace(0, 1, num=num_points)
                 r = np.log(epoch.end_size / epoch.start_size)
                 y = epoch.start_size * np.exp(r * dt)
+            elif epoch.size_function == "linear":
+                x = np.linspace(start_time, end_time, num=num_points)
+                dt = np.linspace(0, 1, num=num_points)
+                y = epoch.start_size + (epoch.end_size - epoch.start_size) * dt
             else:
                 raise ValueError(
                     f"Don't know how to plot epoch {k} with "

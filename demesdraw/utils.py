@@ -68,11 +68,14 @@ def size_of_deme_at_time(deme: demes.Deme, time: float) -> float:
 
     if np.isclose(time, epoch.end_time) or epoch.start_size == epoch.end_size:
         N = epoch.end_size
-    else:
-        assert epoch.size_function == "exponential"
+    elif epoch.size_function == "exponential":
         dt = (epoch.start_time - time) / epoch.time_span
         r = np.log(epoch.end_size / epoch.start_size)
         N = epoch.start_size * np.exp(r * dt)
+    else:
+        assert epoch.size_function == "linear"
+        dt = (epoch.start_time - time) / epoch.time_span
+        N = epoch.start_size + (epoch.end_size - epoch.start_size) * dt
     return N
 
 
