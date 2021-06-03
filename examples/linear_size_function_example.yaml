@@ -1,0 +1,27 @@
+description: Two-populations demography with linear size change.
+time_units: generations
+demes:
+- name: ancestral
+  description: An ancestral population that had linear growth.
+  epochs:
+    - start_size: 100
+      end_time: 2000
+    - start_size: 100
+      end_size: 1000
+      end_time: 1000
+      size_function: linear
+- name: pop_1
+  description: First population that had exponential growth
+  ancestors: [ancestral]
+  epochs:
+    - start_size: 500
+      end_size: 1000
+      end_time: 0
+- name: pop_2
+  description: Second population that had linear decrease after split.
+  ancestors: [ancestral]
+  epochs:
+    - start_size: 500
+      end_size: 10
+      end_time: 0
+      size_function: linear
