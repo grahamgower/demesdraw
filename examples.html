@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Examples &#8212; DemesDraw</title>
     
-  <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
 
     
   <link rel="stylesheet"
@@ -19,14 +20,10 @@
 
     
       
-  <link rel="stylesheet"
-    href="_static/vendor/open-sans_all/1.44.1/index.css">
-  <link rel="stylesheet"
-    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
 
     
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
@@ -34,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="_static/js/index.d3f166471bb80abb5163.js">
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
 
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -44,7 +41,7 @@
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -55,14 +52,14 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="API Reference" href="api.html" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
-
-
-
+    
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
     
 
     <div class="container-xl">
@@ -71,25 +68,25 @@
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
         <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="index.html">
-  
-  
-  <h1 class="site-logo" id="site-title">DemesDraw</h1>
-  
-</a>
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      <h1 class="site-logo" id="site-title">DemesDraw</h1>
+      
+    </a>
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form>
-<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <ul class="nav sidenav_l1">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="quickstart.html">
    Quickstart
   </a>
  </li>
 </ul>
-<ul class="current nav sidenav_l1">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="api.html">
    API Reference
@@ -102,6 +99,7 @@
  </li>
 </ul>
 
+    </div>
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
@@ -169,12 +167,12 @@
     </div>
 </div>
 
-
             <!-- Full screen (wrap in <a> to have style consistency -->
-            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                    title="Fullscreen mode"><i
-                        class="fas fa-expand"></i></button></a>
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
 
             <!-- Launch buttons -->
 
@@ -281,120 +279,127 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/examples_1_0.svg" src="_images/examples_1_0.svg" /><img alt="_images/examples_1_1.svg" src="_images/examples_1_1.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;ipython-input-1-686134f1880c&gt;:10: DeprecationWarning: `set_matplotlib_formats` is deprecated since IPython 7.23, directly use `matplotlib_inline.backend_inline.set_matplotlib_formats()`
+  set_matplotlib_formats(&quot;svg&quot;)
 </pre></div>
 </div>
-<img alt="_images/examples_1_3.svg" src="_images/examples_1_3.svg" /><img alt="_images/examples_1_4.svg" src="_images/examples_1_4.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_1.svg" src="_images/examples_1_1.svg" /><img alt="_images/examples_1_2.svg" src="_images/examples_1_2.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_6.svg" src="_images/examples_1_6.svg" /><img alt="_images/examples_1_7.svg" src="_images/examples_1_7.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_4.svg" src="_images/examples_1_4.svg" /><img alt="_images/examples_1_5.svg" src="_images/examples_1_5.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_9.svg" src="_images/examples_1_9.svg" /><img alt="_images/examples_1_10.svg" src="_images/examples_1_10.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_7.svg" src="_images/examples_1_7.svg" /><img alt="_images/examples_1_8.svg" src="_images/examples_1_8.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_12.svg" src="_images/examples_1_12.svg" /><img alt="_images/examples_1_13.svg" src="_images/examples_1_13.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_10.svg" src="_images/examples_1_10.svg" /><img alt="_images/examples_1_11.svg" src="_images/examples_1_11.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_15.svg" src="_images/examples_1_15.svg" /><img alt="_images/examples_1_16.svg" src="_images/examples_1_16.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_13.svg" src="_images/examples_1_13.svg" /><img alt="_images/examples_1_14.svg" src="_images/examples_1_14.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_18.svg" src="_images/examples_1_18.svg" /><img alt="_images/examples_1_19.svg" src="_images/examples_1_19.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_16.svg" src="_images/examples_1_16.svg" /><img alt="_images/examples_1_17.svg" src="_images/examples_1_17.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_21.svg" src="_images/examples_1_21.svg" /><img alt="_images/examples_1_22.svg" src="_images/examples_1_22.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_19.svg" src="_images/examples_1_19.svg" /><img alt="_images/examples_1_20.svg" src="_images/examples_1_20.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.9/x64/lib/python3.8/site-packages/demes/demes.py:1682: UserWarning: Multiple pulses are defined for the same deme(s) at time 1. The ancestry proportions after this time will thus depend on the order in which the pulses have been specified. To avoid unexpected behaviour, the graph can instead be structured to introduce a new deme at this time with the desired ancestry proportions.
+<img alt="_images/examples_1_22.svg" src="_images/examples_1_22.svg" /><img alt="_images/examples_1_23.svg" src="_images/examples_1_23.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.10/x64/lib/python3.8/site-packages/demes/demes.py:1682: UserWarning: Multiple pulses are defined for the same deme(s) at time 1. The ancestry proportions after this time will thus depend on the order in which the pulses have been specified. To avoid unexpected behaviour, the graph can instead be structured to introduce a new deme at this time with the desired ancestry proportions.
   warnings.warn(
 </pre></div>
 </div>
-<img alt="_images/examples_1_25.svg" src="_images/examples_1_25.svg" /><img alt="_images/examples_1_26.svg" src="_images/examples_1_26.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_26.svg" src="_images/examples_1_26.svg" /><img alt="_images/examples_1_27.svg" src="_images/examples_1_27.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_28.svg" src="_images/examples_1_28.svg" /><img alt="_images/examples_1_29.svg" src="_images/examples_1_29.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_29.svg" src="_images/examples_1_29.svg" /><img alt="_images/examples_1_30.svg" src="_images/examples_1_30.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_31.svg" src="_images/examples_1_31.svg" /><img alt="_images/examples_1_32.svg" src="_images/examples_1_32.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_32.svg" src="_images/examples_1_32.svg" /><img alt="_images/examples_1_33.svg" src="_images/examples_1_33.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_34.svg" src="_images/examples_1_34.svg" /><img alt="_images/examples_1_35.svg" src="_images/examples_1_35.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_35.svg" src="_images/examples_1_35.svg" /><img alt="_images/examples_1_36.svg" src="_images/examples_1_36.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_37.svg" src="_images/examples_1_37.svg" /><img alt="_images/examples_1_38.svg" src="_images/examples_1_38.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_38.svg" src="_images/examples_1_38.svg" /><img alt="_images/examples_1_39.svg" src="_images/examples_1_39.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_40.svg" src="_images/examples_1_40.svg" /><img alt="_images/examples_1_41.svg" src="_images/examples_1_41.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_41.svg" src="_images/examples_1_41.svg" /><img alt="_images/examples_1_42.svg" src="_images/examples_1_42.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_43.svg" src="_images/examples_1_43.svg" /><img alt="_images/examples_1_44.svg" src="_images/examples_1_44.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_44.svg" src="_images/examples_1_44.svg" /><img alt="_images/examples_1_45.svg" src="_images/examples_1_45.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_46.svg" src="_images/examples_1_46.svg" /><img alt="_images/examples_1_47.svg" src="_images/examples_1_47.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_47.svg" src="_images/examples_1_47.svg" /><img alt="_images/examples_1_48.svg" src="_images/examples_1_48.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_49.svg" src="_images/examples_1_49.svg" /><img alt="_images/examples_1_50.svg" src="_images/examples_1_50.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_50.svg" src="_images/examples_1_50.svg" /><img alt="_images/examples_1_51.svg" src="_images/examples_1_51.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_52.svg" src="_images/examples_1_52.svg" /><img alt="_images/examples_1_53.svg" src="_images/examples_1_53.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_53.svg" src="_images/examples_1_53.svg" /><img alt="_images/examples_1_54.svg" src="_images/examples_1_54.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_55.svg" src="_images/examples_1_55.svg" /><img alt="_images/examples_1_56.svg" src="_images/examples_1_56.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_56.svg" src="_images/examples_1_56.svg" /><img alt="_images/examples_1_57.svg" src="_images/examples_1_57.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_58.svg" src="_images/examples_1_58.svg" /><img alt="_images/examples_1_59.svg" src="_images/examples_1_59.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_59.svg" src="_images/examples_1_59.svg" /><img alt="_images/examples_1_60.svg" src="_images/examples_1_60.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_61.svg" src="_images/examples_1_61.svg" /><img alt="_images/examples_1_62.svg" src="_images/examples_1_62.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_62.svg" src="_images/examples_1_62.svg" /><img alt="_images/examples_1_63.svg" src="_images/examples_1_63.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_64.svg" src="_images/examples_1_64.svg" /><img alt="_images/examples_1_65.svg" src="_images/examples_1_65.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_65.svg" src="_images/examples_1_65.svg" /><img alt="_images/examples_1_66.svg" src="_images/examples_1_66.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_67.svg" src="_images/examples_1_67.svg" /><img alt="_images/examples_1_68.svg" src="_images/examples_1_68.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.9/x64/lib/python3.8/site-packages/numpy/ma/core.py:6845: RuntimeWarning: overflow encountered in power
-  result = np.where(m, fa, umath.power(fa, fb)).view(basetype)
+<img alt="_images/examples_1_68.svg" src="_images/examples_1_68.svg" /><img alt="_images/examples_1_69.svg" src="_images/examples_1_69.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 <img alt="_images/examples_1_71.svg" src="_images/examples_1_71.svg" /><img alt="_images/examples_1_72.svg" src="_images/examples_1_72.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_74.svg" src="_images/examples_1_74.svg" /><img alt="_images/examples_1_75.svg" src="_images/examples_1_75.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.10/x64/lib/python3.8/site-packages/numpy/ma/core.py:6845: RuntimeWarning: overflow encountered in power
+  result = np.where(m, fa, umath.power(fa, fb)).view(basetype)
 </pre></div>
 </div>
-<img alt="_images/examples_1_77.svg" src="_images/examples_1_77.svg" /><img alt="_images/examples_1_78.svg" src="_images/examples_1_78.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_75.svg" src="_images/examples_1_75.svg" /><img alt="_images/examples_1_76.svg" src="_images/examples_1_76.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_80.svg" src="_images/examples_1_80.svg" /><img alt="_images/examples_1_81.svg" src="_images/examples_1_81.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_78.svg" src="_images/examples_1_78.svg" /><img alt="_images/examples_1_79.svg" src="_images/examples_1_79.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_83.svg" src="_images/examples_1_83.svg" /><img alt="_images/examples_1_84.svg" src="_images/examples_1_84.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_81.svg" src="_images/examples_1_81.svg" /><img alt="_images/examples_1_82.svg" src="_images/examples_1_82.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_86.svg" src="_images/examples_1_86.svg" /><img alt="_images/examples_1_87.svg" src="_images/examples_1_87.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_84.svg" src="_images/examples_1_84.svg" /><img alt="_images/examples_1_85.svg" src="_images/examples_1_85.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_89.svg" src="_images/examples_1_89.svg" /><img alt="_images/examples_1_90.svg" src="_images/examples_1_90.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_87.svg" src="_images/examples_1_87.svg" /><img alt="_images/examples_1_88.svg" src="_images/examples_1_88.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_92.svg" src="_images/examples_1_92.svg" /><img alt="_images/examples_1_93.svg" src="_images/examples_1_93.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_90.svg" src="_images/examples_1_90.svg" /><img alt="_images/examples_1_91.svg" src="_images/examples_1_91.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_95.svg" src="_images/examples_1_95.svg" /><img alt="_images/examples_1_96.svg" src="_images/examples_1_96.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_93.svg" src="_images/examples_1_93.svg" /><img alt="_images/examples_1_94.svg" src="_images/examples_1_94.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_98.svg" src="_images/examples_1_98.svg" /><img alt="_images/examples_1_99.svg" src="_images/examples_1_99.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_96.svg" src="_images/examples_1_96.svg" /><img alt="_images/examples_1_97.svg" src="_images/examples_1_97.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_101.svg" src="_images/examples_1_101.svg" /><img alt="_images/examples_1_102.svg" src="_images/examples_1_102.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_99.svg" src="_images/examples_1_99.svg" /><img alt="_images/examples_1_100.svg" src="_images/examples_1_100.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_104.svg" src="_images/examples_1_104.svg" /><img alt="_images/examples_1_105.svg" src="_images/examples_1_105.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_102.svg" src="_images/examples_1_102.svg" /><img alt="_images/examples_1_103.svg" src="_images/examples_1_103.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<img alt="_images/examples_1_107.svg" src="_images/examples_1_107.svg" /><img alt="_images/examples_1_108.svg" src="_images/examples_1_108.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<img alt="_images/examples_1_105.svg" src="_images/examples_1_105.svg" /><img alt="_images/examples_1_106.svg" src="_images/examples_1_106.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_108.svg" src="_images/examples_1_108.svg" /><img alt="_images/examples_1_109.svg" src="_images/examples_1_109.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_111.svg" src="_images/examples_1_111.svg" /><img alt="_images/examples_1_112.svg" src="_images/examples_1_112.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -447,11 +452,9 @@
 
       </div>
     </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
 
-    
-  <script src="_static/js/index.d3f166471bb80abb5163.js"></script>
-
-
-    
+  
   </body>
 </html>
