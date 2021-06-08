@@ -340,7 +340,7 @@
         <span class="c1"># Indicate population size discontinuities from ancestor demes.</span>
         <span class="k">for</span> <span class="n">ancestor_id</span> <span class="ow">in</span> <span class="n">deme</span><span class="o">.</span><span class="n">ancestors</span><span class="p">:</span>
             <span class="n">anc</span> <span class="o">=</span> <span class="n">graph</span><span class="p">[</span><span class="n">ancestor_id</span><span class="p">]</span>
-            <span class="n">anc_N</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_of_deme_at_time</span><span class="p">(</span><span class="n">anc</span><span class="p">,</span> <span class="n">deme</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span>
+            <span class="n">anc_N</span> <span class="o">=</span> <span class="n">anc</span><span class="o">.</span><span class="n">size_at</span><span class="p">(</span><span class="n">deme</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span>
             <span class="n">deme_N</span> <span class="o">=</span> <span class="n">deme</span><span class="o">.</span><span class="n">epochs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">start_size</span>
             <span class="k">if</span> <span class="n">anc_N</span> <span class="o">!=</span> <span class="n">deme_N</span><span class="p">:</span>
                 <span class="n">vertices_discontinuity</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>

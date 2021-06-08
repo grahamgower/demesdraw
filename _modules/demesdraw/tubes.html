@@ -282,7 +282,7 @@
 
     <span class="k">def</span> <span class="nf">sizes_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the size coordinates of the tube at the given time.&quot;&quot;&quot;</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_of_deme_at_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deme</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deme</span><span class="o">.</span><span class="n">size_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
         <span class="n">N1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid</span> <span class="o">-</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="n">N2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid</span> <span class="o">+</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="k">return</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span>
