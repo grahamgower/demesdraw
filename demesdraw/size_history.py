@@ -46,9 +46,9 @@ def size_history(
     ax = utils.get_axes(ax)
 
     if invert_x:
-        arrowhead = "<k"
+        arrowhead = "<"
     else:
-        arrowhead = ">k"
+        arrowhead = ">"
 
     colours = utils.get_colours(graph, colours)
     inf_start_time = utils.inf_start_time(graph, inf_ratio, log_time)
