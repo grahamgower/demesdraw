@@ -515,10 +515,10 @@ def tubes(
 
         if source_size2 < dest_size1:
             x = [source_size2 + offset, dest_size1 - offset]
-            arrow = ">k"
+            arrow = ">"
         else:
             x = [source_size1 - offset, dest_size2 + offset]
-            arrow = "<k"
+            arrow = "<"
 
         colour = colours[source]
         lines = ax.plot(
