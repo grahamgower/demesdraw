@@ -110,7 +110,7 @@ class Tube:
 
     def sizes_at(self, time: float) -> Tuple[float, float]:
         """Return the size coordinates of the tube at the given time."""
-        N = utils.size_of_deme_at_time(self.deme, time)
+        N = self.deme.size_at(time)
         N1 = self.mid - N / 2
         N2 = self.mid + N / 2
         return N1, N2

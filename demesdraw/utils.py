@@ -56,29 +56,6 @@ def inf_start_time(graph: demes.Graph, inf_ratio: float, log_scale: bool) -> flo
     return inf_start_time
 
 
-def size_of_deme_at_time(deme: demes.Deme, time: float) -> float:
-    """
-    Return the population size of the deme at the given time.
-    """
-    for epoch in deme.epochs:
-        if epoch.start_time >= time >= epoch.end_time:
-            break
-    else:
-        raise ValueError(f"deme {deme.name} doesn't exist at time {time}")
-
-    if np.isclose(time, epoch.end_time) or epoch.start_size == epoch.end_size:
-        N = epoch.end_size
-    elif epoch.size_function == "exponential":
-        dt = (epoch.start_time - time) / epoch.time_span
-        r = np.log(epoch.end_size / epoch.start_size)
-        N = epoch.start_size * np.exp(r * dt)
-    else:
-        assert epoch.size_function == "linear"
-        dt = (epoch.start_time - time) / epoch.time_span
-        N = epoch.start_size + (epoch.end_size - epoch.start_size) * dt
-    return N
-
-
 def get_colours(
     graph: demes.Graph,
     colours: ColourOrColourMapping = None,

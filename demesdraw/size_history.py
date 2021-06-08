@@ -168,7 +168,7 @@ def size_history(
         # Indicate population size discontinuities from ancestor demes.
         for ancestor_id in deme.ancestors:
             anc = graph[ancestor_id]
-            anc_N = utils.size_of_deme_at_time(anc, deme.start_time)
+            anc_N = anc.size_at(deme.start_time)
             deme_N = deme.epochs[0].start_size
             if anc_N != deme_N:
                 vertices_discontinuity.extend(

@@ -1,4 +1,3 @@
-import warnings
 import math
 
 import demes
@@ -115,48 +114,3 @@ class TestUtilsInfStartTime:
         t = demesdraw.utils.inf_start_time(graph, 0.1, log_scale)
         assert t > 0
         assert not np.isinf(t)
-
-
-class TestUtilsSizeOfDemeAtTime:
-    @pytest.mark.parametrize("deme", tests.example_demes())
-    def test_deme_start_and_end_times(self, deme):
-        N = demesdraw.utils.size_of_deme_at_time(deme, deme.start_time)
-        assert N == deme.epochs[0].start_size
-        N = demesdraw.utils.size_of_deme_at_time(deme, deme.end_time)
-        assert N == deme.epochs[-1].end_size
-
-    @pytest.mark.parametrize("deme", tests.example_demes())
-    def test_times_within_each_epoch(self, deme):
-        for epoch in deme.epochs:
-            if np.isinf(epoch.start_time):
-                # The deme has the same size from end_time back to infinity.
-                for t in [epoch.end_time, epoch.end_time + 100, np.inf]:
-                    N = demesdraw.utils.size_of_deme_at_time(deme, t)
-                    assert N == epoch.start_size
-            else:
-                # Recalling that an epoch spans over the open-closed interval
-                # (start_time, end_time], we test several times in this range.
-                dt = epoch.start_time - epoch.end_time
-                r = np.log(epoch.end_size / epoch.start_size)
-                for p in [0, 1e-6, 1 / 3, 0.1, 1 - 1e-6]:
-                    t = epoch.end_time + p * dt
-                    N = demesdraw.utils.size_of_deme_at_time(deme, t)
-                    if epoch.size_function == "constant":
-                        assert N == epoch.start_size
-                    elif epoch.size_function == "exponential":
-                        expected_N = epoch.start_size * np.exp(r * (1 - p))
-                        assert np.isclose(N, expected_N)
-                    else:
-                        warnings.warn(
-                            f"No tests for size_function '{epoch.size_function}'"
-                        )
-
-    def test_bad_time(self):
-        b = demes.Builder()
-        b.add_deme("A", epochs=[dict(start_size=1, end_time=100)])
-        b.add_deme("B", ancestors=["A"], epochs=[dict(start_size=1)])
-        graph = b.resolve()
-        with pytest.raises(ValueError, match="doesn't exist"):
-            demesdraw.utils.size_of_deme_at_time(graph["A"], 10)
-        with pytest.raises(ValueError, match="doesn't exist"):
-            demesdraw.utils.size_of_deme_at_time(graph["B"], 200)
