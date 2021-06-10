@@ -1,5 +1,8 @@
 # Core dependencies.
 demes==0.1.2
-matplotlib==3.4.2
-numpy==1.20.3
-scipy==1.6.3
+matplotlib==3.3.4; python_version=='3.6'
+matplotlib==3.4.2; python_version>='3.7'
+numpy==1.19.5; python_version=='3.6'
+numpy==1.20.3; python_version>='3.7'
+scipy==1.5.4; python_version=='3.6'
+scipy==1.6.3; python_version>='3.7'
