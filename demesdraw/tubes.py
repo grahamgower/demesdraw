@@ -547,10 +547,10 @@ def tubes(
             start_time = inf_start_time
         if log_scale:
             t = np.exp(
-                rng.uniform(np.log(start_time), np.log(max(1, migration.end_time)))
+                rng.uniform(np.log(max(1, migration.end_time)), np.log(start_time))
             )
         else:
-            t = rng.uniform(start_time, migration.end_time)
+            t = rng.uniform(migration.end_time, start_time)
         return t
 
     # Plot migration lines.
