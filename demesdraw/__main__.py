@@ -60,7 +60,7 @@ class Command:
 
 class TubesCommand(Command):
     """
-    Plot a demes-as-tubes schematic of the model and the demes’ relationships.
+    Plot a demes-as-tubes schematic of the model and the demes' relationships.
     """
 
     def __init__(self, subparsers):
