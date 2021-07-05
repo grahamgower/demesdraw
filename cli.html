@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quickstart &#8212; DemesDraw</title>
+    <title>Command line interface &#8212; DemesDraw</title>
     
   <link href="_static/css/theme.css" rel="stylesheet" />
   <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -51,7 +51,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API Reference" href="api.html" />
+    <link rel="prev" title="Examples" href="examples.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -80,13 +80,13 @@
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
     <div class="bd-toc-item active">
         <ul class="nav bd-sidenav">
- <li class="toctree-l1 current">
-  <a class="reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="quickstart.html">
    Quickstart
   </a>
  </li>
 </ul>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="api.html">
    API Reference
@@ -97,8 +97,8 @@
    Examples
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="cli.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Command line interface
   </a>
  </li>
@@ -141,12 +141,9 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="_sources/quickstart.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
+        
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/quickstart.md"><button type="button"
+        <a class="dropdown-buttons" href="_sources/cli.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -166,10 +163,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/grahamgower/demesdraw/issues/new?title=Issue%20on%20page%20%2Fquickstart.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/grahamgower/demesdraw/issues/new?title=Issue%20on%20page%20%2Fcli.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/grahamgower/demesdraw/edit/main/docs/quickstart.md"><button
+        <a class="edit-button" href="https://github.com/grahamgower/demesdraw/edit/main/docs/cli.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -184,23 +181,6 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/grahamgower/demesdraw/main?urlpath=tree/docs/quickstart.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
@@ -211,19 +191,14 @@
             </div>
             <nav id="bd-toc-nav">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   Quickstart
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#demes-tubes">
+   demes tubes
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#population-size-history">
-   Population size history
-  </a>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#demes-as-tubes">
-   Demes as tubes
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#demes-size-history">
+   demes size_history
   </a>
  </li>
 </ul>
@@ -237,72 +212,75 @@
         
               <div>
                 
-  <div class="section" id="quickstart">
-<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<p>DemesDraw is a python package for drawing
-<a class="reference external" href="https://github.com/popsim-consortium/demes-spec">Demes</a> demographic models.
-It can be installed with pip.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">grahamgower</span><span class="o">/</span><span class="n">demesdraw</span><span class="o">.</span><span class="n">git</span>
+  <div class="section" id="command-line-interface">
+<h1>Command line interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>usage: demesdraw [-h] [--version] {tubes,size_history} ...
+
+Draw a Demes model.
+
+positional arguments:
+  {tubes,size_history}
+    tubes               Plot a demes-as-tubes schematic of the model and the
+                        demes&#39; relationships.
+    size_history        Plot population size as a function of time for each
+                        deme in the model.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --version             show program&#39;s version number and exit
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>DemesDraw is currently focused on providing figures for the Demes
-documentation. As such, the functionality and API are very preliminary.
-However, we hope to expand DemesDraw’s capabilities in the future,
-so backwards-incompatible changes should be expected.</p>
-</div>
-</div>
-<div class="section" id="population-size-history">
-<h1>Population size history<a class="headerlink" href="#population-size-history" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="api.html#demesdraw.size_history" title="demesdraw.size_history"><code class="xref py py-func docutils literal notranslate"><span class="pre">size_history()</span></code></a> function plots the population size as a
-function of time for each deme in the graph. This is great for single-deme
-graphs like the ZigZag model from Schiffels &amp; Durbin et al. (2014).</p>
-<div class="cell tag_hide-input docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zigzag</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../examples/stdpopsim/HomSap__Zigzag_1S14.yaml&quot;</span><span class="p">)</span>
-<span class="n">demesdraw</span><span class="o">.</span><span class="n">size_history</span><span class="p">(</span><span class="n">zigzag</span><span class="p">,</span> <span class="n">invert_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_time</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/quickstart_2_0.svg" src="_images/quickstart_2_0.svg" /></div>
-</div>
-<p>Multi-deme models can also be plotted with <a class="reference internal" href="api.html#demesdraw.size_history" title="demesdraw.size_history"><code class="xref py py-func docutils literal notranslate"><span class="pre">size_history()</span></code></a>.
-E.g., below we plot the human out-of-Africa model from Gutenkunst et al. (2009).
-Lines for distinct demes are given different colours and widths,
-with thinner lines drawn on top of thicker lines. Ancestor/descendant
-relationships are indicated as dotted lines.</p>
-<div class="cell tag_hide-input docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gutenkunst_ooa</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../examples/stdpopsim/HomSap__OutOfAfrica_3G09.yaml&quot;</span><span class="p">)</span>
-<span class="n">demesdraw</span><span class="o">.</span><span class="n">size_history</span><span class="p">(</span><span class="n">gutenkunst_ooa</span><span class="p">,</span> <span class="n">invert_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_size</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/quickstart_4_0.svg" src="_images/quickstart_4_0.svg" /></div>
-</div>
-</div>
-<div class="section" id="demes-as-tubes">
-<h1>Demes as tubes<a class="headerlink" href="#demes-as-tubes" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="api.html#demesdraw.tubes" title="demesdraw.tubes"><code class="xref py py-func docutils literal notranslate"><span class="pre">tubes()</span></code></a> function plots a “demes as tubes”-style schematic
-overview. Compared with the size-history figure above, this more fully
-captures the relationships between demes.
-Ancestor/descendant relationships are indicated as solid lines with
-open arrow heads pointing from ancestor to descendant, and migrations are drawn
-as thin lines with closed arrow heads pointing from source to destination.</p>
-<div class="cell tag_hide-input docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gutenkunst_ooa</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../examples/stdpopsim/HomSap__OutOfAfrica_3G09.yaml&quot;</span><span class="p">)</span>
-<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">gutenkunst_ooa</span><span class="p">,</span> <span class="n">num_lines_per_migration</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">log_time</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">);</span>
+<div class="section" id="demes-tubes">
+<h2>demes tubes<a class="headerlink" href="#demes-tubes" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>usage: demesdraw tubes [-h] [--log-time] [--aspect ASPECT] [--scale SCALE]
+                       [--title TITLE]
+                       model.yaml [figure.img]
+
+Plot a demes-as-tubes schematic of the model and the demes&#39; relationships.
+
+positional arguments:
+  model.yaml       Filename of the model. The special value &#39;-&#39; may be used to
+                   read from stdin. The file may be in any format supported by
+                   the demes library.
+  figure.img       The filename for the image. The file extension determines
+                   the filetype, and can be any format supported by Matplotlib
+                   (e.g. pdf, svg, png). If no file is specified, an
+                   interactive plot window will be opened.
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --log-time       Use a log-10 scale for the time axis.
+  --aspect ASPECT  Set the aspect ratio (height/width) of the plot.
+  --scale SCALE    Scale the figure size by the given value.
+  --title TITLE    Set the title of the figure to the given string.
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="_images/quickstart_6_0.svg" src="_images/quickstart_6_0.svg" /></div>
+<div class="section" id="demes-size-history">
+<h2>demes size_history<a class="headerlink" href="#demes-size-history" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>usage: demesdraw size_history [-h] [--log-time] [--aspect ASPECT]
+                              [--scale SCALE] [--title TITLE]
+                              model.yaml [figure.img]
+
+Plot population size as a function of time for each deme in the model.
+
+positional arguments:
+  model.yaml       Filename of the model. The special value &#39;-&#39; may be used to
+                   read from stdin. The file may be in any format supported by
+                   the demes library.
+  figure.img       The filename for the image. The file extension determines
+                   the filetype, and can be any format supported by Matplotlib
+                   (e.g. pdf, svg, png). If no file is specified, an
+                   interactive plot window will be opened.
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --log-time       Use a log-10 scale for the time axis.
+  --aspect ASPECT  Set the aspect ratio (height/width) of the plot.
+  --scale SCALE    Scale the figure size by the given value.
+  --title TITLE    Set the title of the figure to the given string.
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
 </div>
 </div>
 
@@ -331,7 +309,7 @@ as thin lines with closed arrow heads pointing from source to destination.</p>
         
         <div class='prev-next-bottom'>
             
-    <a class='right-next' id="next-link" href="api.html" title="next page">API Reference</a>
+    <a class='left-prev' id="prev-link" href="examples.html" title="previous page">Examples</a>
 
         </div>
         
