@@ -25,6 +25,7 @@ sphinx:
   - sphinx.ext.autodoc
   - sphinx.ext.viewcode
   - sphinx.ext.intersphinx
+  - sphinxcontrib.programoutput
 
   config:
     autodoc_typehints: "none"

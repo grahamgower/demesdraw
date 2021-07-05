@@ -43,7 +43,8 @@ def size_history(
     :return: The matplotlib axes onto which the figure was drawn.
     :rtype: matplotlib.axes.Axes
     """
-    ax = utils.get_axes(ax)
+    if ax is None:
+        ax = utils.get_axes()
 
     if invert_x:
         arrowhead = "<"

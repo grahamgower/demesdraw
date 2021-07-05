@@ -374,7 +374,8 @@ def tubes(
     if labels not in ("xticks", "legend", "mid", "xticks-legend", "xticks-mid", None):
         raise ValueError(f"Unexpected value for labels: '{labels}'")
 
-    ax = utils.get_axes(ax)
+    if ax is None:
+        ax = utils.get_axes()
 
     if log_time:
         ax.set_yscale("log", base=10)
