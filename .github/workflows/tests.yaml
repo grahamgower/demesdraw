@@ -43,6 +43,11 @@ jobs:
           python -m pip install -r requirements/minimal.txt
           python -m pip install -r requirements/test.txt
 
+      - name: install demesdraw
+        run: |
+          pip install .
+          demesdraw -h
+
       - name: run pytest
         run: |
           python -m pytest \
