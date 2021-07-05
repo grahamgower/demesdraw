@@ -105,14 +105,15 @@ def get_colours(
     return new_colours
 
 
-def get_axes(
-    ax: matplotlib.axes.Axes = None, aspect: float = 9.0 / 16.0, scale: float = 1.0
-) -> matplotlib.axes.Axes:
+def get_axes(aspect: float = None, scale: float = None) -> matplotlib.axes.Axes:
     """
     Make a default axes if one isn't provided.
     """
-    if ax is None:
-        fig_w, fig_h = plt.figaspect(aspect)
-        fig, ax = plt.subplots(figsize=(scale * fig_w, scale * fig_h))
-        fig.set_tight_layout(True)
+    if aspect is None:
+        aspect = 9.0 / 16.0
+    if scale is None:
+        scale = 1.0
+    fig_w, fig_h = plt.figaspect(aspect)
+    fig, ax = plt.subplots(figsize=(scale * fig_w, scale * fig_h))
+    fig.set_tight_layout(True)
     return ax
