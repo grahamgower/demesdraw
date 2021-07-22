@@ -68,10 +68,10 @@ class TubesCommand(Command):
 
     def __call__(self, args):
         graph = demes.load(args.input_file)
-        ax = demesdraw.utils.get_axes(aspect=args.aspect, scale=args.scale)
+        fig, ax = demesdraw.utils.get_fig_axes(aspect=args.aspect, scale=args.scale)
         demesdraw.tubes(graph, ax=ax, log_time=args.log_time, title=args.title)
         if args.output_file is not None:
-            ax.figure.savefig(args.output_file)
+            fig.savefig(args.output_file)
         else:
             # interactive plot
             plt.show()
@@ -87,10 +87,10 @@ class SizeHistoryCommand(Command):
 
     def __call__(self, args):
         graph = demes.load(args.input_file)
-        ax = demesdraw.utils.get_axes(aspect=args.aspect, scale=args.scale)
+        fig, ax = demesdraw.utils.get_fig_axes(aspect=args.aspect, scale=args.scale)
         demesdraw.size_history(graph, ax=ax, log_time=args.log_time, title=args.title)
         if args.output_file is not None:
-            ax.figure.savefig(args.output_file)
+            fig.savefig(args.output_file)
         else:
             # interactive plot
             plt.show()

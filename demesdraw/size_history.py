@@ -44,15 +44,15 @@ def size_history(
     :rtype: matplotlib.axes.Axes
     """
     if ax is None:
-        ax = utils.get_axes()
+        _, ax = utils.get_fig_axes()
 
     if invert_x:
         arrowhead = "<"
     else:
         arrowhead = ">"
 
-    colours = utils.get_colours(graph, colours)
-    inf_start_time = utils.inf_start_time(graph, inf_ratio, log_time)
+    colours = utils._get_colours(graph, colours)
+    inf_start_time = utils._inf_start_time(graph, inf_ratio, log_time)
 
     linestyles = ["solid"]  # , "dashed", "dashdot"]
     linewidths = [2, 4, 8, 1]
