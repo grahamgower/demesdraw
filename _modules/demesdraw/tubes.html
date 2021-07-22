@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.e8e5499552300ddf5d7adccae7cc3b70.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
@@ -552,22 +552,18 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected value for labels: &#39;</span><span class="si">{</span><span class="n">labels</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_fig_axes</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">log_time</span><span class="p">:</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
-    <span class="n">colours</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_colours</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">colours</span><span class="p">)</span>
+    <span class="n">colours</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">_get_colours</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">colours</span><span class="p">)</span>
 
     <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="n">seed2</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">63</span><span class="p">)</span>
-    <span class="n">inf_start_time</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">inf_start_time</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">inf_ratio</span><span class="p">,</span> <span class="n">log_time</span><span class="p">)</span>
+    <span class="n">inf_start_time</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">_inf_start_time</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">inf_ratio</span><span class="p">,</span> <span class="n">log_time</span><span class="p">)</span>
 
-    <span class="n">size_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
-        <span class="nb">max</span><span class="p">(</span><span class="n">epoch</span><span class="o">.</span><span class="n">start_size</span><span class="p">,</span> <span class="n">epoch</span><span class="o">.</span><span class="n">end_size</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span>
-        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">deme</span><span class="o">.</span><span class="n">epochs</span>
-    <span class="p">)</span>
+    <span class="n">size_max</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_max</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">positions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">positions</span> <span class="o">=</span> <span class="n">find_positions</span><span class="p">(</span>
             <span class="n">graph</span><span class="p">,</span> <span class="n">size_max</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">,</span> <span class="n">rounds</span><span class="o">=</span><span class="n">optimisation_rounds</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed2</span>
