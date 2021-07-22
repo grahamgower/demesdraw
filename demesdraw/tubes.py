@@ -375,22 +375,18 @@ def tubes(
         raise ValueError(f"Unexpected value for labels: '{labels}'")
 
     if ax is None:
-        ax = utils.get_axes()
+        _, ax = utils.get_fig_axes()
 
     if log_time:
         ax.set_yscale("log", base=10)
 
-    colours = utils.get_colours(graph, colours)
+    colours = utils._get_colours(graph, colours)
 
     rng = np.random.default_rng(seed)
     seed2 = rng.integers(2 ** 63)
-    inf_start_time = utils.inf_start_time(graph, inf_ratio, log_time)
+    inf_start_time = utils._inf_start_time(graph, inf_ratio, log_time)
 
-    size_max = max(
-        max(epoch.start_size, epoch.end_size)
-        for deme in graph.demes
-        for epoch in deme.epochs
-    )
+    size_max = utils.size_max(graph)
     if positions is None:
         positions = find_positions(
             graph, size_max * 1.1, rounds=optimisation_rounds, seed=seed2

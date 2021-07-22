@@ -2,12 +2,10 @@ import math
 
 import demes
 import pytest
-import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
 import demesdraw
-import demesdraw.utils
 import tests
 
 
@@ -28,7 +26,7 @@ class TestSizeHistory:
         self.check_size_history(graph, invert_x=True, annotate_epochs=True)
 
 
-class TestAsTubes:
+class TestTubes:
     def check_tubes(self, graph, seed=1234, optimisation_rounds=None, **kwargs):
         ax = demesdraw.tubes(
             graph, seed=seed, optimisation_rounds=optimisation_rounds, **kwargs
@@ -84,33 +82,3 @@ class TestAsTubes:
         graph = b.resolve()
         with pytest.raises(ValueError, match="colours must be specified"):
             self.check_tubes(graph)
-
-
-class TestUtilsInfStartTime:
-    @pytest.mark.parametrize("log_scale", [True, False])
-    @pytest.mark.parametrize("graph", tests.example_graphs())
-    def test_time_is_reasonable(self, graph, log_scale):
-        t = demesdraw.utils.inf_start_time(graph, 0.1, log_scale)
-        assert t > 0
-        assert not np.isinf(t)
-
-        times = []
-        for deme in graph.demes:
-            for epoch in deme.epochs:
-                times.extend([epoch.start_time, epoch.end_time])
-        for migration in graph.migrations:
-            times.extend([migration.start_time, migration.end_time])
-        for pulse in graph.pulses:
-            times.append(pulse.time)
-        time_max = max(time for time in times if not np.isinf(time))
-
-        assert t > time_max
-
-    @pytest.mark.parametrize("log_scale", [True, False])
-    def test_one_epoch(self, log_scale):
-        b = demes.Builder()
-        b.add_deme("A", epochs=[dict(start_size=1)])
-        graph = b.resolve()
-        t = demesdraw.utils.inf_start_time(graph, 0.1, log_scale)
-        assert t > 0
-        assert not np.isinf(t)
