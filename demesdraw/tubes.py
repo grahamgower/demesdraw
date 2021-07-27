@@ -313,6 +313,7 @@ def tubes(
     num_lines_per_migration: int = 10,
     seed: int = None,
     optimisation_rounds: int = None,
+    max_time: float = None,
     # TODO: docstring
     labels: str = "xticks-mid",
     fill: bool = True,
@@ -350,7 +351,8 @@ def tubes(
     :param float inf_ratio: The proportion of the time axis that will be
         used for the time interval which stretches towards infinity.
     :param dict positions: A dictionary mapping deme names to horizontal
-        coordinates. Note that the width of a deme is the deme's (max) size,
+        coordinates (the mid point of the deme's tube).
+        Note that the width of a deme is the deme's (max) size,
         so the positions should allow sufficient space to avoid overlapping.
     :param int num_lines_per_migration: The number of lines to draw per
         migration. For symmetric migrations, this number of lines will be
@@ -364,6 +366,11 @@ def tubes(
     :param int seed: Seed for the random number generator. The generator is
         used to draw times for migration lines and during the optimisation
         procedure used to determine deme positions on the horizontal axis.
+    :param float max_time: The maximum time value shown in the figure.
+        If demographic events (e.g. size changes, migrations, common ancestor
+        events) occur before this time, those events will not be visible.
+        If no demographic events occur before this time, the root demes will
+        drawn so they extend to the given time.
 
     :return: The matplotlib axes onto which the figure was drawn.
     :rtype: matplotlib.axes.Axes
@@ -381,7 +388,9 @@ def tubes(
 
     rng = np.random.default_rng(seed)
     seed2 = rng.integers(2 ** 63)
-    inf_start_time = utils._inf_start_time(graph, inf_ratio, log_time)
+    inf_start_time = max_time
+    if inf_start_time is None:
+        inf_start_time = utils._inf_start_time(graph, inf_ratio, log_time)
 
     size_max = utils.size_max(graph)
     if positions is None:
