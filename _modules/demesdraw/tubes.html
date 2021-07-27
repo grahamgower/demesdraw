@@ -490,6 +490,7 @@
     <span class="n">num_lines_per_migration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">optimisation_rounds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="c1"># TODO: docstring</span>
     <span class="n">labels</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;xticks-mid&quot;</span><span class="p">,</span>
     <span class="n">fill</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -527,7 +528,8 @@
 <span class="sd">    :param float inf_ratio: The proportion of the time axis that will be</span>
 <span class="sd">        used for the time interval which stretches towards infinity.</span>
 <span class="sd">    :param dict positions: A dictionary mapping deme names to horizontal</span>
-<span class="sd">        coordinates. Note that the width of a deme is the deme&#39;s (max) size,</span>
+<span class="sd">        coordinates (the mid point of the deme&#39;s tube).</span>
+<span class="sd">        Note that the width of a deme is the deme&#39;s (max) size,</span>
 <span class="sd">        so the positions should allow sufficient space to avoid overlapping.</span>
 <span class="sd">    :param int num_lines_per_migration: The number of lines to draw per</span>
 <span class="sd">        migration. For symmetric migrations, this number of lines will be</span>
@@ -541,6 +543,11 @@
 <span class="sd">    :param int seed: Seed for the random number generator. The generator is</span>
 <span class="sd">        used to draw times for migration lines and during the optimisation</span>
 <span class="sd">        procedure used to determine deme positions on the horizontal axis.</span>
+<span class="sd">    :param float max_time: The maximum time value shown in the figure.</span>
+<span class="sd">        If demographic events (e.g. size changes, migrations, common ancestor</span>
+<span class="sd">        events) occur before this time, those events will not be visible.</span>
+<span class="sd">        If no demographic events occur before this time, the root demes will</span>
+<span class="sd">        drawn so they extend to the given time.</span>
 
 <span class="sd">    :return: The matplotlib axes onto which the figure was drawn.</span>
 <span class="sd">    :rtype: matplotlib.axes.Axes</span>
@@ -558,7 +565,9 @@
 
     <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="n">seed2</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">63</span><span class="p">)</span>
-    <span class="n">inf_start_time</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">_inf_start_time</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">inf_ratio</span><span class="p">,</span> <span class="n">log_time</span><span class="p">)</span>
+    <span class="n">inf_start_time</span> <span class="o">=</span> <span class="n">max_time</span>
+    <span class="k">if</span> <span class="n">inf_start_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inf_start_time</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">_inf_start_time</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">inf_ratio</span><span class="p">,</span> <span class="n">log_time</span><span class="p">)</span>
 
     <span class="n">size_max</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">size_max</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">positions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
