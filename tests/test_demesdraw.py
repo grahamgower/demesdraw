@@ -82,3 +82,25 @@ class TestTubes:
         graph = b.resolve()
         with pytest.raises(ValueError, match="colours must be specified"):
             self.check_tubes(graph)
+
+    @pytest.mark.parametrize("log_time", [True, False])
+    def test_max_time(self, log_time):
+        def check_max_time(graph):
+            for max_time in [50, 5000, 1e7]:
+                ax = demesdraw.tubes(graph, log_time=log_time, max_time=max_time)
+                ylim = ax.get_ylim()
+                assert math.isclose(ylim[1], max_time)
+                plt.close(ax.figure)
+
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=1000)))
+        b.add_deme("A")
+        b.add_deme("B")
+        graph = b.resolve()
+        check_max_time(graph)
+
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=1000)))
+        b.add_deme("A", epochs=[dict(end_time=100)])
+        b.add_deme("B", ancestors=["A"])
+        b.add_deme("C", ancestors=["A"])
+        graph = b.resolve()
+        check_max_time(graph)
