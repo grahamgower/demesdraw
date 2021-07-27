@@ -17,14 +17,11 @@ class Tube:
     dimension and a width equal to the deme's population size, which may
     change over time.
 
-    :ivar time: Coordinates along the time dimension.
-    :type time: list of float
-    :ivar size1: Coordinates along the non-time dimension, corresponding to the
-        first side of the tube.
-    :type size1: list of float
-    :ivar size2: Coordinates along the non-time dimension, corresponding to the
-        second side of the tube.
-    :type size2: list of float
+    :ivar list[float] time: Coordinates along the time dimension.
+    :ivar list[float] size1: Coordinates along the non-time dimension,
+        corresponding to the first side of the tube.
+    :ivar list[float] size2: Coordinates along the non-time dimension,
+        corresponding to the second side of the tube.
     """
 
     def __init__(
@@ -334,7 +331,7 @@ def tubes(
     Lines are drawn in the colour of the ancestor or source deme, and arrows
     point from ancestor to descendant or from source to dest.
     For each period of continuous migration, multiple thin lines are drawn.
-    The time of each migration line is drawn uniformly at
+    The time for each migration line is sampled uniformly at
     random from the migration's time interval (or log-uniformly for a
     log-scaled time axis). Symmetric migrations have lines in both directions.
 
@@ -445,7 +442,7 @@ def tubes(
         )
         for ancestor_id in deme.ancestors:
             anc_size1, anc_size2 = tubes[ancestor_id].sizes_at(deme.start_time)
-            if anc_size1 + anc_size2 < tube.size1[0] + tube.size2[0]:
+            if anc_size2 < tube.size1[0]:
                 # Ancestor is to the left.
                 x_pos = [anc_size2, tube_frac[left]]
                 ancestry_arrows.append(
@@ -457,7 +454,7 @@ def tubes(
                     )
                 )
                 left += 1
-            else:
+            elif tube.size2[0] < anc_size1:
                 # Ancestor is to the right.
                 x_pos = [anc_size1, tube_frac[len(tube_frac) - right - 1]]
                 ancestry_arrows.append(
