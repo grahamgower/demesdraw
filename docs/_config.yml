@@ -26,6 +26,7 @@ sphinx:
   - sphinx.ext.viewcode
   - sphinx.ext.intersphinx
   - sphinxcontrib.programoutput
+  - sphinx_issues
 
   config:
     autodoc_typehints: "none"
@@ -33,3 +34,4 @@ sphinx:
       python: ["https://docs.python.org/3/", null]
       demes: ["https://popsim-consortium.github.io/demes-docs/main/", null]
       matplotlib: ["https://matplotlib.org/stable/", null]
+    issues_github_path: grahamgower/demesdraw

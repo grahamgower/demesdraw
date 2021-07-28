@@ -1,7 +1,7 @@
-# Table of content
-# Learn more at https://jupyterbook.org/customize/toc.html
-#
-- file: quickstart
+format: jb-article
+root: quickstart
+sections:
 - file: api
-- file: examples
 - file: cli
+- file: examples
+- file: CHANGELOG
