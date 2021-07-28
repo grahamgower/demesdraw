@@ -23,7 +23,7 @@ $ demesdraw tubes --log-time \
 	AmericanAdmixture_4B11_tubes.svg
 ```
 
-![stdpopsim/AmericanAdmixture_4B11 as tubes](docs/_static/AmericanAdmixture_4B11_tubes.svg)
+![stdpopsim/AmericanAdmixture_4B11 as tubes](https://raw.githubusercontent.com/grahamgower/demesdraw/main/docs/_static/AmericanAdmixture_4B11_tubes.svg)
 
 ## Python API
 
@@ -36,7 +36,7 @@ ax = demesdraw.size_history(graph, log_time=True)
 ax.figure.savefig("AmericanAdmixture_4B11_size_history.svg")
 ```
 
-![stdpopsim/AmericanAdmixture_4B11 size history](docs/_static/AmericanAdmixture_4B11_size_history.svg)
+![stdpopsim/AmericanAdmixture_4B11 size history](https://raw.githubusercontent.com/grahamgower/demesdraw/main/docs/_static/AmericanAdmixture_4B11_size_history.svg)
 
 # Documentation
 
