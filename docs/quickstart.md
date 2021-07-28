@@ -28,7 +28,7 @@ DemesDraw is a python package for drawing
 [Demes](https://github.com/popsim-consortium/demes-spec) demographic models.
 It can be installed with pip.
 ```
-python -m pip install git+https://github.com/grahamgower/demesdraw.git
+python3 -m pip install demesdraw
 ```
 
 ```{warning}
