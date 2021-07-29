@@ -9,8 +9,14 @@ Feedback is very welcome.
 
 # Installation
 
+Install with pip:
 ```
 $ python3 -m pip install demesdraw
+```
+
+Or with conda:
+```
+$ conda install -c conda-forge demesdraw
 ```
 
 # Usage

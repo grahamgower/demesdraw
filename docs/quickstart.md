@@ -31,6 +31,11 @@ It can be installed with pip.
 python3 -m pip install demesdraw
 ```
 
+Or with conda.
+```
+conda install -c conda-forge demesdraw
+```
+
 ```{warning}
 DemesDraw is currently focused on providing figures for the Demes
 documentation. As such, the functionality and API are very preliminary.
