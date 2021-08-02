@@ -54,7 +54,7 @@ def _inf_start_time(graph: demes.Graph, inf_ratio: float, log_scale: bool) -> fl
 
     :param demes.Graph graph: The graph.
     :param float inf_ratio: The proportion of the time axis that will be used
-        for the time intervale which stretches towards infinity.
+        for the time interval which stretches towards infinity.
     :param bool log_scale: The time axis uses a log scale.
     :return: The time.
     :rtype: float
