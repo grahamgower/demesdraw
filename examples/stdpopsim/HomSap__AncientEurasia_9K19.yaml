@@ -1,104 +1,78 @@
-description: "This is the best-fitting model of a history of multiple ancient and\
-  \ present-day human populations sampled across Eurasia over the past 120,000 years.\
-  \ The fitting was performed using momi2 (Kamm et al. 2019), which uses the multi-population\
-  \ site-frequency spectrum as input data. The model includes a ghost admixture event\
-  \ (from unsampled basal Eurasians into early European farmers), and two admixture\
-  \ events where the source is approximately well-known (from Neanderthals into Non-Africans\
-  \ and from Western European hunter-gatherers into modern Sardinians. There are three\
-  \ present-day populations: Sardinians, Han Chinese and African Mbuti. Additionally,\
-  \ there are several ancient samples obtained from fossils dated at different times\
-  \ in the past: the Altai Neanderthal (Prufer et al. 2014), a Mesolithic hunter-gatherer\
-  \ (Lazaridis et al. 2014), a Neolithic early European sample (Lazaridis et al. 2014),\
-  \ and two Palaeolithic modern humans from Siberia - MA1 (Raghavan et al. 2014) and\
-  \  Ust'Ishim (Fu et al. 2014). All the ancient samples are represented by a single\
-  \ diploid genome."
+description: 'This is the best-fitting model of a history of multiple ancient and
+  present-day human populations sampled across Eurasia over the past 120,000 years.
+  The fitting was performed using momi2 (Kamm et al. 2019), which uses the multi-population
+  site-frequency spectrum as input data. The model includes a ghost admixture event
+  (from unsampled basal Eurasians into early European farmers), and two admixture
+  events where the source is approximately well-known (from Neanderthals into Non-Africans
+  and from Western European hunter-gatherers into modern Sardinians. There are three
+  present-day populations: Sardinians, Han Chinese and African Mbuti. Additionally,
+  there are several ancient samples obtained from fossils dated at different times
+  in the past: the Altai Neanderthal (Prufer et al. 2014), a Mesolithic hunter-gatherer
+  (Lazaridis et al. 2014), a Neolithic early European sample (Lazaridis et al. 2014),
+  and two Palaeolithic modern humans from Siberia - MA1 (Raghavan et al. 2014) and  Ust''Ishim
+  (Fu et al. 2014). All the ancient samples are represented by a single diploid genome.'
 time_units: generations
-doi:
-- https://doi.org/10.1080/01621459.2019.1635482
+doi: ['https://doi.org/10.1080/01621459.2019.1635482']
 demes:
 - name: Loschbour
   epochs:
-  - end_time: 27840.0
-    start_size: 18200.0
-  - end_time: 3832.0
-    start_size: 29100.0
-  - end_time: 2016.0
-    start_size: 2340.0
-  - end_time: 0
-    start_size: 1920.0
+  - {end_time: 27840.0, start_size: 18200.0}
+  - {end_time: 3832.0, start_size: 29100.0}
+  - {end_time: 2016.0, start_size: 2340.0}
+  - {end_time: 0, start_size: 1920.0}
 - name: Neanderthal
   start_time: 27840.0
-  ancestors:
-  - Loschbour
+  ancestors: [Loschbour]
   epochs:
-  - end_time: 3832.0
-    start_size: 18200.0
-  - end_time: 2000.0
-    start_size: 18200.000000000007
-    end_size: 86.9
-  - end_time: 0
-    start_size: 86.9
+  - {end_time: 3832.0, start_size: 18200.0}
+  - {end_time: 2000.0, start_size: 18200.000000000007, end_size: 86.9}
+  - {end_time: 0, start_size: 86.9}
 - name: Mbuti
   start_time: 3832.0
-  ancestors:
-  - Loschbour
+  ancestors: [Loschbour]
   epochs:
-  - end_time: 0
-    start_size: 17300.0
+  - {end_time: 0, start_size: 17300.0}
 - name: BasalEurasian
   start_time: 3192.0
-  ancestors:
-  - Loschbour
+  ancestors: [Loschbour]
   epochs:
-  - end_time: 0
-    start_size: 1920.0
+  - {end_time: 0, start_size: 1920.0}
 - name: UstIshim
   start_time: 2060.0
-  ancestors:
-  - Loschbour
+  ancestors: [Loschbour]
   epochs:
-  - end_time: 0
-    start_size: 1920.0
+  - {end_time: 0, start_size: 1920.0}
 - name: Han
   start_time: 2016.0
-  ancestors:
-  - Loschbour
+  ancestors: [Loschbour]
   epochs:
-  - end_time: 0
-    start_size: 6300.0
+  - {end_time: 0, start_size: 6300.0}
 - name: MA1
   start_time: 1796.0
-  ancestors:
-  - Loschbour
+  ancestors: [Loschbour]
   epochs:
-  - end_time: 0
-    start_size: 1920.0
+  - {end_time: 0, start_size: 1920.0}
 - name: LBK
   start_time: 1508.0
-  ancestors:
-  - Loschbour
+  ancestors: [Loschbour]
   epochs:
-  - end_time: 307.6
-    start_size: 12000.0
-  - end_time: 0
-    start_size: 75.7
+  - {end_time: 307.6, start_size: 12000.0}
+  - {end_time: 0, start_size: 75.7}
 - name: Sardinian
   start_time: 307.6
-  ancestors:
-  - LBK
+  ancestors: [LBK]
   epochs:
-  - end_time: 0
-    start_size: 15000.0
+  - {end_time: 0, start_size: 15000.0}
 pulses:
-- source: Neanderthal
-  dest: Loschbour
+- dest: Loschbour
   time: 2272.0
-  proportion: 0.0296
-- source: BasalEurasian
-  dest: LBK
+  sources: [Neanderthal]
+  proportions: [0.0296]
+- dest: LBK
   time: 1348.0
-  proportion: 0.0936
-- source: Loschbour
-  dest: Sardinian
+  sources: [BasalEurasian]
+  proportions: [0.0936]
+- dest: Sardinian
   time: 49.2
-  proportion: 0.0317
+  sources: [Loschbour]
+  proportions: [0.0317]

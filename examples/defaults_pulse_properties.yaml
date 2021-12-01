@@ -1,12 +1,16 @@
-description: "Example setting pulse properties using defaults"
+description: Example setting pulse properties using defaults
 time_units: generations
-
 defaults:
-  pulse: {proportion: 0.5, time: 1}
+  pulse:
+    time: 1
+    proportions: [0.5]
   epoch: {start_size: 1}
-
-demes: [{name: deme0}, {name: deme1}, {name: deme2}]
-
+demes:
+- {name: deme0}
+- {name: deme1}
+- {name: deme2}
 pulses:
-- {dest: deme1, source: deme0}
-- {dest: deme2, source: deme1}
+- dest: deme1
+  sources: [deme0]
+- dest: deme2
+  sources: [deme1]

@@ -15,63 +15,46 @@ description: This was the best fit model of Ashkenazi Jewish demographic history
   not include the SNP array ascertainment scheme. It should be noted that Gladstein
   and Hammer 2019 simulated with a mutation rate of 2.5e-8.
 time_units: generations
-doi:
-- https://doi.org/10.1093/molbev/msz047
+doi: ['https://doi.org/10.1093/molbev/msz047']
 demes:
 - name: YRI
   epochs:
-  - end_time: 8800.0
-    start_size: 7300.0
-  - end_time: 0
-    start_size: 18197.008586099826
+  - {end_time: 8800.0, start_size: 7300.0}
+  - {end_time: 0, start_size: 18197.008586099826}
 - name: CHB
   start_time: 2105.0
-  ancestors:
-  - YRI
+  ancestors: [YRI]
   epochs:
-  - end_time: 0
-    start_size: 4073.802778041126
+  - {end_time: 0, start_size: 4073.802778041126}
 - name: CEU
   start_time: 850.0
-  ancestors:
-  - CHB
+  ancestors: [CHB]
   epochs:
-  - end_time: 0
-    start_size: 33113.112148259075
+  - {end_time: 0, start_size: 33113.112148259075}
 - name: ME
   start_time: 481.0
-  ancestors:
-  - CEU
+  ancestors: [CEU]
   epochs:
-  - end_time: 0
-    start_size: 436515.8322401656
+  - {end_time: 0, start_size: 436515.8322401656}
 - name: J
   start_time: 211.0
-  ancestors:
-  - ME
+  ancestors: [ME]
   epochs:
-  - end_time: 0
-    start_size: 354813.3892335753
+  - {end_time: 0, start_size: 354813.3892335753}
 - name: WAJ
   start_time: 29.0
-  ancestors:
-  - J
+  ancestors: [J]
   epochs:
-  - end_time: 13.0
-    start_size: 1096.4781961431852
-  - end_time: 0
-    start_size: 6606.934480075957
+  - {end_time: 13.0, start_size: 1096.4781961431852}
+  - {end_time: 0, start_size: 6606.934480075957}
 - name: EAJ
   start_time: 14.0
-  ancestors:
-  - WAJ
+  ancestors: [WAJ]
   epochs:
-  - end_time: 13.0
-    start_size: 1096.4781961431852
-  - end_time: 0
-    start_size: 1949844.5997580455
+  - {end_time: 13.0, start_size: 1096.4781961431852}
+  - {end_time: 0, start_size: 1949844.5997580455}
 pulses:
-- source: CEU
-  dest: WAJ
+- dest: WAJ
   time: 28.0
-  proportion: 0.17
+  sources: [CEU]
+  proportions: [0.17]
