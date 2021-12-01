@@ -170,7 +170,8 @@ def interactions_indexes(graph: demes.Graph, *, unique: bool) -> List[Tuple[int,
             ):
                 interactions.append((idx[source], idx[dest]))
     for pulse in graph.pulses:
-        interactions.append((idx[pulse.source], idx[pulse.dest]))
+        for source in pulse.sources:
+            interactions.append((idx[source], idx[pulse.dest]))
 
     if unique:
         # Remove duplicates.
@@ -571,9 +572,8 @@ def tubes(
 
     # Plot pulse lines.
     for pulse in graph.pulses:
-        migration_line(
-            pulse.source, pulse.dest, pulse.time, linestyle="--", linewidth=1
-        )
+        for source in pulse.sources:
+            migration_line(source, pulse.dest, pulse.time, linestyle="--", linewidth=1)
 
     xticks = []
     xticklabels = []
