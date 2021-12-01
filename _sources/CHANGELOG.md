@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.x.x]
+
+**Breaking changes**
+
+* Updates for demes 0.2.0, which changes the syntax for pulses
+  from using a single `source` and `proportion` to using a list of
+  `sources` and a list of `proportions`.
+
 ## [0.1.4] - 2021-07-28
 
 * Added `max_time` parameter to `demesdraw.tubes()`.
