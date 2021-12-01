@@ -1,8 +1,8 @@
 # Changelog
 
-## [0.x.x]
+## [0.2.0] - 2021-12-01
 
-**Breaking changes**
+**Breaking change**
 
 * Updates for demes 0.2.0, which changes the syntax for pulses
   from using a single `source` and `proportion` to using a list of
