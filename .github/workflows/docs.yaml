@@ -25,16 +25,46 @@ jobs:
         run: |
           python -m pip install -r requirements/minimal.txt
           python -m pip install -r requirements/docs.txt
+          python -m pip install build packaging
 
-      - name: install demesdraw
-        run: python -m pip install .
+      - name: generate version string
+        run: python -m build --sdist
 
       - name: build Docs
         run: make -C docs
 
-      - name: push to GitHub Pages
-        if: (!github.event.pull_request)
-        uses: peaceiris/actions-gh-pages@v3.6.1
+      - name: move docs
+        if: github.event_name == 'push'
+        run: |
+          cp docs/is_new_stable.py /tmp/
+          mv docs/_build/html /tmp/${GITHUB_REF_NAME}
+          git checkout gh-pages
+          rm -fr ${GITHUB_REF_NAME}
+          mv /tmp/${GITHUB_REF_NAME} .
+          find ${GITHUB_REF_NAME} -name __pycache__ -exec rm -r {} +
+          rm -fr latest
+          ln -s ${GITHUB_REF_NAME} latest
+
+      - name: check if tag is new stable
+        if: github.event_name == 'push' && github.ref_type == 'tag'
+        run: |
+          if [ -f stable ]; then
+            export STABLE=$(readlink stable)
+          else
+            export STABLE=0
+          fi
+          if python /tmp/is_new_stable.py ${STABLE} ${GITHUB_REF_NAME}; then
+            # Use for "stable" docs path.
+            echo "new stable is ${GITHUB_REF_NAME}"
+            rm -fr stable
+            ln -s ${GITHUB_REF_NAME} stable
+            echo "STABLE_PATH=stable" >> $GITHUB_ENV
+          fi
+
+      - name: commit to gh-pages
+        if: github.event_name == 'push'
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/_build/html
+          commit_message: deploy ${{ github.ref }}
+          branch: gh-pages
+          file_pattern: ${{ github.ref_name }} latest ${{ env.STABLE_PATH }}
