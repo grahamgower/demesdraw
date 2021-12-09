@@ -28,6 +28,10 @@ sphinx:
   - sphinxcontrib.programoutput
   - sphinx_issues
 
+  local_extensions:
+    # Add version string to the navbar and footer.
+    inject_version: _ext
+
   config:
     autodoc_typehints: "none"
     intersphinx_mapping:
