@@ -1,0 +1,79 @@
+Metadata-Version: 2.1
+Name: demesdraw
+Version: 0.2.0
+Summary: drawing tools for Demes demographic models
+Home-page: https://github.com/grahamgower/demesdraw
+Author: Graham Gower
+License: ISC
+Project-URL: Documentation, https://grahamgower.github.io/demesdraw/
+Project-URL: Source Code, https://github.com/grahamgower/demesdraw
+Project-URL: Bug Tracker, https://github.com/grahamgower/demesdraw/issues
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: ISC License (ISCL)
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# DemesDraw
+
+`demesdraw` is a Python package that contains drawing functions for
+[Demes](https://popsim-consortium.github.io/demes-spec-docs/main/)
+demographic models, using `matplotlib` to create the figures.
+DemesDraw offers both a command line interface, and a Python API.
+Feedback is very welcome.
+
+
+# Installation
+
+Install with pip:
+```
+$ python3 -m pip install demesdraw
+```
+
+Or with conda:
+```
+$ conda install -c conda-forge demesdraw
+```
+
+# Usage
+
+## Command line
+
+```
+$ demesdraw tubes --log-time \
+	examples/stdpopsim/HomSap__AmericanAdmixture_4B11.yaml \
+	AmericanAdmixture_4B11_tubes.svg
+```
+
+![stdpopsim/AmericanAdmixture_4B11 as tubes](https://raw.githubusercontent.com/grahamgower/demesdraw/main/docs/_static/AmericanAdmixture_4B11_tubes.svg)
+
+## Python API
+
+```
+import demes
+import demesdraw
+
+graph = demes.load("examples/stdpopsim/HomSap__AmericanAdmixture_4B11.yaml")
+ax = demesdraw.size_history(graph, log_time=True)
+ax.figure.savefig("AmericanAdmixture_4B11_size_history.svg")
+```
+
+![stdpopsim/AmericanAdmixture_4B11 size history](https://raw.githubusercontent.com/grahamgower/demesdraw/main/docs/_static/AmericanAdmixture_4B11_size_history.svg)
+
+# Documentation
+
+Complete API and CLI details are available in the 
+[DemesDraw documentation](https://grahamgower.github.io/demesdraw).
+
+

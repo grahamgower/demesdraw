@@ -1,0 +1,3 @@
+[console_scripts]
+demesdraw = demesdraw.__main__:cli
+
