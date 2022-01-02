@@ -1,14 +1,12 @@
-from typing import Any, Dict, Iterable, Mapping, List, Tuple
+from typing import Dict, Mapping, List, Tuple
 import itertools
-import math
 
 import demes
 import numpy as np
-import scipy.optimize
 import matplotlib
 import matplotlib.patheffects
 
-from demesdraw import utils
+from . import utils
 
 
 class Tube:
@@ -130,177 +128,30 @@ class Tube:
         return matplotlib.path.Path(vertices, codes)
 
 
-def coexist(deme_j: demes.Deme, deme_k: demes.Deme) -> bool:
-    """Returns true if deme_j and deme_k exist simultaneously."""
-    return not (
-        deme_j.end_time >= deme_k.start_time or deme_k.end_time >= deme_j.start_time
-    )
-
-
-def coexistence_indexes(graph: demes.Graph) -> List[Tuple[int, int]]:
-    """Pairs of indices of demes that exist simultaneously."""
-    contemporaries = []
-    for j, deme_j in enumerate(graph.demes):
-        for k, deme_k in enumerate(graph.demes[j + 1 :], j + 1):
-            if coexist(deme_j, deme_k):
-                contemporaries.append((j, k))
-    return contemporaries
-
-
-def successors_indexes(graph: demes.Graph) -> Mapping[int, List[int]]:
-    """Graph successors, but use indexes rather than deme names"""
-    idx = {deme.name: j for j, deme in enumerate(graph.demes)}
-    successors = dict()
-    for deme, children in graph.successors().items():
-        if len(children) > 0:
-            successors[idx[deme]] = [idx[child] for child in children]
-    return successors
-
-
-def interactions_indexes(graph: demes.Graph, *, unique: bool) -> List[Tuple[int, int]]:
-    """Pairs of indices of demes that exchange migrants (migrations or pulses)."""
-    idx = {deme.name: j for j, deme in enumerate(graph.demes)}
-    interactions = []
-    for migration in graph.migrations:
-        if isinstance(migration, demes.AsymmetricMigration):
-            interactions.append((idx[migration.source], idx[migration.dest]))
-        else:
-            for source, dest in itertools.permutations(
-                migration.demes, 2  # type:ignore  # noqa
-            ):
-                interactions.append((idx[source], idx[dest]))
-    for pulse in graph.pulses:
-        for source in pulse.sources:
-            interactions.append((idx[source], idx[pulse.dest]))
-
-    if unique:
-        # Remove duplicates.
-        i2 = set()
-        for a, b in interactions:
-            if (b, a) in i2:
-                continue
-            i2.add((a, b))
-        interactions = list(i2)
-
-    return interactions
-
-
-def topdown_placement(graph: demes.Graph) -> Mapping[str, int]:
+def find_positions(graph: demes.Graph, sep: float) -> Dict[str, float]:
     """
-    Assign integer positions to demes by traversing the graph top down,
-    avoiding positions already given to contemporary demes.
-    """
-    positions = {graph.demes[0].name: 0}
-    for deme in graph.demes[1:]:
-        taken = set()
-        for other, pos in positions.items():
-            if coexist(deme, graph[other]):
-                taken.add(pos)
-        pos = 0
-        while pos in taken:
-            pos += 1
-        positions[deme.name] = pos
-    return positions
+    Find optimal deme positions along a single dimension by:
 
-
-def find_positions(
-    graph: demes.Graph, sep: float, rounds: int = None, seed: int = None
-) -> Mapping[str, float]:
-    """
-    Find optimal positions for the demes along a single dimension by minimising:
-
-      - the distance from each parent deme to the mean position of its children,
-      - the distance between interacting demes (where interactions are either
-        migrations or pulses),
-      - the distance from zero.
+      - ordering the demes to minimise the number of lines crossing demes,
+      - minimising the distance from each parent deme to the mean position of
+        its children,
+      - minimising the distance between interacting demes (where interactions
+        are either migrations or pulses).
 
     In addition, the solution is constrained so that contemporary demes
-    have a minimum separation distance, ``sep``.
+    have a minimum separation distance.
 
-    :param demes.Graph graph: The graph for which positions should be obtained.
-    :param float sep: The minimum separation distance between contemporary demes.
-    :param int rounds: Number of rounds of optimisation to perform.
-    :param int seed: Seed for the random number generator.
-
-    :return: A dictionary mapping deme names to positions.
-    :rtype: dict
+    :param graph:
+        The graph for which positions should be obtained.
+    :param sep:
+        The minimum separation distance between contemporary demes.
+    :return:
+        A dictionary mapping deme names to positions.
     """
-    if rounds is None:
-        if len(graph.demes) <= 5:
-            # explore all orderings of 5 demes
-            rounds = 120
-        else:
-            # just use topdown placement
-            rounds = 0
-
-    contemporaries = coexistence_indexes(graph)
-    if len(contemporaries) == 0:
-        # There are no constraints, so stack demes on top of each other.
-        return {deme.name: 0 for deme in graph.demes}
-    successors = successors_indexes(graph)
-    interactions = interactions_indexes(graph, unique=True)
-
-    def fseparation(x: np.ndarray) -> np.ndarray:
-        """The separation distance between coexisting demes."""
-        return np.array([np.abs(x[j] - x[k]) for j, k in contemporaries])
-
-    def fmin(x: np.ndarray) -> float:
-        """Function to be minimised."""
-        z = 0
-        # Minimise the distance from each deme to its children.
-        for parent, children in successors.items():
-            a = x[parent]
-            b = np.mean([x[child] for child in children])
-            z += (a - b) ** 2
-            # z += sum((a - x[child]) ** 2 for child in children)
-        # Minimise the distance between interacting demes.
-        # (either migrations or pulses).
-        z += sum((x[j] - x[k]) ** 2 for j, k in interactions)
-        # Also penalise large positions.
-        z += sum(x)
-        return z
-
-    topdown_positions = topdown_placement(graph)
-    topdown = np.array(list(topdown_positions.values())) * sep
-    x0 = topdown
-    fmin_best = fmin(x0)
-    x_best = x0.copy()
-
-    def initial_states(rounds: int) -> Iterable[Any]:
-        """Generate initial states for the optimisation procedure."""
-        # Try the canonical top-down ordering.
-        yield topdown
-
-        n = len(graph.demes)
-        if math.factorial(n) <= rounds:
-            # generate all permutations
-            yield from itertools.permutations(x0, n)
-        else:
-            rng = np.random.default_rng(seed)
-            for _ in range(rounds):
-                x = x0.copy()
-                rng.shuffle(x)
-                yield x
-
-    # We optimise with the "SLSQP" method, which quickly converges to a
-    # local solution, then repeat for many distinct starting positions.
-    # This seems to work better than using the slower "trust-constr"
-    # constrained-optimisation method.
-    for x in initial_states(rounds):
-        res = scipy.optimize.minimize(
-            fmin,
-            x,
-            method="SLSQP",
-            bounds=scipy.optimize.Bounds(0, np.inf),
-            constraints=scipy.optimize.NonlinearConstraint(
-                fseparation, lb=sep, ub=np.inf
-            ),
-        )
-        if res.success and res.fun < fmin_best:
-            x_best = res.x
-            fmin_best = res.fun
-
-    return {deme.name: position for deme, position in zip(graph.demes, x_best)}
+    positions = utils.minimal_crossing_positions(
+        graph, sep=sep, unique_interactions=False
+    )
+    return utils.cvxpy_optimise(graph, positions, sep=sep, unique_interactions=False)
 
 
 def tubes(
@@ -313,7 +164,6 @@ def tubes(
     positions: Mapping[str, float] = None,
     num_lines_per_migration: int = 10,
     seed: int = None,
-    optimisation_rounds: int = None,
     max_time: float = None,
     # TODO: docstring
     labels: str = "xticks-mid",
@@ -337,44 +187,46 @@ def tubes(
     random from the migration's time interval (or log-uniformly for a
     log-scaled time axis). Symmetric migrations have lines in both directions.
 
-    We encourage users to manually specify the horizontal ``positions``
-    for demes. If not specified, the positions will be chosen automatically,
-    but these positions may be unexpected or otherwise non-optimal.
+    If ``positions`` are not specified, the positions will be chosen
+    automatically such that line crossings are minimised and related demes
+    are close together. If the automatically chosen positions are unexpected,
+    please open an issue at https://github.com/grahamgower/demesdraw/issues/.
 
-    :param demes.Graph graph: The demes graph to plot.
-    :param matplotlib.axes.Axes ax: The matplotlib axes onto which the figure
+    :param demes.Graph graph:
+        The demes graph to plot.
+    :param matplotlib.axes.Axes ax:
+        The matplotlib axes onto which the figure
         will be drawn. If None, an empty axes will be created for the figure.
-    :param colours: A mapping from deme name to matplotlib colour. Alternately,
+    :param colours:
+        A mapping from deme name to matplotlib colour. Alternately,
         ``colours`` may be a named colour that will be used for all demes.
     :type colours: dict or str
-    :param bool log_time: Use a log-10 scale for the time axis.
-    :param str title: The title of the figure.
-    :param float inf_ratio: The proportion of the time axis that will be
+    :param log_time:
+        If True, use a log-10 scale for the time axis.
+    :param title:
+        The title of the figure.
+    :param inf_ratio:
+        The proportion of the time axis that will be
         used for the time interval which stretches towards infinity.
-    :param dict positions: A dictionary mapping deme names to horizontal
-        coordinates (the mid point of the deme's tube).
+    :param positions:
+        A dictionary mapping deme names to horizontal coordinates
+        (the mid point of the deme's tube).
         Note that the width of a deme is the deme's (max) size,
         so the positions should allow sufficient space to avoid overlapping.
-    :param int num_lines_per_migration: The number of lines to draw per
-        migration. For symmetric migrations, this number of lines will be
-        drawn in each direction.
-    :param int optimisation_rounds: Number of rounds of optimisation to perform
-        when searching for reasonable horizontal positions for the demes.
-        We use an optimisation method that quickly converges to a local
-        solution, but repeat the procedure with many distinct starting
-        positions. The layout for graphs with many demes may benefit from
-        increasing this parameter.
-    :param int seed: Seed for the random number generator. The generator is
-        used to draw times for migration lines and during the optimisation
-        procedure used to determine deme positions on the horizontal axis.
-    :param float max_time: The maximum time value shown in the figure.
+    :param num_lines_per_migration:
+        The number of lines to draw per migration. For symmetric migrations,
+        this number of lines will be drawn in each direction.
+    :param seed:
+        Seed for the random number generator. The generator is
+        used to sample times for migration lines.
+    :param max_time:
+        The maximum time value shown in the figure.
         If demographic events (e.g. size changes, migrations, common ancestor
         events) occur before this time, those events will not be visible.
         If no demographic events occur before this time, the root demes will
         drawn so they extend to the given time.
-
-    :return: The matplotlib axes onto which the figure was drawn.
-    :rtype: matplotlib.axes.Axes
+    :return:
+        The matplotlib axes onto which the figure was drawn.
     """
     if labels not in ("xticks", "legend", "mid", "xticks-legend", "xticks-mid", None):
         raise ValueError(f"Unexpected value for labels: '{labels}'")
@@ -388,16 +240,13 @@ def tubes(
     colours = utils._get_colours(graph, colours)
 
     rng = np.random.default_rng(seed)
-    seed2 = rng.integers(2 ** 63)
     inf_start_time = max_time
     if inf_start_time is None:
         inf_start_time = utils._inf_start_time(graph, inf_ratio, log_time)
 
-    size_max = utils.size_max(graph)
     if positions is None:
-        positions = find_positions(
-            graph, size_max * 1.1, rounds=optimisation_rounds, seed=seed2
-        )
+        sep = 1.5 * utils.size_max(graph)
+        positions = find_positions(graph, sep)
 
     tubes = {}
     ancestry_arrows = []

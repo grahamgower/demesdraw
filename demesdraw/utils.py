@@ -1,10 +1,13 @@
+import itertools
 import math
-from typing import Mapping, Set, Tuple, Union
+from typing import Dict, List, Mapping, Set, Tuple, Union
 import warnings
 
+import cvxpy as cp
 import demes
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
 
 __all__ = [
     "get_fig_axes",
@@ -237,3 +240,257 @@ def log_time_heuristic(graph: demes.Graph) -> bool:
     else:
         log_time = False
     return log_time
+
+
+def _intersect(
+    dm_j: Union[demes.Deme, demes.AsymmetricMigration],
+    dm_k: Union[demes.Deme, demes.AsymmetricMigration],
+) -> bool:
+    """Returns true if dm_j and dm_k intersect in time."""
+    return not (dm_j.end_time >= dm_k.start_time or dm_k.end_time >= dm_j.start_time)
+
+
+def coexistence_indices(graph: demes.Graph) -> List[Tuple[int, int]]:
+    """Pairs of indices of demes that exist simultaneously."""
+    contemporaries = []
+    for j, deme_j in enumerate(graph.demes):
+        for k, deme_k in enumerate(graph.demes[j + 1 :], j + 1):
+            if _intersect(deme_j, deme_k):
+                contemporaries.append((j, k))
+    return contemporaries
+
+
+def successors_indices(graph: demes.Graph) -> Dict[int, List[int]]:
+    """Graph successors, but use indices rather than deme names"""
+    idx = {deme.name: j for j, deme in enumerate(graph.demes)}
+    successors = dict()
+    for deme, children in graph.successors().items():
+        if len(children) > 0:
+            successors[idx[deme]] = [idx[child] for child in children]
+    return successors
+
+
+def interactions_indices(graph: demes.Graph, *, unique: bool) -> List[Tuple[int, int]]:
+    """Pairs of indices of demes that exchange migrants (migrations or pulses)."""
+    idx = {deme.name: j for j, deme in enumerate(graph.demes)}
+    interactions = []
+    for migration in graph.migrations:
+        if isinstance(migration, demes.AsymmetricMigration):
+            interactions.append((idx[migration.source], idx[migration.dest]))
+        else:
+            for source, dest in itertools.permutations(
+                migration.demes, 2  # type:ignore  # noqa
+            ):
+                interactions.append((idx[source], idx[dest]))
+    for pulse in graph.pulses:
+        for source in pulse.sources:
+            interactions.append((idx[source], idx[pulse.dest]))
+
+    if unique:
+        # Remove duplicates.
+        i2 = set()
+        for a, b in interactions:
+            if (b, a) in i2:
+                continue
+            i2.add((a, b))
+        interactions = list(i2)
+
+    return interactions
+
+
+def _get_line_candidates(graph: demes.Graph, unique: bool):
+    candidates = []
+    # Ancestry lines.
+    for child in graph.demes:
+        for parent_name in child.ancestors:
+            for deme in graph.demes:
+                if deme is child or deme.name == parent_name:
+                    continue
+                if deme.start_time > child.start_time > deme.end_time:
+                    candidates.append((child.name, deme.name, parent_name))
+    # Pulse lines.
+    for pulse in graph.pulses:
+        for source in pulse.sources:
+            for deme in graph.demes:
+                if deme.name in [pulse.dest, source]:
+                    continue
+                if deme.start_time > pulse.time > deme.end_time:
+                    candidates.append((source, deme.name, pulse.dest))
+    # Migration blocks.
+    for migration in graph.migrations:
+        for deme in graph.demes:
+            if deme.name in (migration.dest, migration.source):
+                continue
+            if _intersect(deme, migration):
+                candidates.append((migration.source, deme.name, migration.dest))
+
+    if unique:
+        # Remove duplicates.
+        c2 = set()
+        for a, b, c in candidates:
+            if (c, b, a) in c2:
+                continue
+            c2.add((a, b, c))
+        candidates = list(c2)
+
+    idx = {deme.name: j for j, deme in enumerate(graph.demes)}
+    return np.array([(idx[a], idx[b], idx[c]) for a, b, c in candidates])
+
+
+def _line_crossings(xx: np.ndarray, candidates: np.ndarray) -> np.ndarray:
+    """
+    Count the number of lines that cross one or more demes.
+
+    :param xx:
+        The positions of the demes in the graph. This is a 2d array,
+        where each row in xx is a distinct vector of proposed positions.
+        Specifically, xx[j, k] is the position of deme k in the j'th
+        proposed positions vector.
+    :param candidates:
+        A 2d array of candidate indices.
+    :return:
+        The number of lines crossing demes. This is a 1d array
+        of counts, one for each vector of proposed positions.
+    """
+    if candidates.size == 0:
+        return np.array(0)
+    a = xx[..., candidates[:, 0]]
+    b = xx[..., candidates[:, 1]]
+    c = xx[..., candidates[:, 2]]
+    return np.logical_or(
+        np.logical_and(a < b, b < c), np.logical_and(a > b, b > c)
+    ).sum(axis=-1)
+
+
+def minimal_crossing_positions(
+    graph: demes.Graph,
+    *,
+    sep: float,
+    unique_interactions: bool,
+    maxiter: int = 1000000,
+    seed: int = 1234,
+) -> Dict[str, float]:
+    """
+    Find an ordering of demes that minimises line crossings.
+
+    Lines may be for ancestry, pulses, or migrations. A naive algorithm is
+    used to search for the optimal ordering: if :math:`n!` <= ``maxiter``,
+    where ``n`` is the number of demes in the graph, then all possible
+    orderings may be evaluated; otherwise up to ``maxiter`` random
+    permutations are evaluated. If a proposed ordering produces zero line
+    crossings, the algorithm terminates early.
+
+    :param graph:
+        Graph for which positions should be obtained.
+    :param sep:
+        The separation distance between demes.
+    :param maxiter:
+        Maximum number of orderings to search through.
+    :param seed:
+        Seed for the random number generator.
+    :return:
+        A dictionary mapping deme names to positions.
+    """
+    # Initial ordering.
+    x0 = np.arange(0, sep * len(graph.demes), sep)
+
+    def propose_positions_batches(num_proposals: int, batch_size=1000):
+        n = len(graph.demes)
+        if math.factorial(n) <= num_proposals:
+            # Generate all permutations.
+            iperms = itertools.permutations(x0, n)
+            while True:
+                x_batch = np.array((list(itertools.islice(iperms, batch_size))))
+                if x_batch.size == 0:
+                    break
+                yield x_batch
+        else:
+            # Generate random permutations.
+            rng = np.random.default_rng(seed)
+            remaining = num_proposals
+            while remaining > 0:
+                if remaining < batch_size:
+                    batch_size = remaining
+                remaining -= batch_size
+                x_batch = np.array([rng.permutation(x0) for _ in range(batch_size)])
+                yield x_batch
+
+    candidates = _get_line_candidates(graph, unique=unique_interactions)
+    crosses = _line_crossings(x0, candidates)
+    x_best = x0
+    if crosses > 0:
+        for x_proposal_batch in propose_positions_batches(maxiter):
+            if crosses == 0:
+                break
+            proposal_crosses = _line_crossings(x_proposal_batch, candidates)
+            best = np.argmin(proposal_crosses)
+            if proposal_crosses[best] < crosses:
+                crosses = proposal_crosses[best]
+                x_best = x_proposal_batch[best]
+
+    return {deme.name: float(pos) for deme, pos in zip(graph.demes, x_best)}
+
+
+def cvxpy_optimise(
+    graph: demes.Graph,
+    positions: Mapping[str, float],
+    *,
+    sep: float,
+    unique_interactions: bool,
+) -> Dict[str, float]:
+    """
+    Optimise the given positions into a tree-like layout.
+
+    Convex optimisation is used to minimise the distances:
+
+      - from each parent deme to the mean position of its children,
+      - and between interacting demes (where interactions are either
+        migrations or pulses).
+
+    Subject to the constraints that:
+
+      - demes are ordered like in the input ``positions``,
+      - and demes have a minimum separation distance ``sep``.
+
+    :param graph:
+        Graph for which positions should be optimised.
+    :param positions:
+        A dictionary mapping deme names to positions.
+    :param sep:
+        The minimum separation distance between contemporary demes.
+    :return:
+        A dictionary mapping deme names to positions.
+    """
+    contemporaries = coexistence_indices(graph)
+    if len(contemporaries) == 0:
+        # There are no constraints, so stack demes on top of each other.
+        return {deme.name: 0 for deme in graph.demes}
+    successors = successors_indices(graph)
+    interactions = interactions_indices(graph, unique=unique_interactions)
+
+    vs = [cp.Variable() for _ in graph.demes]
+    # Place the root at position 0.
+    vs[0].value = 0
+
+    z = 0
+    for parent, children in successors.items():
+        a = vs[parent]
+        b = sum(vs[child] for child in children) / len(children)
+        z += (a - b) ** 2
+    if len(interactions) > 0:
+        z += cp.sum_squares(cp.hstack([vs[j] - vs[k] for j, k in interactions]))
+    objective = cp.Minimize(z)
+
+    constraints = []
+    x = np.array([positions[deme.name] for deme in graph.demes])
+    for j, k in contemporaries:
+        if x[j] < x[k]:
+            j, k = k, j
+        constraints.append(vs[j] - vs[k] >= sep)
+
+    prob = cp.Problem(objective, constraints)
+    prob.solve("OSQP")
+    if prob.status != cp.OPTIMAL:
+        raise RuntimeError(f"Failed to optimise: {prob}")
+
+    return {graph.demes[j].name: float(v.value) for j, v in enumerate(vs)}

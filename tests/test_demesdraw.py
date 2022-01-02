@@ -27,10 +27,8 @@ class TestSizeHistory:
 
 
 class TestTubes:
-    def check_tubes(self, graph, seed=1234, optimisation_rounds=None, **kwargs):
-        ax = demesdraw.tubes(
-            graph, seed=seed, optimisation_rounds=optimisation_rounds, **kwargs
-        )
+    def check_tubes(self, graph, seed=1234, **kwargs):
+        ax = demesdraw.tubes(graph, seed=seed, **kwargs)
         assert isinstance(ax, matplotlib.axes.Axes)
         plt.close(ax.figure)
 
