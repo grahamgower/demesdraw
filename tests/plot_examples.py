@@ -1,3 +1,5 @@
+import warnings
+
 import demes
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
@@ -11,7 +13,9 @@ with PdfPages("examples.pdf") as pdf:
 
     for filename in sorted(example_files()):
         title = filename.name
-        graph = demes.load(filename)
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", "Multiple pulses", UserWarning, "demes")
+            graph = demes.load(filename)
 
         fig, (ax1, ax2) = utils.get_fig_axes(
             scale=1.5, nrows=2, constrained_layout=True

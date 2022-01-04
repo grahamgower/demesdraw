@@ -11,6 +11,7 @@ import tests
 
 
 class TestInfStartTime:
+    @pytest.mark.filterwarnings("ignore:.*log scale.*:UserWarning:demesdraw.utils")
     @pytest.mark.parametrize("log_scale", [True, False])
     @pytest.mark.parametrize("graph", tests.example_graphs())
     def test_time_is_reasonable(self, graph, log_scale):

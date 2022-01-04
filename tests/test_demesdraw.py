@@ -15,6 +15,7 @@ class TestSizeHistory:
         assert isinstance(ax, matplotlib.axes.Axes)
         plt.close(ax.figure)
 
+    @pytest.mark.filterwarnings("ignore:.*log scale.*:UserWarning:demesdraw.utils")
     @pytest.mark.parametrize("log_size", [True, False])
     @pytest.mark.parametrize("log_time", [True, False])
     @pytest.mark.parametrize("graph", tests.example_graphs())
@@ -32,6 +33,7 @@ class TestTubes:
         assert isinstance(ax, matplotlib.axes.Axes)
         plt.close(ax.figure)
 
+    @pytest.mark.filterwarnings("ignore:.*log scale.*:UserWarning:demesdraw.utils")
     @pytest.mark.parametrize("log_time", [True, False])
     @pytest.mark.parametrize("graph", tests.example_graphs())
     def test_log_params(self, graph, log_time):
