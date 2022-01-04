@@ -352,7 +352,9 @@ def tubes(
             **arrow_kwargs,
         )
         arr.set_sketch_params(1, 100, 2)
-        ax.add_patch(arr)
+        # Ignore potential overflow when using log scale. Infinity is fine.
+        with np.errstate(over="ignore"):
+            ax.add_patch(arr)
 
     # Update the axes view. ax.add_patch() doesn't do this itself.
     ax.autoscale_view()
