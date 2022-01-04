@@ -314,10 +314,6 @@ class TestLineCrossings:
         candidates = utils._get_line_candidates(graph, unique=True)
         assert len(candidates) == 1
 
-        def order(deme_names):
-            pos = {name: j * 150 for j, name in enumerate(deme_names)}
-            return np.array([pos[deme.name] for deme in graph.demes])
-
         assert utils._line_crossings(order(["a", "b", "c"]), candidates) == 0
         assert utils._line_crossings(order(["a", "c", "b"]), candidates) == 0
         assert utils._line_crossings(order(["b", "a", "c"]), candidates) == 1
@@ -369,10 +365,6 @@ class TestLineCrossings:
         # unique = True
         candidates = utils._get_line_candidates(graph, unique=True)
         assert len(candidates) == 2
-
-        def order(deme_names):
-            pos = {name: j * 150 for j, name in enumerate(deme_names)}
-            return np.array([pos[deme.name] for deme in graph.demes])
 
         assert utils._line_crossings(order(["a", "b", "c"]), candidates) == 1
         assert utils._line_crossings(order(["a", "c", "b"]), candidates) == 0

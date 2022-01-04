@@ -36,15 +36,7 @@ Or with conda.
 conda install -c conda-forge demesdraw
 ```
 
-```{warning}
-DemesDraw is currently focused on providing figures for the Demes
-documentation. As such, the functionality and API are very preliminary.
-However, we hope to expand DemesDraw's capabilities in the future,
-so backwards-incompatible changes should be expected.
-```
-
 # Population size history
-
 
 The {func}`.size_history` function plots the population size as a
 function of time for each deme in the graph. This is great for single-deme

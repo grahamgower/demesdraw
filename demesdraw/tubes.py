@@ -164,7 +164,6 @@ def tubes(
     num_lines_per_migration: int = 10,
     seed: int = None,
     max_time: float = None,
-    # TODO: docstring
     labels: str = "xticks-mid",
     fill: bool = True,
 ) -> matplotlib.axes.Axes:
@@ -193,15 +192,17 @@ def tubes(
 
     :param demes.Graph graph:
         The demes graph to plot.
-    :param matplotlib.axes.Axes ax:
+    :param ax:
         The matplotlib axes onto which the figure
         will be drawn. If None, an empty axes will be created for the figure.
+    :type ax: Optional[matplotlib.axes.Axes]
     :param colours:
         A mapping from deme name to matplotlib colour. Alternately,
         ``colours`` may be a named colour that will be used for all demes.
-    :type colours: dict or str
+    :type colours: Optional[dict or str]
     :param log_time:
         If True, use a log-10 scale for the time axis.
+        If False (*default*), a linear scale will be used.
     :param title:
         The title of the figure.
     :param inf_ratio:
@@ -222,8 +223,28 @@ def tubes(
         The maximum time value shown in the figure.
         If demographic events (e.g. size changes, migrations, common ancestor
         events) occur before this time, those events will not be visible.
-        If no demographic events occur before this time, the root demes will
+        If no demographic events occur before this time, the root demes will be
         drawn so they extend to the given time.
+    :param labels:
+        A string indicating where the deme names should be drawn, or ``None``.
+        The options are:
+
+         * "xticks": for extant demes, labels are written under the x-axis
+           as matplotlib xticklabels. Labels are not written for extinct demes.
+         * "legend": labels for colour patches are written in a legend.
+         * "mid": labels are written in the middle of each deme's tube.
+         * "xticks-legend": for extant demes, labels are written under the
+           x-axis as matplotlib xticklabels. For extinct demes, labels for
+           colour patches are written in a legend.
+         * "xticks-mid" (*default*): for extant demes, labels are written
+           under the x-axis as matplotlib xticklabels. For extinct demes,
+           labels are written in the middle of each deme's tube.
+         * ``None``: no labels are written.
+
+    :type labels: str or None
+    :param fill:
+        If True, the inside of the tubes will be painted.
+        If False, only the outline of the tubes will be drawn.
     :return:
         The matplotlib axes onto which the figure was drawn.
     """

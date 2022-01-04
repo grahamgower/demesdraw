@@ -144,27 +144,24 @@ def get_fig_axes(
     Get a matplotlib figure and axes.
 
     The default width and height of a matplotlib figure is 6.4 x 4.8 inches.
-    But what does this mean for how the figure will look on your laptop?
-    Or on your phone? In practice, the device (or the user) will magnify or
-    shrink the figure as appropriate. This means you should save your figure
-    in a vector format (such as pdf or svg) which permits arbitrary zooming
-    without loss of quality.
+    To create axes on a figure with other sizes, the ``figsize`` argument
+    can be passed to :func:`matplotlib.pyplot.subplots`.
+    The ``get_fig_axes()`` function creates an axes on a figure with an
+    alternative parameterisation that is useful for screen display of
+    vector images.
 
-    When making a vector-format figure, the size of the figure is not usually
-    as important as the aspect ratio and the relative sizes of the objects
-    within the figure. This function accepts an ``aspect`` parameter that
-    sets the aspect ratio, and a ``scale`` parameter that multiplies the
-    figure size. Increasing the scale will have the effect of decreasing the
-    size of objects in the figure (including fonts), and increasing the amount
-    of space between objects.
+    An ``aspect`` parameter sets the aspect ratio, and a ``scale`` parameter
+    multiplies the figure size. Increasing the scale will have the effect of
+    decreasing the size of objects in the figure (including fonts),
+    and increasing the amount of space between objects.
 
-    :param float aspect: The aspect ratio (height/width) of the figure.
+    :param aspect: The aspect ratio (height/width) of the figure.
         This value will be passed to :func:`matplotlib.figure.figaspect` to
         obtain the figure's width and height dimensions.
         If not specified, 9/16 will be used.
-    :param float scale: Multiply the figure width and height by this value.
+    :param scale: Multiply the figure width and height by this value.
         If not specified, 1.0 will be used.
-    :param dict kwargs: Further keyword args will be passed directly to
+    :param kwargs: Further keyword args will be passed directly to
         :func:`matplotlib.pyplot.subplots`.
     :return: A 2-tuple containing the matplotlib figure and axes,
         as returned by :func:`matplotlib.pyplot.subplots`.
