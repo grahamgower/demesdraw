@@ -33,9 +33,9 @@ sphinx:
     inject_version: _ext
 
   config:
-    autodoc_typehints: "none"
+    autodoc_typehints: description
     intersphinx_mapping:
       python: ["https://docs.python.org/3/", null]
-      demes: ["https://popsim-consortium.github.io/demes-docs/main/", null]
+      demes: ["https://popsim-consortium.github.io/demes-docs/stable/", null]
       matplotlib: ["https://matplotlib.org/stable/", null]
     issues_github_path: grahamgower/demesdraw

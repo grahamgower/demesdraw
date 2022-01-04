@@ -15,6 +15,7 @@ __all__ = [
     "size_min",
     "log_size_heuristic",
     "log_time_heuristic",
+    "separation_heuristic",
 ]
 
 
@@ -228,9 +229,10 @@ def log_time_heuristic(graph: demes.Graph) -> bool:
     """
     Decide whether or not to use log scale for times.
 
-    :param demes.Graph graph: The graph.
-    :return: True if log scale should be used or False otherwise.
-    :rtype: bool
+    :param demes.Graph graph:
+        The graph.
+    :return:
+        True if log scale should be used or False otherwise.
     """
     times = _get_times(graph)
     times.discard(0)
@@ -240,6 +242,33 @@ def log_time_heuristic(graph: demes.Graph) -> bool:
     else:
         log_time = False
     return log_time
+
+
+def _contemporaries_max(graph: demes.Graph) -> int:
+    """The maximum number of contemporary demes at any time."""
+    c_max = 1
+    for deme_j in graph.demes:
+        c = 1
+        for deme_k in graph.demes:
+            if deme_j is not deme_k and _intersect(deme_j, deme_k):
+                c += 1
+        if c > c_max:
+            c_max = c
+    return c_max
+
+
+def separation_heuristic(graph: demes.Graph) -> float:
+    """
+    Find a reasonable separation distance for deme positions.
+
+    :param demes.Graph graph:
+        The graph.
+    :return:
+        The separation distance.
+    """
+    # This looks ok. See spacing.pdf produced by tests/plot_examples.py.
+    c = _contemporaries_max(graph)
+    return (1 + 0.5 * math.log(c)) * size_max(graph)
 
 
 def _intersect(

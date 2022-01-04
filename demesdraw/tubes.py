@@ -128,7 +128,7 @@ class Tube:
         return matplotlib.path.Path(vertices, codes)
 
 
-def find_positions(graph: demes.Graph, sep: float) -> Dict[str, float]:
+def find_positions(graph: demes.Graph) -> Dict[str, float]:
     """
     Find optimal deme positions along a single dimension by:
 
@@ -143,11 +143,10 @@ def find_positions(graph: demes.Graph, sep: float) -> Dict[str, float]:
 
     :param graph:
         The graph for which positions should be obtained.
-    :param sep:
-        The minimum separation distance between contemporary demes.
     :return:
         A dictionary mapping deme names to positions.
     """
+    sep = utils.separation_heuristic(graph)
     positions = utils.minimal_crossing_positions(
         graph, sep=sep, unique_interactions=False
     )
@@ -245,8 +244,7 @@ def tubes(
         inf_start_time = utils._inf_start_time(graph, inf_ratio, log_time)
 
     if positions is None:
-        sep = 1.5 * utils.size_max(graph)
-        positions = find_positions(graph, sep)
+        positions = find_positions(graph)
 
     tubes = {}
     ancestry_arrows = []

@@ -9,6 +9,23 @@ from demesdraw import utils
 from tests import example_files
 
 
+with PdfPages("spacing.pdf") as pdf:
+    for _n in range(30):
+        n = _n + 1
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        for j in range(n):
+            b.add_deme(f"d{j}")
+            if j > 0:
+                b.add_migration(demes=[f"d{j - 1}", f"d{j}"], rate=1e-5)
+        graph = b.resolve()
+
+        colours = None
+        if n > 20:
+            colours = "black"
+        ax = demesdraw.tubes(graph, colours=colours)
+        pdf.savefig(ax.figure)
+        plt.close(ax.figure)
+
 with PdfPages("examples.pdf") as pdf:
 
     for filename in sorted(example_files()):
@@ -37,7 +54,6 @@ with PdfPages("examples.pdf") as pdf:
             log_time=log_time,
             # fill=False,
             # colours="black",
-            # optimisation_rounds=0,
         )
 
         pdf.savefig(fig)
