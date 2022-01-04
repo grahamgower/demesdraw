@@ -25,6 +25,12 @@ jobs:
       matrix:
         os: [ubuntu-18.04, windows-2019, macos-10.15]
         python-version: [3.6, "3.10"]
+        # cvxpy has a dependency (qdldl) which doesn't have wheels
+        # for 3.10 and the windows build fails in CI for reasons
+        # I don't care to debug.
+        exclude:
+          - os: windows-2019
+            python-version: "3.10"
     env:
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python-version }}

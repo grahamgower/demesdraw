@@ -8,40 +8,53 @@ from demesdraw import utils
 def size_history(
     graph: demes.Graph,
     ax: matplotlib.axes.Axes = None,
-    inf_ratio: float = 0.1,
-    inf_label: bool = False,
-    invert_x: bool = False,
-    annotate_epochs: bool = False,
     colours: utils.ColourOrColourMapping = None,
     log_time: bool = False,
     log_size: bool = False,
     title: str = None,
+    inf_ratio: float = 0.1,
+    inf_label: bool = False,
+    invert_x: bool = False,
+    annotate_epochs: bool = False,
     num_points: int = 100,
 ) -> matplotlib.axes.Axes:
     """
     Plot population size as a function of time for each deme in the graph.
 
-    :param demes.Graph graph: The demes graph to plot.
-    :param matplotlib.axes.Axes ax: The matplotlib axes onto which the figure
+    :param demes.Graph graph:
+        The demes graph to plot.
+    :param ax:
+        The matplotlib axes onto which the figure
         will be drawn. If None, an empty axes will be created for the figure.
-    :param float inf_ratio: The proportion of the time axis that will be
-        used for the time interval which stretches towards infinity.
-    :param bool inf_label: Write "inf" by the arrow that points towards infinity.
-    :param bool invert_x: If true, the horizontal axis will have infinity
-        on the left and zero on the right, and the vertical axis will be drawn
-        on the right.
-    :param bool annotate_epochs: Annotate the figure with epoch indices
-        over the relevant parts of the lines. This is mostly useful as a
-        pedagogical tool.
-    :param colours: A mapping from deme name to matplotlib colour. Alternately,
+    :type ax: Optional[matplotlib.axes.Axes]
+    :param colours:
+        A mapping from deme name to matplotlib colour. Alternately,
         ``colours`` may be a named colour that will be used for all demes.
-    :type colours: dict or str
-    :param bool log_time: Use a log-10 scale for the time axis.
-    :param bool log_size: Use a log-10 scale for the deme size axis.
-    :param str title: The title of the figure.
-
+    :type colours: Optional[dict or str]
+    :param log_time:
+        If True, use a log-10 scale for the time axis.
+        If False (*default*), a linear scale will be used.
+    :param bool log_size:
+        If True, use a log-10 scale for the size axis.
+        If False (*default*), a linear scale will be used.
+    :param title:
+        The title of the figure.
+    :param inf_ratio:
+        The proportion of the time axis that will be
+        used for the time interval which stretches towards infinity.
+    :param inf_label:
+        Write "inf" by the arrow that points towards infinity.
+    :param invert_x:
+        If True, the horizontal axis will have infinity on the left and
+        zero on the right, and the vertical axis will be drawn on the right.
+        If False (*default*), the horizontal axis will have zero on the left
+        and infinity on the right, and the vertical axis will be drawn
+        on the left.
+    :param annotate_epochs:
+        If True, annotate the figure with epoch indices over the relevant
+        parts of the lines. This may be useful as a pedagogical tool.
+        If False (*default*), do not annotate the epochs.
     :return: The matplotlib axes onto which the figure was drawn.
-    :rtype: matplotlib.axes.Axes
     """
     if ax is None:
         _, ax = utils.get_fig_axes()

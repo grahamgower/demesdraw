@@ -1,5 +1,6 @@
 import pathlib
 import functools
+import warnings
 
 import demes
 import matplotlib
@@ -18,7 +19,10 @@ def example_files():
 
 @functools.lru_cache(maxsize=None)
 def example_graphs():
-    return [demes.load(fn) for fn in example_files()]
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", "Multiple pulses", UserWarning, "demes")
+        graphs = [demes.load(fn) for fn in example_files()]
+    return graphs
 
 
 @functools.lru_cache(maxsize=None)

@@ -1,0 +1,66 @@
+time_units: generations
+defaults:
+  epoch:
+    start_size: 5000
+
+demes:
+- name: A
+  epochs:
+  - end_time: 10000
+- name: B
+  ancestors: [A]
+  epochs:
+  - end_time: 2000
+- name: C
+  ancestors: [A]
+  epochs:
+  - end_time: 5000
+- name: D
+  ancestors: [C]
+  epochs:
+  - end_time: 1000
+- name: E
+  ancestors: [C]
+  epochs:
+  - end_time: 2000
+- name: F
+  ancestors: [B, E]
+  proportions: [0.5, 0.5]
+  start_time: 2000
+  epochs:
+  - end_time: 500
+  - end_time: 100
+    end_size: 200
+- name: G
+  ancestors: [D]
+  epochs:
+  - start_size: 500
+    end_size: 5000
+- name: H
+  ancestors: [D]
+- name: I
+  ancestors: [G]
+  start_time: 50
+  epochs:
+  - start_size: 1000
+    end_size: 10000
+- name: X
+  ancestors: [A]
+  epochs:
+  - start_size: 800
+    end_time: 500
+
+migrations:
+- demes: [X, H]
+  rate: 1e-5
+- demes: [I, H]
+  rate: 1e-5
+pulses:
+- sources: [F]
+  dest: G
+  proportions: [0.1]
+  time: 200
+- sources: [F]
+  dest: G
+  proportions: [0.1]
+  time: 100
