@@ -1,5 +1,22 @@
 # Changelog
 
+## [next release]
+
+* Improved the default positions of demes in `demesdraw.tubes()`
+  for tree-like models and more elaborate models with many demes.
+  The previously used optimisation procedure (scipy's SLSQP) has been
+  removed in favour of constrained convex optimisation using `cvxpy`.
+* Increased the default amount of space that separates demes in
+  `demesdraw.tubes()`, and use more space when there are more
+  contemporary demes (see `demesdraw.util.separation_heuristic()`).
+* Filter numpy warnings about overflow when using a log scale.
+  The overflow in question is harmless and these warnings only serve
+  to confuse users.
+
+**Breaking change**
+
+* Removed the `optimisation_rounds` parameter to `demesdraw.tubes()`.
+
 ## [0.2.0] - 2021-12-01
 
 **Breaking change**

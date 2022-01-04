@@ -15,4 +15,5 @@
 .. autofunction:: demesdraw.utils.size_min
 .. autofunction:: demesdraw.utils.log_size_heuristic
 .. autofunction:: demesdraw.utils.log_time_heuristic
+.. autofunction:: demesdraw.utils.separation_heuristic
 ```
