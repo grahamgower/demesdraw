@@ -1,3 +1,4 @@
+import collections
 import itertools
 import math
 
@@ -127,6 +128,91 @@ class TestLogSizeHeuristic:
         assert log_size in [True, False]
 
 
+class TestInteractionIndices:
+    @pytest.mark.parametrize("unique", (True, False))
+    @pytest.mark.parametrize("n", (1, 2, 3))
+    def test_no_interations_isolated_demes(self, n, unique):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        for j in range(n):
+            b.add_deme(f"deme{j}")
+        graph = b.resolve()
+        interactions = utils.interactions_indices(graph, unique=unique)
+        assert len(interactions) == 0
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_no_interactions_common_ancestor(self, unique):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a", epochs=[dict(end_time=100)])
+        b.add_deme("b", ancestors=["a"])
+        b.add_deme("c", ancestors=["a"])
+        graph = b.resolve()
+        interactions = utils.interactions_indices(graph, unique=unique)
+        assert len(interactions) == 0
+
+    @pytest.mark.parametrize("n_migrations", (1, 2, 3))
+    def test_asymmetric_migrations(self, n_migrations):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a", epochs=[dict(end_time=100)])
+        b.add_deme("b", ancestors=["a"])
+        b.add_deme("c", ancestors=["a"])
+        times = np.linspace(0, 100, n_migrations + 1)
+        for start_time, end_time in zip(times[1:], times[:-1]):
+            b.add_migration(
+                source="b",
+                dest="c",
+                start_time=start_time,
+                end_time=end_time,
+                rate=1e-5,
+            )
+        graph = b.resolve()
+        interactions = utils.interactions_indices(graph, unique=False)
+        assert (
+            interactions == [(1, 2)] * n_migrations
+            or interactions == [(2, 1)] * n_migrations
+        )
+        interactions = utils.interactions_indices(graph, unique=True)
+        assert interactions == [(1, 2)] or interactions == [(2, 1)]
+
+    @pytest.mark.parametrize("n_migrations", (1, 2, 3))
+    def test_symmetric_migrations(self, n_migrations):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a", epochs=[dict(end_time=100)])
+        b.add_deme("b", ancestors=["a"])
+        b.add_deme("c", ancestors=["a"])
+        times = np.linspace(0, 100, n_migrations + 1)
+        for start_time, end_time in zip(times[1:], times[:-1]):
+            b.add_migration(
+                demes=["b", "c"], start_time=start_time, end_time=end_time, rate=1e-5
+            )
+        graph = b.resolve()
+        interactions = utils.interactions_indices(graph, unique=False)
+        assert len(interactions) == 2 * n_migrations
+        counts = collections.Counter(interactions)
+        assert len(counts) == 2
+        assert counts[(1, 2)] == n_migrations
+        assert counts[(2, 1)] == n_migrations
+        interactions = utils.interactions_indices(graph, unique=True)
+        assert interactions == [(1, 2)] or interactions == [(2, 1)]
+
+    @pytest.mark.parametrize("n_pulses", (1, 2, 3))
+    def test_pulses(self, n_pulses):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a", epochs=[dict(end_time=100)])
+        b.add_deme("b", ancestors=["a"])
+        b.add_deme("c", ancestors=["a"])
+        for j in range(n_pulses):
+            b.add_pulse(
+                sources=["b"], dest="c", time=100 * j / n_pulses + 1, proportions=[0.1]
+            )
+        graph = b.resolve()
+        interactions = utils.interactions_indices(graph, unique=False)
+        assert (
+            interactions == [(1, 2)] * n_pulses or interactions == [(2, 1)] * n_pulses
+        )
+        interactions = utils.interactions_indices(graph, unique=True)
+        assert interactions == [(1, 2)] or interactions == [(2, 1)]
+
+
 class TestLineCrossings:
     @pytest.mark.parametrize("unique", (True, False))
     @pytest.mark.parametrize("n", (1, 2, 3))
@@ -141,7 +227,7 @@ class TestLineCrossings:
             assert utils._line_crossings(x, candidates) == 0
 
     @pytest.mark.parametrize("unique", (True, False))
-    def test_no_crossings_ancestor_goes_exinct(self, unique):
+    def test_no_crossings_common_ancestor(self, unique):
         b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
         b.add_deme("a", epochs=[dict(end_time=100)])
         b.add_deme("b", ancestors=["a"])

@@ -301,13 +301,7 @@ def interactions_indices(graph: demes.Graph, *, unique: bool) -> List[Tuple[int,
     idx = {deme.name: j for j, deme in enumerate(graph.demes)}
     interactions = []
     for migration in graph.migrations:
-        if isinstance(migration, demes.AsymmetricMigration):
-            interactions.append((idx[migration.source], idx[migration.dest]))
-        else:
-            for source, dest in itertools.permutations(
-                migration.demes, 2  # type:ignore  # noqa
-            ):
-                interactions.append((idx[source], idx[dest]))
+        interactions.append((idx[migration.source], idx[migration.dest]))
     for pulse in graph.pulses:
         for source in pulse.sources:
             interactions.append((idx[source], idx[pulse.dest]))
@@ -435,11 +429,10 @@ def minimal_crossing_positions(
             rng = np.random.default_rng(seed)
             remaining = num_proposals
             while remaining > 0:
-                if remaining < batch_size:
-                    batch_size = remaining
-                remaining -= batch_size
+                batch_size = min(batch_size, remaining)
                 x_batch = np.array([rng.permutation(x0) for _ in range(batch_size)])
                 yield x_batch
+                remaining -= batch_size
 
     candidates = _get_line_candidates(graph, unique=unique_interactions)
     crosses = _line_crossings(x0, candidates)
