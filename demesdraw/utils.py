@@ -420,7 +420,7 @@ def minimal_crossing_positions(
             # Generate all permutations.
             iperms = itertools.permutations(x0, n)
             while True:
-                x_batch = np.array((list(itertools.islice(iperms, batch_size))))
+                x_batch = np.array(list(itertools.islice(iperms, batch_size)))
                 if x_batch.size == 0:
                     break
                 yield x_batch
@@ -439,13 +439,13 @@ def minimal_crossing_positions(
     x_best = x0
     if crosses > 0:
         for x_proposal_batch in propose_positions_batches(maxiter):
-            if crosses == 0:
-                break
             proposal_crosses = _line_crossings(x_proposal_batch, candidates)
             best = np.argmin(proposal_crosses)
             if proposal_crosses[best] < crosses:
                 crosses = proposal_crosses[best]
                 x_best = x_proposal_batch[best]
+                if crosses == 0:
+                    break
 
     return {deme.name: float(pos) for deme, pos in zip(graph.demes, x_best)}
 
