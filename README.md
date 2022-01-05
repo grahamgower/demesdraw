@@ -43,7 +43,7 @@ In the following example, the horizontal positions of the demes
 are chosen manually and the names of extinct demes are moved to
 a legend.
 
-```
+```python
 import demes
 import demesdraw
 
