@@ -109,7 +109,7 @@
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
-  demesdraw 0.2.1.dev55
+  demesdraw 0.2.1.dev58
 </div>
 
 </div>
@@ -606,7 +606,7 @@
             <span class="c1"># Generate all permutations.</span>
             <span class="n">iperms</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">permutations</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="n">x_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">islice</span><span class="p">(</span><span class="n">iperms</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">))))</span>
+                <span class="n">x_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">islice</span><span class="p">(</span><span class="n">iperms</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)))</span>
                 <span class="k">if</span> <span class="n">x_batch</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">break</span>
                 <span class="k">yield</span> <span class="n">x_batch</span>
@@ -625,13 +625,13 @@
     <span class="n">x_best</span> <span class="o">=</span> <span class="n">x0</span>
     <span class="k">if</span> <span class="n">crosses</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">x_proposal_batch</span> <span class="ow">in</span> <span class="n">propose_positions_batches</span><span class="p">(</span><span class="n">maxiter</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">crosses</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">break</span>
             <span class="n">proposal_crosses</span> <span class="o">=</span> <span class="n">_line_crossings</span><span class="p">(</span><span class="n">x_proposal_batch</span><span class="p">,</span> <span class="n">candidates</span><span class="p">)</span>
             <span class="n">best</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">proposal_crosses</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">proposal_crosses</span><span class="p">[</span><span class="n">best</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">crosses</span><span class="p">:</span>
                 <span class="n">crosses</span> <span class="o">=</span> <span class="n">proposal_crosses</span><span class="p">[</span><span class="n">best</span><span class="p">]</span>
                 <span class="n">x_best</span> <span class="o">=</span> <span class="n">x_proposal_batch</span><span class="p">[</span><span class="n">best</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">crosses</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">break</span>
 
     <span class="k">return</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">deme</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">,</span> <span class="n">x_best</span><span class="p">)}</span>
 
@@ -1134,7 +1134,7 @@
             <span class="c1"># Generate all permutations.</span>
             <span class="n">iperms</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">permutations</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="n">x_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">islice</span><span class="p">(</span><span class="n">iperms</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">))))</span>
+                <span class="n">x_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">islice</span><span class="p">(</span><span class="n">iperms</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)))</span>
                 <span class="k">if</span> <span class="n">x_batch</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">break</span>
                 <span class="k">yield</span> <span class="n">x_batch</span>
@@ -1153,13 +1153,13 @@
     <span class="n">x_best</span> <span class="o">=</span> <span class="n">x0</span>
     <span class="k">if</span> <span class="n">crosses</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">x_proposal_batch</span> <span class="ow">in</span> <span class="n">propose_positions_batches</span><span class="p">(</span><span class="n">maxiter</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">crosses</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">break</span>
             <span class="n">proposal_crosses</span> <span class="o">=</span> <span class="n">_line_crossings</span><span class="p">(</span><span class="n">x_proposal_batch</span><span class="p">,</span> <span class="n">candidates</span><span class="p">)</span>
             <span class="n">best</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">proposal_crosses</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">proposal_crosses</span><span class="p">[</span><span class="n">best</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">crosses</span><span class="p">:</span>
                 <span class="n">crosses</span> <span class="o">=</span> <span class="n">proposal_crosses</span><span class="p">[</span><span class="n">best</span><span class="p">]</span>
                 <span class="n">x_best</span> <span class="o">=</span> <span class="n">x_proposal_batch</span><span class="p">[</span><span class="n">best</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">crosses</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">break</span>
 
     <span class="k">return</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">deme</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">,</span> <span class="n">x_best</span><span class="p">)}</span>
 
@@ -1245,7 +1245,7 @@
     
         &copy; Copyright 2021.<br/>
       <div class="extra_footer">
-        demesdraw 0.2.1.dev55+g1b8775b
+        demesdraw 0.2.1.dev58+g750b760
       </div>
   </p>
 </footer>
