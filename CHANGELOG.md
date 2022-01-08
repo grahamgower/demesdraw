@@ -1,6 +1,6 @@
 # Changelog
 
-## [next release]
+## [0.3.0] - 2022-01-08
 
 * Improved the default positions of demes in `demesdraw.tubes()`
   for tree-like models and more elaborate models with many demes.
