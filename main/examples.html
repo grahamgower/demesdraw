@@ -118,7 +118,7 @@
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
-  demesdraw 0.2.1.dev59
+  demesdraw 0.2.1.dev61
 </div>
 
 </div>
@@ -216,14 +216,17 @@
         </div>
     </div>
 </div>
-    <!-- Table of contents that is only displayed when printing the page -->
-    <div id="jb-print-docs-body" class="onlyprint">
-        <h1>Examples</h1>
-        <!-- Table of contents -->
-        <div id="print-main-content" class="row">
-            <div class="col-12 col-md-12 pl-md-5 pr-md-5">
-            <div id="jb-print-toc">
-                
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Examples</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
             </div>
             
               <div>
@@ -426,214 +429,8 @@
 
               </div>
               
-            </div>
-        </div>
-    </div>
-    <div id="main-content" class="row noprint">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
-              <div>
-                
-  <div class="tex2jax_ignore mathjax_ignore section" id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<div class="cell tag_hide-input docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-
-<span class="kn">import</span> <span class="nn">demes</span>
-<span class="kn">import</span> <span class="nn">demesdraw</span>
-<span class="kn">import</span> <span class="nn">demesdraw.utils</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="c1"># Output SVG.</span>
-<span class="kn">from</span> <span class="nn">matplotlib_inline.backend_inline</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
-<span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s2">&quot;svg&quot;</span><span class="p">)</span>
-
-
-<span class="c1"># Ignore warnings about simultaneous pulses in our examples.</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="s2">&quot;Multiple pulses&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">,</span> <span class="s2">&quot;demes&quot;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">plot_from_yaml</span><span class="p">(</span><span class="n">yaml_filename</span><span class="p">):</span>
-    <span class="n">graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">yaml_filename</span><span class="p">)</span>
-    <span class="n">log_time</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log_time_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
-    <span class="n">log_size</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log_size_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
-
-    <span class="n">ax1</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">size_history</span><span class="p">(</span>
-        <span class="n">graph</span><span class="p">,</span>
-        <span class="n">invert_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">log_time</span><span class="o">=</span><span class="n">log_time</span><span class="p">,</span>
-        <span class="n">log_size</span><span class="o">=</span><span class="n">log_size</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">ax2</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span>
-        <span class="n">graph</span><span class="p">,</span>
-        <span class="n">log_time</span><span class="o">=</span><span class="n">log_time</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ax1</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ax2</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
-    
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">ax1</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">ax2</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    
-<span class="c1"># Plot each example yaml in the examples folder.</span>
-<span class="n">cwd</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-<span class="n">examples</span> <span class="o">=</span> <span class="nb">list</span><span class="p">((</span><span class="n">cwd</span> <span class="o">/</span> <span class="s2">&quot;..&quot;</span> <span class="o">/</span> <span class="s2">&quot;examples&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;**/*.yaml&quot;</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">examples</span><span class="p">):</span>
-    <span class="n">plot_from_yaml</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/examples_1_0.svg" src="_images/examples_1_0.svg" /><img alt="_images/examples_1_1.svg" src="_images/examples_1_1.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_3.svg" src="_images/examples_1_3.svg" /><img alt="_images/examples_1_4.svg" src="_images/examples_1_4.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_6.svg" src="_images/examples_1_6.svg" /><img alt="_images/examples_1_7.svg" src="_images/examples_1_7.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_9.svg" src="_images/examples_1_9.svg" /><img alt="_images/examples_1_10.svg" src="_images/examples_1_10.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_12.svg" src="_images/examples_1_12.svg" /><img alt="_images/examples_1_13.svg" src="_images/examples_1_13.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_15.svg" src="_images/examples_1_15.svg" /><img alt="_images/examples_1_16.svg" src="_images/examples_1_16.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_18.svg" src="_images/examples_1_18.svg" /><img alt="_images/examples_1_19.svg" src="_images/examples_1_19.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_21.svg" src="_images/examples_1_21.svg" /><img alt="_images/examples_1_22.svg" src="_images/examples_1_22.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_24.svg" src="_images/examples_1_24.svg" /><img alt="_images/examples_1_25.svg" src="_images/examples_1_25.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_27.svg" src="_images/examples_1_27.svg" /><img alt="_images/examples_1_28.svg" src="_images/examples_1_28.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_30.svg" src="_images/examples_1_30.svg" /><img alt="_images/examples_1_31.svg" src="_images/examples_1_31.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_33.svg" src="_images/examples_1_33.svg" /><img alt="_images/examples_1_34.svg" src="_images/examples_1_34.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_36.svg" src="_images/examples_1_36.svg" /><img alt="_images/examples_1_37.svg" src="_images/examples_1_37.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_39.svg" src="_images/examples_1_39.svg" /><img alt="_images/examples_1_40.svg" src="_images/examples_1_40.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_42.svg" src="_images/examples_1_42.svg" /><img alt="_images/examples_1_43.svg" src="_images/examples_1_43.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_45.svg" src="_images/examples_1_45.svg" /><img alt="_images/examples_1_46.svg" src="_images/examples_1_46.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_48.svg" src="_images/examples_1_48.svg" /><img alt="_images/examples_1_49.svg" src="_images/examples_1_49.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_51.svg" src="_images/examples_1_51.svg" /><img alt="_images/examples_1_52.svg" src="_images/examples_1_52.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_54.svg" src="_images/examples_1_54.svg" /><img alt="_images/examples_1_55.svg" src="_images/examples_1_55.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_57.svg" src="_images/examples_1_57.svg" /><img alt="_images/examples_1_58.svg" src="_images/examples_1_58.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_60.svg" src="_images/examples_1_60.svg" /><img alt="_images/examples_1_61.svg" src="_images/examples_1_61.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_63.svg" src="_images/examples_1_63.svg" /><img alt="_images/examples_1_64.svg" src="_images/examples_1_64.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_66.svg" src="_images/examples_1_66.svg" /><img alt="_images/examples_1_67.svg" src="_images/examples_1_67.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_69.svg" src="_images/examples_1_69.svg" /><img alt="_images/examples_1_70.svg" src="_images/examples_1_70.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_72.svg" src="_images/examples_1_72.svg" /><img alt="_images/examples_1_73.svg" src="_images/examples_1_73.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_75.svg" src="_images/examples_1_75.svg" /><img alt="_images/examples_1_76.svg" src="_images/examples_1_76.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_78.svg" src="_images/examples_1_78.svg" /><img alt="_images/examples_1_79.svg" src="_images/examples_1_79.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_81.svg" src="_images/examples_1_81.svg" /><img alt="_images/examples_1_82.svg" src="_images/examples_1_82.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_84.svg" src="_images/examples_1_84.svg" /><img alt="_images/examples_1_85.svg" src="_images/examples_1_85.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_87.svg" src="_images/examples_1_87.svg" /><img alt="_images/examples_1_88.svg" src="_images/examples_1_88.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_90.svg" src="_images/examples_1_90.svg" /><img alt="_images/examples_1_91.svg" src="_images/examples_1_91.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_93.svg" src="_images/examples_1_93.svg" /><img alt="_images/examples_1_94.svg" src="_images/examples_1_94.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_96.svg" src="_images/examples_1_96.svg" /><img alt="_images/examples_1_97.svg" src="_images/examples_1_97.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_99.svg" src="_images/examples_1_99.svg" /><img alt="_images/examples_1_100.svg" src="_images/examples_1_100.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_102.svg" src="_images/examples_1_102.svg" /><img alt="_images/examples_1_103.svg" src="_images/examples_1_103.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_105.svg" src="_images/examples_1_105.svg" /><img alt="_images/examples_1_106.svg" src="_images/examples_1_106.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_108.svg" src="_images/examples_1_108.svg" /><img alt="_images/examples_1_109.svg" src="_images/examples_1_109.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<img alt="_images/examples_1_111.svg" src="_images/examples_1_111.svg" /><img alt="_images/examples_1_112.svg" src="_images/examples_1_112.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-
-    <script type="text/x-thebe-config">
-    {
-        requestKernel: true,
-        binderOptions: {
-            repo: "binder-examples/jupyter-stacks-datascience",
-            ref: "master",
-        },
-        codeMirrorConfig: {
-            theme: "abcdef",
-            mode: "python"
-        },
-        kernelOptions: {
-            kernelName: "python3",
-            path: "./."
-        },
-        predefinedOutput: true
-    }
-    </script>
-    <script>kernelName = 'python3'</script>
-
-              </div>
-              
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="cli.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -650,7 +447,7 @@
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
@@ -660,7 +457,7 @@
     
         &copy; Copyright 2021.<br/>
       <div class="extra_footer">
-        demesdraw 0.2.1.dev59+g4861d04
+        demesdraw 0.2.1.dev61+g4cd7f35
       </div>
   </p>
 </footer>
