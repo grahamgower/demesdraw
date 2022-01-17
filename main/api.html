@@ -118,7 +118,7 @@
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
-  demesdraw 0.3.1.dev7
+  demesdraw 0.3.1.dev9
 </div>
 
 </div>
@@ -270,7 +270,7 @@ will be drawn. If None, an empty axes will be created for the figure.</p></li>
 If False (<em>default</em>), a linear scale will be used.</p></li>
 <li><p><strong>log_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If True, use a log-10 scale for the size axis.
 If False (<em>default</em>), a linear scale will be used.</p></li>
-<li><p><strong>title</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – The title of the figure.</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – The title of the figure.</p></li>
 <li><p><strong>inf_ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – The proportion of the time axis that will be
 used for the time interval which stretches towards infinity.</p></li>
 <li><p><strong>inf_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Write “inf” by the arrow that points towards infinity.</p></li>
@@ -328,23 +328,23 @@ will be drawn. If None, an empty axes will be created for the figure.</p></li>
 <code class="docutils literal notranslate"><span class="pre">colours</span></code> may be a named colour that will be used for all demes.</p></li>
 <li><p><strong>log_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If True, use a log-10 scale for the time axis.
 If False (<em>default</em>), a linear scale will be used.</p></li>
-<li><p><strong>title</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – The title of the figure.</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – The title of the figure.</p></li>
 <li><p><strong>inf_ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – The proportion of the time axis that will be
 used for the time interval which stretches towards infinity.</p></li>
-<li><p><strong>positions</strong> (<em>Optional</em><em>[</em><em>Mapping</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>]</em><em>]</em>) – A dictionary mapping deme names to horizontal coordinates
+<li><p><strong>positions</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.10)"><em>Mapping</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>]</em><em>]</em>) – A dictionary mapping deme names to horizontal coordinates
 (the mid point of the deme’s tube).
 Note that the width of a deme is the deme’s (max) size,
 so the positions should allow sufficient space to avoid overlapping.</p></li>
 <li><p><strong>num_lines_per_migration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The number of lines to draw per migration. For symmetric migrations,
 this number of lines will be drawn in each direction.</p></li>
-<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em>) – Seed for the random number generator. The generator is
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em>) – Seed for the random number generator. The generator is
 used to sample times for migration lines.</p></li>
-<li><p><strong>max_time</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>]</em>) – The maximum time value shown in the figure.
+<li><p><strong>max_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>]</em>) – The maximum time value shown in the figure.
 If demographic events (e.g. size changes, migrations, common ancestor
 events) occur before this time, those events will not be visible.
 If no demographic events occur before this time, the root demes will be
 drawn so they extend to the given time.</p></li>
-<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – <p>A string indicating where the deme names should be drawn, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>None</em>) – <p>A string indicating where the deme names should be drawn, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 The options are:</p>
 <blockquote>
 <div><ul>
@@ -395,11 +395,11 @@ and increasing the amount of space between objects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>aspect</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>]</em>) – The aspect ratio (height/width) of the figure.
+<li><p><strong>aspect</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>]</em>) – The aspect ratio (height/width) of the figure.
 This value will be passed to <a class="reference external" href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.figaspect" title="(in Matplotlib v3.5.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">matplotlib.figure.figaspect()</span></code></a> to
 obtain the figure’s width and height dimensions.
 If not specified, 9/16 will be used.</p></li>
-<li><p><strong>scale</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>]</em>) – Multiply the figure width and height by this value.
+<li><p><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>]</em>) – Multiply the figure width and height by this value.
 If not specified, 1.0 will be used.</p></li>
 <li><p><strong>kwargs</strong> – Further keyword args will be passed directly to
 <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="(in Matplotlib v3.5.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">matplotlib.pyplot.subplots()</span></code></a>.</p></li>
@@ -553,7 +553,7 @@ as returned by <a class="reference external" href="https://matplotlib.org/stable
     
         &copy; Copyright 2021.<br/>
       <div class="extra_footer">
-        demesdraw 0.3.1.dev7+g3758a7d
+        demesdraw 0.3.1.dev9+g06c31f0
       </div>
   </p>
 </footer>
