@@ -1,5 +1,5 @@
 # Core dependencies.
-cvxpy==1.1.18
+cvxpy==1.2.0
 demes==0.2.1
 matplotlib==3.3.4; python_version=='3.6'
 matplotlib==3.5.1; python_version>='3.7'
