@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - name: download wheel
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: wheel-and-sdist
           path: dist/
@@ -69,7 +69,7 @@ jobs:
     needs: ['wheel_test']
     steps:
       - name: download wheel
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: wheel-and-sdist
           path: dist/
