@@ -414,7 +414,7 @@ def minimal_crossing_positions(
     # Initial ordering.
     x0 = np.arange(0, sep * len(graph.demes), sep)
 
-    def propose_positions_batches(num_proposals: int, batch_size=1000):
+    def propose_positions_batches(num_proposals: int, batch_size=200):
         n = len(graph.demes)
         if math.factorial(n) <= num_proposals:
             # Generate all permutations.
@@ -430,8 +430,9 @@ def minimal_crossing_positions(
             remaining = num_proposals
             while remaining > 0:
                 batch_size = min(batch_size, remaining)
-                x_batch = np.array([rng.permutation(x0) for _ in range(batch_size)])
-                yield x_batch
+                yield rng.permuted(
+                    np.tile(x0, batch_size).reshape(batch_size, -1), axis=1
+                )
                 remaining -= batch_size
 
     candidates = _get_line_candidates(graph, unique=unique_interactions)
