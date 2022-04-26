@@ -3,6 +3,7 @@
 ## unreleased
 
 * Dropped support for Python 3.6.
+* Performance improvement when calculating tube positions.
 
 ## [0.3.0] - 2022-01-08
 

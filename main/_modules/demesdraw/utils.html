@@ -118,7 +118,7 @@ const thebe_selector_output = ".output, .cell_output"
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
-  demesdraw 0.3.1.dev55
+  demesdraw 0.3.1.dev57
 </div>
 
 </div>
@@ -612,7 +612,7 @@ const thebe_selector_output = ".output, .cell_output"
     <span class="c1"># Initial ordering.</span>
     <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sep</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">),</span> <span class="n">sep</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">propose_positions_batches</span><span class="p">(</span><span class="n">num_proposals</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">propose_positions_batches</span><span class="p">(</span><span class="n">num_proposals</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">num_proposals</span><span class="p">:</span>
             <span class="c1"># Generate all permutations.</span>
@@ -628,8 +628,9 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="n">remaining</span> <span class="o">=</span> <span class="n">num_proposals</span>
             <span class="k">while</span> <span class="n">remaining</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">remaining</span><span class="p">)</span>
-                <span class="n">x_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">rng</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)])</span>
-                <span class="k">yield</span> <span class="n">x_batch</span>
+                <span class="k">yield</span> <span class="n">rng</span><span class="o">.</span><span class="n">permuted</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+                <span class="p">)</span>
                 <span class="n">remaining</span> <span class="o">-=</span> <span class="n">batch_size</span>
 
     <span class="n">candidates</span> <span class="o">=</span> <span class="n">_get_line_candidates</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="n">unique_interactions</span><span class="p">)</span>
@@ -729,7 +730,7 @@ const thebe_selector_output = ".output, .cell_output"
     
         &copy; Copyright 2021.<br/>
       <div class="extra_footer">
-        demesdraw 0.3.1.dev55+g58632b3
+        demesdraw 0.3.1.dev57+gc847238
       </div>
   </p>
 </footer>
