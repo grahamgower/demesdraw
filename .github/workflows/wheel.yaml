@@ -23,7 +23,7 @@ jobs:
           twine check dist/*
 
       - name: upload wheel
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: wheel-and-sdist
           path: dist/
