@@ -1,5 +1,9 @@
 # Changelog
 
+## unreleased
+
+* Dropped support for Python 3.6.
+
 ## [0.3.0] - 2022-01-08
 
 * Improved the default positions of demes in `demesdraw.tubes()`
