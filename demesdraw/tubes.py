@@ -1,5 +1,4 @@
 from typing import Dict, Mapping, List, Tuple
-import itertools
 
 import demes
 import numpy as np
@@ -292,7 +291,7 @@ def tubes(
         )
         ax.add_patch(path_patch)
         if fill:
-            ax.fill_betweenx(
+            poly = ax.fill_betweenx(
                 tube.time,
                 tube.size1,
                 tube.size2,
@@ -301,6 +300,7 @@ def tubes(
                 alpha=0.5,
                 zorder=1,
             )
+            poly._demesdraw_data = dict(deme=deme)
 
         # Indicate ancestry from ancestor demes.
         tube_frac = np.linspace(
@@ -318,7 +318,7 @@ def tubes(
             ],
             zorder=2,
         )
-        for ancestor_id in deme.ancestors:
+        for ancestor_id, proportion in zip(deme.ancestors, deme.proportions):
             anc_size1, anc_size2 = tubes[ancestor_id].sizes_at(deme.start_time)
             if anc_size2 < tube.size1[0]:
                 # Ancestor is to the left.
@@ -382,7 +382,7 @@ def tubes(
     xlim = ax.get_xlim()
     offset = 0.01 * (xlim[1] - xlim[0])
 
-    def migration_line(source, dest, time, **mig_kwargs):
+    def migration_line(source, dest, time, metadata, **mig_kwargs):
         """Draw a migration line from source to dest at the given time."""
         source_size1, source_size2 = tubes[source].sizes_at(time)
         dest_size1, dest_size2 = tubes[dest].sizes_at(time)
@@ -390,9 +390,13 @@ def tubes(
         if source_size2 < dest_size1:
             x = [source_size2 + offset, dest_size1 - offset]
             arrow = ">"
+            lr = "r"
         else:
             x = [source_size1 - offset, dest_size2 + offset]
             arrow = "<"
+            lr = "l"
+
+        metadata = dict(lr=lr, **metadata)
 
         colour = colours[source]
         lines = ax.plot(
@@ -405,7 +409,8 @@ def tubes(
         )
         for line in lines:
             line.set_sketch_params(1, 100, 2)
-        ax.plot(
+            line._demesdraw_data = metadata
+        lines = ax.plot(
             x[1],
             time,
             arrow,
@@ -414,6 +419,8 @@ def tubes(
             path_effects=[matplotlib.patheffects.Normal()],
             **mig_kwargs,
         )
+        for line in lines:
+            line._demesdraw_data = metadata
 
     def random_migration_time(migration, log_scale: bool) -> float:
         start_time = migration.start_time
@@ -430,20 +437,27 @@ def tubes(
     # Plot migration lines.
     migration_kwargs = dict(linewidth=0.2, alpha=0.5)
     for migration in graph.migrations:
-        if isinstance(migration, demes.AsymmetricMigration):
-            for _ in range(num_lines_per_migration):
-                t = random_migration_time(migration, log_time)
-                migration_line(migration.source, migration.dest, t, **migration_kwargs)
-        else:
-            for a, b in itertools.permutations(migration.demes, 2):  # type: ignore  # noqa
-                for _ in range(num_lines_per_migration):
-                    t = random_migration_time(migration, log_time)
-                    migration_line(a, b, t, **migration_kwargs)
+        for _ in range(num_lines_per_migration):
+            t = random_migration_time(migration, log_time)
+            migration_line(
+                migration.source,
+                migration.dest,
+                t,
+                dict(migration=migration),
+                **migration_kwargs,
+            )
 
     # Plot pulse lines.
     for pulse in graph.pulses:
-        for source in pulse.sources:
-            migration_line(source, pulse.dest, pulse.time, linestyle="--", linewidth=1)
+        for j, source in enumerate(pulse.sources):
+            migration_line(
+                source,
+                pulse.dest,
+                pulse.time,
+                dict(pulse=pulse, source=j),
+                linestyle="--",
+                linewidth=1,
+            )
 
     xticks = []
     xticklabels = []
@@ -509,4 +523,202 @@ def tubes(
 
     ax.set_ylim(1 if log_time else 0, inf_start_time)
 
+    # Status bar text when in interactive mode.
+    def format_coord(x, y):
+        return f"time={y:.1f}"
+
+    ax.format_coord = format_coord
+
+    # Note: we must hold a reference to the motion_notify_event callback,
+    # or the callback will get garbage collected and thus disabled.
+    # So we just add an attribute to the returned Axes object.
+    ax._demesdraw_mouseoverpopup = _MouseoverPopup(ax.figure, ax)
+
     return ax
+
+
+# Copied and modified from:
+# https://matplotlib.org/stable/tutorials/advanced/blitting.html
+class _BlitManager:
+    def __init__(self, canvas, animated_artists=()):
+        """
+        Parameters
+        ----------
+        canvas : FigureCanvasAgg
+            The canvas to work with, this only works for sub-classes of the Agg
+            canvas which have the `~FigureCanvasAgg.copy_from_bbox` and
+            `~FigureCanvasAgg.restore_region` methods.
+
+        animated_artists : Iterable[Artist]
+            List of the artists to manage
+        """
+        self.canvas = canvas
+        self._bg = None
+        self._artists = []
+
+        if hasattr(canvas, "copy_from_bbox") and hasattr(canvas, "restore_region"):
+            # Webagg and related backends support blitting as of matplotlib 3.4,
+            # but supports_blit is False because of some rendering artifacts.
+            # However, not using blitting is very laggy, so we use it anyway.
+            self.canvas.supports_blit = True
+        if not self.canvas.supports_blit:
+            return
+
+        for a in animated_artists:
+            self.add_artist(a)
+        # grab the background on every draw
+        self.cid = canvas.mpl_connect("draw_event", self.on_draw)
+
+    def on_draw(self, event):
+        """Callback to register with 'draw_event'."""
+        cv = self.canvas
+        if event is not None:
+            if event.canvas != cv:
+                return
+        self._bg = cv.copy_from_bbox(cv.figure.bbox)
+        self._draw_animated()
+
+    def add_artist(self, art):
+        """
+        Add an artist to be managed.
+
+        Parameters
+        ----------
+        art : Artist
+
+            The artist to be added.  Will be set to 'animated' (just
+            to be safe).  *art* must be in the figure associated with
+            the canvas this class is managing.
+
+        """
+        assert art.figure == self.canvas.figure
+        art.set_animated(True)
+        self._artists.append(art)
+
+    def _draw_animated(self):
+        """Draw all of the animated artists."""
+        fig = self.canvas.figure
+        for a in self._artists:
+            fig.draw_artist(a)
+
+    def update(self):
+        """Update the screen with animated artists."""
+        if not self.canvas.supports_blit:
+            self.canvas.draw_idle()
+            return
+        cv = self.canvas
+        fig = cv.figure
+        # paranoia in case we missed the draw event,
+        if self._bg is None:
+            self.on_draw(None)
+        else:
+            # restore the background
+            cv.restore_region(self._bg)
+            # draw all of the animated artists
+            self._draw_animated()
+            # update the GUI state
+            cv.blit(fig.bbox)
+
+
+class _MouseoverPopup:
+    def __init__(self, fig, ax):
+        """Setup interactive mouseover annotations."""
+
+        self.ax = ax
+        self.popup = ax.annotate(
+            "",
+            xy=(0, 0),
+            xytext=(20, 20),
+            textcoords="offset points",
+            multialignment="left",
+            horizontalalignment="center",
+            verticalalignment="center",
+            bbox=dict(boxstyle="round", fc="yellow"),
+            arrowprops=dict(arrowstyle="->"),
+        )
+        self.popup.set_visible(False)
+        self.bm = _BlitManager(fig.canvas, [self.popup])
+
+        # Detect mouseover for artists with a _demesdraw_data attribute,
+        # which were added in demesdraw.tubes().
+        self.artists = []
+        for artist in reversed(ax.get_children()):
+            if hasattr(artist, "_demesdraw_data"):
+                self.artists.append(artist)
+
+        # Get the midpoint of the figure in data coords.
+        axis_to_data = self.ax.transAxes + self.ax.transData.inverted()
+        self.xmid, self.ymid = axis_to_data.transform((0.5, 0.5))
+
+        # Save a reference to the callback so that it doesn't get garbage collected.
+        self.cid = fig.canvas.mpl_connect("motion_notify_event", self.motion_callback)
+
+    def motion_callback(self, event):
+        visible = self.popup.get_visible()
+        mouse_inside_artist = False
+        if event.inaxes == self.ax:
+            for artist in self.artists:
+                contained, _ = artist.contains(event)
+                if contained:
+                    data = artist._demesdraw_data
+                    label = self.get_mouseover_label(data, event)
+                    x = event.xdata
+                    y = event.ydata
+                    xt = 50
+                    yt = 50
+                    if x > self.xmid:
+                        xt *= -1
+                    if y > self.ymid:
+                        yt *= -1
+                    self.popup.xy = (x, y)
+                    self.popup.xyann = (xt, yt)  # xytext
+                    self.popup.set_text(label)
+                    self.popup.set_visible(True)
+                    mouse_inside_artist = True
+                    self.bm.update()
+                    break
+
+        if not mouse_inside_artist and visible:
+            self.popup.set_visible(False)
+            self.bm.update()
+
+    def get_arrow(self, lr, source, dest):
+        assert lr in ("l", "r")
+        arrow = r"$\rightarrow$" if lr == "r" else r"$\leftarrow$"
+        if lr == "r":
+            return f"{source} {arrow} {dest}"
+        else:
+            return f"{dest} {arrow} {source}"
+
+    def get_mouseover_label(self, data, event):
+        if "deme" in data:
+            deme = data["deme"]
+            time = max(min(event.ydata, deme.start_time - 1e-6), deme.end_time)
+            size = deme.size_at(time)
+            ancestors = ", ".join(deme.ancestors)
+            proportions = ", ".join(map(str, deme.proportions))
+            label = (
+                f"deme: {deme.name}\n"
+                f"time: ({deme.start_time}, {deme.end_time}]\n"
+                f"ancestors: {ancestors}\n"
+                f"proportions: {proportions}\n"
+                f"size: {int(size)}"
+            )
+        elif "migration" in data:
+            migration = data["migration"]
+            arrow = self.get_arrow(data["lr"], migration.source, migration.dest)
+            label = (
+                f"migration: {arrow}\n"
+                f"time: ({migration.start_time}, {migration.end_time}]\n"
+                f"rate: {migration.rate}"
+            )
+        elif "pulse" in data:
+            pulse = data["pulse"]
+            j = data["source"]
+            arrow = self.get_arrow(data["lr"], pulse.sources[j], pulse.dest)
+            label = (
+                f"pulse: {arrow}\n"
+                f"time: {pulse.time}\n"
+                f"proportion: {pulse.proportions[j]}"
+            )
+        return label

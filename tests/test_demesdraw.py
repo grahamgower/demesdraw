@@ -4,9 +4,19 @@ import demes
 import pytest
 import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib.testing.compare import compare_images
+from matplotlib.backend_bases import FigureCanvasBase
+import numpy as np
 
 import demesdraw
 import tests
+
+
+def images_equal(file1, file2):
+    # Matplotlib's compare_images() function has a weird return value.
+    # This wrapper just makes test assertions clearer.
+    cmp = compare_images(file1, file2, tol=0)
+    return cmp is None
 
 
 class TestSizeHistory:
@@ -104,3 +114,114 @@ class TestTubes:
         b.add_deme("C", ancestors=["A"])
         graph = b.resolve()
         check_max_time(graph)
+
+    def test_format_coord(self):
+        # The Axes object's format_coord() function gives the text for the
+        # status bar in interactive figures. We want this to indicate the
+        # time corresponding to the mouse cursor location.
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=1000)))
+        b.add_deme("A")
+        graph = b.resolve()
+        ax = demesdraw.tubes(graph)
+        w, h = ax.figure.canvas.get_width_height()
+        status_text = ax.format_coord(w / 2, h / 2)
+        assert "x" not in status_text
+        assert "y" not in status_text
+        assert "time" in status_text
+
+    @pytest.mark.parametrize("log_time", [True, False])
+    @pytest.mark.usefixtures("tmp_path")
+    def test_mouseover_deme(self, log_time, tmp_path):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=1000)))
+        b.add_deme("A")
+        graph = b.resolve()
+
+        ax = demesdraw.tubes(graph, log_time=log_time)
+        ax.figure.savefig(tmp_path / "fig1.png")
+
+        # Simulate mouseover in the middle of the figure.
+        # An annotation should appear, showing deme info.
+        w, h = ax.figure.canvas.get_width_height()
+        FigureCanvasBase.motion_notify_event(ax.figure.canvas, w / 2, h / 2)
+        ax.figure.savefig(tmp_path / "fig2.png")
+
+        assert not images_equal(tmp_path / "fig1.png", tmp_path / "fig2.png")
+
+        # Simulate mouseover at the edge of the figure.
+        # The annotation should disappear.
+        FigureCanvasBase.motion_notify_event(ax.figure.canvas, 1, 1)
+        ax.figure.savefig(tmp_path / "fig3.png")
+
+        assert images_equal(tmp_path / "fig1.png", tmp_path / "fig3.png")
+
+    @pytest.mark.parametrize("log_time", [True, False])
+    @pytest.mark.usefixtures("tmp_path")
+    def test_mouseover_pulse(self, log_time, tmp_path):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=1000)))
+        b.add_deme("A")
+        b.add_deme("B")
+        b.add_pulse(sources=["A"], dest="B", proportions=[0.1], time=100)
+        graph = b.resolve()
+
+        ax = demesdraw.tubes(graph, log_time=log_time)
+        ax.figure.savefig(tmp_path / "fig1.png")
+
+        # Simulate moving the mouse over the pulse lines.
+        # An annotation should appear, showing pulse info.
+        num_pulse_lines = 0
+        for line in ax.lines:
+            if not (
+                hasattr(line, "_demesdraw_data") and "pulse" in line._demesdraw_data
+            ):
+                continue
+            xs, ys = line.get_xdata(), line.get_ydata()
+            x, y = ax.transData.transform((np.mean(xs), ys[0]))
+            FigureCanvasBase.motion_notify_event(ax.figure.canvas, x, y)
+            ax.figure.savefig(tmp_path / "fig2.png")
+
+            assert not images_equal(tmp_path / "fig1.png", tmp_path / "fig2.png")
+            num_pulse_lines += 1
+        assert num_pulse_lines > 0
+
+        # Simulate mouseover at the edge of the figure.
+        # The annotation should disappear.
+        FigureCanvasBase.motion_notify_event(ax.figure.canvas, 1, 1)
+        ax.figure.savefig(tmp_path / "fig3.png")
+
+        assert images_equal(tmp_path / "fig1.png", tmp_path / "fig3.png")
+
+    @pytest.mark.parametrize("log_time", [True, False])
+    @pytest.mark.usefixtures("tmp_path")
+    def test_mouseover_migration(self, log_time, tmp_path):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=1000)))
+        b.add_deme("A")
+        b.add_deme("B")
+        b.add_migration(demes=["A", "B"], rate=1e-5)
+        graph = b.resolve()
+
+        ax = demesdraw.tubes(graph, log_time=log_time)
+        ax.figure.savefig(tmp_path / "fig1.png")
+
+        # Simulate moving the mouse over the migration lines.
+        # An annotation should appear, showing migration info.
+        num_migration_lines = 0
+        for line in ax.lines:
+            if not (
+                hasattr(line, "_demesdraw_data") and "migration" in line._demesdraw_data
+            ):
+                continue
+            xs, ys = line.get_xdata(), line.get_ydata()
+            x, y = ax.transData.transform((np.mean(xs), ys[0]))
+            FigureCanvasBase.motion_notify_event(ax.figure.canvas, x, y)
+            ax.figure.savefig(tmp_path / "fig2.png")
+
+            assert not images_equal(tmp_path / "fig1.png", tmp_path / "fig2.png")
+            num_migration_lines += 1
+        assert num_migration_lines > 0
+
+        # Simulate mouseover at the edge of the figure.
+        # The annotation should disappear.
+        FigureCanvasBase.motion_notify_event(ax.figure.canvas, 1, 1)
+        ax.figure.savefig(tmp_path / "fig3.png")
+
+        assert images_equal(tmp_path / "fig1.png", tmp_path / "fig3.png")
