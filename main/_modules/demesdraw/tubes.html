@@ -134,7 +134,7 @@ const thebe_selector_output = ".output, .cell_output"
              <!-- To handle the deprecated key -->
             
             <div class="navbar_extra_footer">
-            demesdraw 0.3.1.dev78
+            demesdraw 0.3.1.dev81
             </div>
             
         </div>
@@ -261,7 +261,6 @@ title="Open an issue"
                 
   <h1>Source code for demesdraw.tubes</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
-<span class="kn">import</span> <span class="nn">itertools</span>
 
 <span class="kn">import</span> <span class="nn">demes</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -554,7 +553,7 @@ title="Open an issue"
         <span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">path_patch</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">fill_betweenx</span><span class="p">(</span>
+            <span class="n">poly</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">fill_betweenx</span><span class="p">(</span>
                 <span class="n">tube</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                 <span class="n">tube</span><span class="o">.</span><span class="n">size1</span><span class="p">,</span>
                 <span class="n">tube</span><span class="o">.</span><span class="n">size2</span><span class="p">,</span>
@@ -563,6 +562,7 @@ title="Open an issue"
                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                 <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="p">)</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">_demesdraw_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">deme</span><span class="o">=</span><span class="n">deme</span><span class="p">)</span>
 
         <span class="c1"># Indicate ancestry from ancestor demes.</span>
         <span class="n">tube_frac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
@@ -580,7 +580,7 @@ title="Open an issue"
             <span class="p">],</span>
             <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">for</span> <span class="n">ancestor_id</span> <span class="ow">in</span> <span class="n">deme</span><span class="o">.</span><span class="n">ancestors</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ancestor_id</span><span class="p">,</span> <span class="n">proportion</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">deme</span><span class="o">.</span><span class="n">ancestors</span><span class="p">,</span> <span class="n">deme</span><span class="o">.</span><span class="n">proportions</span><span class="p">):</span>
             <span class="n">anc_size1</span><span class="p">,</span> <span class="n">anc_size2</span> <span class="o">=</span> <span class="n">tubes</span><span class="p">[</span><span class="n">ancestor_id</span><span class="p">]</span><span class="o">.</span><span class="n">sizes_at</span><span class="p">(</span><span class="n">deme</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">anc_size2</span> <span class="o">&lt;</span> <span class="n">tube</span><span class="o">.</span><span class="n">size1</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                 <span class="c1"># Ancestor is to the left.</span>
@@ -644,7 +644,7 @@ title="Open an issue"
     <span class="n">xlim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
     <span class="n">offset</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">migration_line</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="o">**</span><span class="n">mig_kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">migration_line</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="o">**</span><span class="n">mig_kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Draw a migration line from source to dest at the given time.&quot;&quot;&quot;</span>
         <span class="n">source_size1</span><span class="p">,</span> <span class="n">source_size2</span> <span class="o">=</span> <span class="n">tubes</span><span class="p">[</span><span class="n">source</span><span class="p">]</span><span class="o">.</span><span class="n">sizes_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
         <span class="n">dest_size1</span><span class="p">,</span> <span class="n">dest_size2</span> <span class="o">=</span> <span class="n">tubes</span><span class="p">[</span><span class="n">dest</span><span class="p">]</span><span class="o">.</span><span class="n">sizes_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
@@ -652,9 +652,13 @@ title="Open an issue"
         <span class="k">if</span> <span class="n">source_size2</span> <span class="o">&lt;</span> <span class="n">dest_size1</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">source_size2</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">dest_size1</span> <span class="o">-</span> <span class="n">offset</span><span class="p">]</span>
             <span class="n">arrow</span> <span class="o">=</span> <span class="s2">&quot;&gt;&quot;</span>
+            <span class="n">lr</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">source_size1</span> <span class="o">-</span> <span class="n">offset</span><span class="p">,</span> <span class="n">dest_size2</span> <span class="o">+</span> <span class="n">offset</span><span class="p">]</span>
             <span class="n">arrow</span> <span class="o">=</span> <span class="s2">&quot;&lt;&quot;</span>
+            <span class="n">lr</span> <span class="o">=</span> <span class="s2">&quot;l&quot;</span>
+
+        <span class="n">metadata</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span> <span class="o">**</span><span class="n">metadata</span><span class="p">)</span>
 
         <span class="n">colour</span> <span class="o">=</span> <span class="n">colours</span><span class="p">[</span><span class="n">source</span><span class="p">]</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
@@ -667,7 +671,8 @@ title="Open an issue"
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
             <span class="n">line</span><span class="o">.</span><span class="n">set_sketch_params</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">line</span><span class="o">.</span><span class="n">_demesdraw_data</span> <span class="o">=</span> <span class="n">metadata</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
             <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
             <span class="n">time</span><span class="p">,</span>
             <span class="n">arrow</span><span class="p">,</span>
@@ -676,6 +681,8 @@ title="Open an issue"
             <span class="n">path_effects</span><span class="o">=</span><span class="p">[</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">patheffects</span><span class="o">.</span><span class="n">Normal</span><span class="p">()],</span>
             <span class="o">**</span><span class="n">mig_kwargs</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="n">line</span><span class="o">.</span><span class="n">_demesdraw_data</span> <span class="o">=</span> <span class="n">metadata</span>
 
     <span class="k">def</span> <span class="nf">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">log_scale</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">migration</span><span class="o">.</span><span class="n">start_time</span>
@@ -692,20 +699,27 @@ title="Open an issue"
     <span class="c1"># Plot migration lines.</span>
     <span class="n">migration_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">migration</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">migrations</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">demes</span><span class="o">.</span><span class="n">AsymmetricMigration</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_lines_per_migration</span><span class="p">):</span>
-                <span class="n">t</span> <span class="o">=</span> <span class="n">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">log_time</span><span class="p">)</span>
-                <span class="n">migration_line</span><span class="p">(</span><span class="n">migration</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">migration</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">migration_kwargs</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">permutations</span><span class="p">(</span><span class="n">migration</span><span class="o">.</span><span class="n">demes</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>  <span class="c1"># type: ignore  # noqa</span>
-                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_lines_per_migration</span><span class="p">):</span>
-                    <span class="n">t</span> <span class="o">=</span> <span class="n">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">log_time</span><span class="p">)</span>
-                    <span class="n">migration_line</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">migration_kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_lines_per_migration</span><span class="p">):</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">log_time</span><span class="p">)</span>
+            <span class="n">migration_line</span><span class="p">(</span>
+                <span class="n">migration</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+                <span class="n">migration</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span>
+                <span class="n">t</span><span class="p">,</span>
+                <span class="nb">dict</span><span class="p">(</span><span class="n">migration</span><span class="o">=</span><span class="n">migration</span><span class="p">),</span>
+                <span class="o">**</span><span class="n">migration_kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
 
     <span class="c1"># Plot pulse lines.</span>
     <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">pulse</span><span class="o">.</span><span class="n">sources</span><span class="p">:</span>
-            <span class="n">migration_line</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">pulse</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">pulse</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">source</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">sources</span><span class="p">):</span>
+            <span class="n">migration_line</span><span class="p">(</span>
+                <span class="n">source</span><span class="p">,</span>
+                <span class="n">pulse</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span>
+                <span class="n">pulse</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="nb">dict</span><span class="p">(</span><span class="n">pulse</span><span class="o">=</span><span class="n">pulse</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">j</span><span class="p">),</span>
+                <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+                <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span>
 
     <span class="n">xticks</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">xticklabels</span> <span class="o">=</span> <span class="p">[]</span>
@@ -771,7 +785,205 @@ title="Open an issue"
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">log_time</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span> <span class="n">inf_start_time</span><span class="p">)</span>
 
+    <span class="c1"># Status bar text when in interactive mode.</span>
+    <span class="k">def</span> <span class="nf">format_coord</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;time=</span><span class="si">{</span><span class="n">y</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">format_coord</span> <span class="o">=</span> <span class="n">format_coord</span>
+
+    <span class="c1"># Note: we must hold a reference to the motion_notify_event callback,</span>
+    <span class="c1"># or the callback will get garbage collected and thus disabled.</span>
+    <span class="c1"># So we just add an attribute to the returned Axes object.</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">_demesdraw_mouseoverpopup</span> <span class="o">=</span> <span class="n">_MouseoverPopup</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">ax</span></div>
+
+
+<span class="c1"># Copied and modified from:</span>
+<span class="c1"># https://matplotlib.org/stable/tutorials/advanced/blitting.html</span>
+<span class="k">class</span> <span class="nc">_BlitManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">animated_artists</span><span class="o">=</span><span class="p">()):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        canvas : FigureCanvasAgg</span>
+<span class="sd">            The canvas to work with, this only works for sub-classes of the Agg</span>
+<span class="sd">            canvas which have the `~FigureCanvasAgg.copy_from_bbox` and</span>
+<span class="sd">            `~FigureCanvasAgg.restore_region` methods.</span>
+
+<span class="sd">        animated_artists : Iterable[Artist]</span>
+<span class="sd">            List of the artists to manage</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">canvas</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bg</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_artists</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">canvas</span><span class="p">,</span> <span class="s2">&quot;copy_from_bbox&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">canvas</span><span class="p">,</span> <span class="s2">&quot;restore_region&quot;</span><span class="p">):</span>
+            <span class="c1"># Webagg and related backends support blitting as of matplotlib 3.4,</span>
+            <span class="c1"># but supports_blit is False because of some rendering artifacts.</span>
+            <span class="c1"># However, not using blitting is very laggy, so we use it anyway.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">supports_blit</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">supports_blit</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">animated_artists</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="c1"># grab the background on every draw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cid</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s2">&quot;draw_event&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_draw</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Callback to register with &#39;draw_event&#39;.&quot;&quot;&quot;</span>
+        <span class="n">cv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span>
+        <span class="k">if</span> <span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">canvas</span> <span class="o">!=</span> <span class="n">cv</span><span class="p">:</span>
+                <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bg</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">copy_from_bbox</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">bbox</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_animated</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">add_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">art</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add an artist to be managed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        art : Artist</span>
+
+<span class="sd">            The artist to be added.  Will be set to &#39;animated&#39; (just</span>
+<span class="sd">            to be safe).  *art* must be in the figure associated with</span>
+<span class="sd">            the canvas this class is managing.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">art</span><span class="o">.</span><span class="n">figure</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">figure</span>
+        <span class="n">art</span><span class="o">.</span><span class="n">set_animated</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_artists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">art</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_draw_animated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Draw all of the animated artists.&quot;&quot;&quot;</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">figure</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_artists</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the screen with animated artists.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">supports_blit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw_idle</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="n">cv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">figure</span>
+        <span class="c1"># paranoia in case we missed the draw event,</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">on_draw</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># restore the background</span>
+            <span class="n">cv</span><span class="o">.</span><span class="n">restore_region</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bg</span><span class="p">)</span>
+            <span class="c1"># draw all of the animated artists</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_draw_animated</span><span class="p">()</span>
+            <span class="c1"># update the GUI state</span>
+            <span class="n">cv</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">fig</span><span class="o">.</span><span class="n">bbox</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_MouseoverPopup</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Setup interactive mouseover annotations.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">popup</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+            <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">,</span>
+            <span class="n">multialignment</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+            <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">verticalalignment</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;round&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;yellow&quot;</span><span class="p">),</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-&gt;&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">popup</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bm</span> <span class="o">=</span> <span class="n">_BlitManager</span><span class="p">(</span><span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">popup</span><span class="p">])</span>
+
+        <span class="c1"># Detect mouseover for artists with a _demesdraw_data attribute,</span>
+        <span class="c1"># which were added in demesdraw.tubes().</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">artists</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_children</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="s2">&quot;_demesdraw_data&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">artists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">artist</span><span class="p">)</span>
+
+        <span class="c1"># Get the midpoint of the figure in data coords.</span>
+        <span class="n">axis_to_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymid</span> <span class="o">=</span> <span class="n">axis_to_data</span><span class="o">.</span><span class="n">transform</span><span class="p">((</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+
+        <span class="c1"># Save a reference to the callback so that it doesn&#39;t get garbage collected.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cid</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s2">&quot;motion_notify_event&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">motion_callback</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">motion_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="n">visible</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">popup</span><span class="o">.</span><span class="n">get_visible</span><span class="p">()</span>
+        <span class="n">mouse_inside_artist</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">inaxes</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">artists</span><span class="p">:</span>
+                <span class="n">contained</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">artist</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">contained</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">artist</span><span class="o">.</span><span class="n">_demesdraw_data</span>
+                    <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mouseover_label</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">xdata</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span>
+                    <span class="n">xt</span> <span class="o">=</span> <span class="mi">50</span>
+                    <span class="n">yt</span> <span class="o">=</span> <span class="mi">50</span>
+                    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmid</span><span class="p">:</span>
+                        <span class="n">xt</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymid</span><span class="p">:</span>
+                        <span class="n">yt</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">popup</span><span class="o">.</span><span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">popup</span><span class="o">.</span><span class="n">xyann</span> <span class="o">=</span> <span class="p">(</span><span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">)</span>  <span class="c1"># xytext</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">popup</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">popup</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">mouse_inside_artist</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">bm</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+                    <span class="k">break</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mouse_inside_artist</span> <span class="ow">and</span> <span class="n">visible</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">popup</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bm</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_arrow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">lr</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="n">arrow</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$\rightarrow$&quot;</span> <span class="k">if</span> <span class="n">lr</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span> <span class="k">else</span> <span class="sa">r</span><span class="s2">&quot;$\leftarrow$&quot;</span>
+        <span class="k">if</span> <span class="n">lr</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">arrow</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">dest</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dest</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">arrow</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="nf">get_mouseover_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;deme&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">deme</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">]</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">ydata</span><span class="p">,</span> <span class="n">deme</span><span class="o">.</span><span class="n">start_time</span> <span class="o">-</span> <span class="mf">1e-6</span><span class="p">),</span> <span class="n">deme</span><span class="o">.</span><span class="n">end_time</span><span class="p">)</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">deme</span><span class="o">.</span><span class="n">size_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+            <span class="n">ancestors</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">deme</span><span class="o">.</span><span class="n">ancestors</span><span class="p">)</span>
+            <span class="n">proportions</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">deme</span><span class="o">.</span><span class="n">proportions</span><span class="p">))</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;deme: </span><span class="si">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;time: (</span><span class="si">{</span><span class="n">deme</span><span class="o">.</span><span class="n">start_time</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">deme</span><span class="o">.</span><span class="n">end_time</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;ancestors: </span><span class="si">{</span><span class="n">ancestors</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;proportions: </span><span class="si">{</span><span class="n">proportions</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;size: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;migration&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">migration</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;migration&quot;</span><span class="p">]</span>
+            <span class="n">arrow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_arrow</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;lr&quot;</span><span class="p">],</span> <span class="n">migration</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">migration</span><span class="o">.</span><span class="n">dest</span><span class="p">)</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;migration: </span><span class="si">{</span><span class="n">arrow</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;time: (</span><span class="si">{</span><span class="n">migration</span><span class="o">.</span><span class="n">start_time</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">migration</span><span class="o">.</span><span class="n">end_time</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;rate: </span><span class="si">{</span><span class="n">migration</span><span class="o">.</span><span class="n">rate</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;pulse&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">pulse</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;pulse&quot;</span><span class="p">]</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span>
+            <span class="n">arrow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_arrow</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;lr&quot;</span><span class="p">],</span> <span class="n">pulse</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">pulse</span><span class="o">.</span><span class="n">dest</span><span class="p">)</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;pulse: </span><span class="si">{</span><span class="n">arrow</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;time: </span><span class="si">{</span><span class="n">pulse</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;proportion: </span><span class="si">{</span><span class="n">pulse</span><span class="o">.</span><span class="n">proportions</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">label</span>
 </pre></div>
 
               </div>
@@ -792,7 +1004,7 @@ title="Open an issue"
   
       &copy; Copyright 2021.<br/>
     <div class="extra_footer">
-      demesdraw 0.3.1.dev78+g57bbc02
+      demesdraw 0.3.1.dev81+gcce1d58
     </div>
 </p>
         </footer>

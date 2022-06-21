@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* Added mouseover annotation popups for interactive tubes plots.
 * Dropped support for Python 3.6.
 * Performance improvement when calculating tube positions.
 
@@ -13,7 +14,7 @@
   removed in favour of constrained convex optimisation using `cvxpy`.
 * Increased the default amount of space that separates demes in
   `demesdraw.tubes()`, and use more space when there are more
-  contemporary demes (see `demesdraw.util.separation_heuristic()`).
+  contemporary demes (see `demesdraw.utils.separation_heuristic()`).
 * Filter numpy warnings about overflow when using a log scale.
   The overflow in question is harmless and these warnings only serve
   to confuse users.

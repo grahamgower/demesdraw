@@ -136,7 +136,7 @@ const thebe_selector_output = ".output, .cell_output"
              <!-- To handle the deprecated key -->
             
             <div class="navbar_extra_footer">
-            demesdraw 0.3.1.dev78
+            demesdraw 0.3.1.dev81
             </div>
             
         </div>
@@ -436,6 +436,7 @@ title="Print to PDF"
 <section id="unreleased">
 <h2>unreleased<a class="headerlink" href="#unreleased" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
+<li><p>Added mouseover annotation popups for interactive tubes plots.</p></li>
 <li><p>Dropped support for Python 3.6.</p></li>
 <li><p>Performance improvement when calculating tube positions.</p></li>
 </ul>
@@ -449,7 +450,7 @@ The previously used optimisation procedure (scipy’s SLSQP) has been
 removed in favour of constrained convex optimisation using <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code>.</p></li>
 <li><p>Increased the default amount of space that separates demes in
 <code class="docutils literal notranslate"><span class="pre">demesdraw.tubes()</span></code>, and use more space when there are more
-contemporary demes (see <code class="docutils literal notranslate"><span class="pre">demesdraw.util.separation_heuristic()</span></code>).</p></li>
+contemporary demes (see <code class="docutils literal notranslate"><span class="pre">demesdraw.utils.separation_heuristic()</span></code>).</p></li>
 <li><p>Filter numpy warnings about overflow when using a log scale.
 The overflow in question is harmless and these warnings only serve
 to confuse users.</p></li>
@@ -552,7 +553,7 @@ from using a single <code class="docutils literal notranslate"><span class="pre"
   
       &copy; Copyright 2021.<br/>
     <div class="extra_footer">
-      demesdraw 0.3.1.dev78+g57bbc02
+      demesdraw 0.3.1.dev81+gcce1d58
     </div>
 </p>
         </footer>
