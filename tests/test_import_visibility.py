@@ -1,5 +1,3 @@
-import sys
-
 import pytest
 
 from demesdraw import *
@@ -19,12 +17,12 @@ from demesdraw.utils import *  # noqa: E402
 
 
 def test_utils_public_symbols():
-
     get_fig_axes
     size_max
     size_min
     log_size_heuristic
     log_time_heuristic
+    separation_heuristic
 
 
 def test_utils_nonpublic_symbols():
@@ -32,10 +30,6 @@ def test_utils_nonpublic_symbols():
         _get_colours
 
 
-PY36 = sys.version_info[0:2] < (3, 7)
-
-
-@pytest.mark.xfail(PY36, reason="__dir__ does nothing on Python 3.6", strict=True)
 def test_dir():
     import demesdraw
 
@@ -46,7 +40,6 @@ def test_dir():
     assert "utils" not in dir_demesdraw
 
 
-@pytest.mark.xfail(PY36, reason="__dir__ does nothing on Python 3.6", strict=True)
 def test_utils_dir():
     import demesdraw.utils
 
