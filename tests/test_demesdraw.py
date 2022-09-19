@@ -5,7 +5,7 @@ import pytest
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.testing.compare import compare_images
-from matplotlib.backend_bases import FigureCanvasBase
+from matplotlib.backend_bases import MouseEvent
 import numpy as np
 
 import demesdraw
@@ -142,14 +142,16 @@ class TestTubes:
         # Simulate mouseover in the middle of the figure.
         # An annotation should appear, showing deme info.
         w, h = ax.figure.canvas.get_width_height()
-        FigureCanvasBase.motion_notify_event(ax.figure.canvas, w / 2, h / 2)
+        event = MouseEvent("motion_notify_event", ax.figure.canvas, w / 2, h / 2)
+        ax.figure.canvas.callbacks.process("motion_notify_event", event)
         ax.figure.savefig(tmp_path / "fig2.png")
 
         assert not images_equal(tmp_path / "fig1.png", tmp_path / "fig2.png")
 
         # Simulate mouseover at the edge of the figure.
         # The annotation should disappear.
-        FigureCanvasBase.motion_notify_event(ax.figure.canvas, 1, 1)
+        event = MouseEvent("motion_notify_event", ax.figure.canvas, 1, 1)
+        ax.figure.canvas.callbacks.process("motion_notify_event", event)
         ax.figure.savefig(tmp_path / "fig3.png")
 
         assert images_equal(tmp_path / "fig1.png", tmp_path / "fig3.png")
@@ -176,7 +178,8 @@ class TestTubes:
                 continue
             xs, ys = line.get_xdata(), line.get_ydata()
             x, y = ax.transData.transform((np.mean(xs), ys[0]))
-            FigureCanvasBase.motion_notify_event(ax.figure.canvas, x, y)
+            event = MouseEvent("motion_notify_event", ax.figure.canvas, x, y)
+            ax.figure.canvas.callbacks.process("motion_notify_event", event)
             ax.figure.savefig(tmp_path / "fig2.png")
 
             assert not images_equal(tmp_path / "fig1.png", tmp_path / "fig2.png")
@@ -185,7 +188,8 @@ class TestTubes:
 
         # Simulate mouseover at the edge of the figure.
         # The annotation should disappear.
-        FigureCanvasBase.motion_notify_event(ax.figure.canvas, 1, 1)
+        event = MouseEvent("motion_notify_event", ax.figure.canvas, 1, 1)
+        ax.figure.canvas.callbacks.process("motion_notify_event", event)
         ax.figure.savefig(tmp_path / "fig3.png")
 
         assert images_equal(tmp_path / "fig1.png", tmp_path / "fig3.png")
@@ -212,7 +216,8 @@ class TestTubes:
                 continue
             xs, ys = line.get_xdata(), line.get_ydata()
             x, y = ax.transData.transform((np.mean(xs), ys[0]))
-            FigureCanvasBase.motion_notify_event(ax.figure.canvas, x, y)
+            event = MouseEvent("motion_notify_event", ax.figure.canvas, x, y)
+            ax.figure.canvas.callbacks.process("motion_notify_event", event)
             ax.figure.savefig(tmp_path / "fig2.png")
 
             assert not images_equal(tmp_path / "fig1.png", tmp_path / "fig2.png")
@@ -221,7 +226,8 @@ class TestTubes:
 
         # Simulate mouseover at the edge of the figure.
         # The annotation should disappear.
-        FigureCanvasBase.motion_notify_event(ax.figure.canvas, 1, 1)
+        event = MouseEvent("motion_notify_event", ax.figure.canvas, 1, 1)
+        ax.figure.canvas.callbacks.process("motion_notify_event", event)
         ax.figure.savefig(tmp_path / "fig3.png")
 
         assert images_equal(tmp_path / "fig1.png", tmp_path / "fig3.png")
