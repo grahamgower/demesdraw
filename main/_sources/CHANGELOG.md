@@ -1,10 +1,11 @@
 # Changelog
 
-## unreleased
+## [0.3.1] - 2022-09-19
 
 * Added mouseover annotation popups for interactive tubes plots.
 * Dropped support for Python 3.6.
 * Performance improvement when calculating tube positions.
+* Fix incompatibility with "legend" labels and matplotlib 3.6.0.
 
 ## [0.3.0] - 2022-01-08
 
