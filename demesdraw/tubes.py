@@ -484,7 +484,7 @@ def tubes(
                 for deme_name in deme_labels
             ],
             # Use a horizontal layout, rather than vertical.
-            ncol=len(deme_labels) // 2,
+            ncol=max(1, len(deme_labels) // 2),
         )
 
     if labels in ("mid", "xticks-mid"):

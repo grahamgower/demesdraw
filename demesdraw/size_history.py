@@ -229,7 +229,7 @@ def size_history(
     ax.autoscale_view()
 
     if len(graph.demes) > 1:
-        leg = ax.legend(handles=legend_handles, ncol=len(graph.demes) // 2)
+        leg = ax.legend(handles=legend_handles, ncol=max(1, len(graph.demes) // 2))
         leg.set_zorder(z_top)
 
     if title is not None:
