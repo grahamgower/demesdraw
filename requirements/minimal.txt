@@ -2,6 +2,6 @@
 cvxpy==1.2.1
 demes==0.2.2
 matplotlib; python_version=='3.7'
-matplotlib==3.6.0; python_version>='3.8'
+matplotlib==3.6.1; python_version>='3.8'
 numpy; python_version=='3.7'
 numpy==1.23.3; python_version>='3.8'
