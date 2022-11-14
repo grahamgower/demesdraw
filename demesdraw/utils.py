@@ -1,3 +1,4 @@
+from __future__ import annotations
 import itertools
 import math
 from typing import Dict, List, Mapping, Set, Tuple, Union
@@ -90,7 +91,7 @@ def _inf_start_time(graph: demes.Graph, inf_ratio: float, log_scale: bool) -> fl
 
 def _get_colours(
     graph: demes.Graph,
-    colours: ColourOrColourMapping = None,
+    colours: ColourOrColourMapping | None = None,
     default_colour: Colour = "gray",
 ) -> Mapping[str, Colour]:
     """
@@ -138,7 +139,7 @@ def _get_colours(
 
 
 def get_fig_axes(
-    aspect: float = None, scale: float = None, **kwargs
+    aspect: float | None = None, scale: float | None = None, **kwargs
 ) -> Tuple[matplotlib.figure.Figure, matplotlib.axes.Axes]:
     """
     Get a matplotlib figure and axes.

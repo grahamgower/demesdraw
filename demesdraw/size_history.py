@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import demes
 import numpy as np
 import matplotlib
@@ -7,11 +9,11 @@ from demesdraw import utils
 
 def size_history(
     graph: demes.Graph,
-    ax: matplotlib.axes.Axes = None,
-    colours: utils.ColourOrColourMapping = None,
+    ax: matplotlib.axes.Axes | None = None,
+    colours: utils.ColourOrColourMapping | None = None,
     log_time: bool = False,
     log_size: bool = False,
-    title: str = None,
+    title: str | None = None,
     inf_ratio: float = 0.1,
     inf_label: bool = False,
     invert_x: bool = False,

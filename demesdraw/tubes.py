@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Dict, Mapping, List, Tuple
 
 import demes
@@ -154,15 +155,15 @@ def find_positions(graph: demes.Graph) -> Dict[str, float]:
 
 def tubes(
     graph: demes.Graph,
-    ax: matplotlib.axes.Axes = None,
-    colours: utils.ColourOrColourMapping = None,
+    ax: matplotlib.axes.Axes | None = None,
+    colours: utils.ColourOrColourMapping | None = None,
     log_time: bool = False,
-    title: str = None,
+    title: str | None = None,
     inf_ratio: float = 0.2,
-    positions: Mapping[str, float] = None,
+    positions: Mapping[str, float] | None = None,
     num_lines_per_migration: int = 10,
-    seed: int = None,
-    max_time: float = None,
+    seed: int | None = None,
+    max_time: float | None = None,
     labels: str = "xticks-mid",
     fill: bool = True,
 ) -> matplotlib.axes.Axes:
