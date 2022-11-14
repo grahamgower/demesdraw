@@ -134,7 +134,7 @@ const thebe_selector_output = ".output, .cell_output"
              <!-- To handle the deprecated key -->
             
             <div class="navbar_extra_footer">
-            demesdraw 0.3.2.dev24
+            demesdraw 0.3.2.dev26
             </div>
             
         </div>
@@ -260,7 +260,9 @@ title="Open an issue"
               <div>
                 
   <h1>Source code for demesdraw.size_history</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">demes</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">demes</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 
@@ -269,11 +271,11 @@ title="Open an issue"
 
 <div class="viewcode-block" id="size_history"><a class="viewcode-back" href="../../api.html#demesdraw.size_history">[docs]</a><span class="k">def</span> <span class="nf">size_history</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
-    <span class="n">ax</span><span class="p">:</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">colours</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">ColourOrColourMapping</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ax</span><span class="p">:</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">colours</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">ColourOrColourMapping</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">log_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">log_size</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">inf_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
     <span class="n">inf_label</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">invert_x</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -545,7 +547,7 @@ title="Open an issue"
   
       &copy; Copyright 2021.<br/>
     <div class="extra_footer">
-      demesdraw 0.3.2.dev24+g57f3964
+      demesdraw 0.3.2.dev26+g88561ca
     </div>
 </p>
         </footer>
