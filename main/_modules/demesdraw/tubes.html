@@ -134,7 +134,7 @@ const thebe_selector_output = ".output, .cell_output"
              <!-- To handle the deprecated key -->
             
             <div class="navbar_extra_footer">
-            demesdraw 0.3.2.dev36
+            demesdraw 0.3.2.dev38
             </div>
             
         </div>
@@ -272,7 +272,7 @@ title="Open an issue"
 
 
 <span class="k">class</span> <span class="nc">Tube</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A deme represented as a tube. The tube has a length along the time</span>
 <span class="sd">    dimension and a width equal to the deme&#39;s population size, which may</span>
 <span class="sd">    change over time.</span>
@@ -291,7 +291,7 @@ title="Open an issue"
         <span class="n">inf_start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">log_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param demes.Deme deme: The deme for which to calculate coordinates.</span>
 <span class="sd">        :param float mid: The mid point of the deme along the non-time dimension.</span>
 <span class="sd">        :param float inf_start_time: The value along the time dimension which</span>
@@ -310,7 +310,7 @@ title="Open an issue"
         <span class="n">log_time</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
         <span class="n">num_points</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Calculate tube coordinates.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate tube coordinates.&quot;&quot;&quot;</span>
         <span class="n">time</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">size1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">size2</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -366,14 +366,14 @@ title="Open an issue"
         <span class="bp">self</span><span class="o">.</span><span class="n">size2</span> <span class="o">=</span> <span class="n">size2</span>
 
     <span class="k">def</span> <span class="nf">sizes_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Return the size coordinates of the tube at the given time.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the size coordinates of the tube at the given time.&quot;&quot;&quot;</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deme</span><span class="o">.</span><span class="n">size_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
         <span class="n">N1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid</span> <span class="o">-</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="n">N2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid</span> <span class="o">+</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="k">return</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span>
 
     <span class="k">def</span> <span class="nf">to_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Return a matplotlib.path.Path for the tube outline.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a matplotlib.path.Path for the tube outline.&quot;&quot;&quot;</span>
         <span class="c1"># Compared with separately drawing each side of the tube,</span>
         <span class="c1"># drawing a path that includes both sides of the tube means:</span>
         <span class="c1">#  * vector formats use one &quot;stroke&quot; rather than two; and</span>
@@ -391,7 +391,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">find_positions</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find optimal deme positions along a single dimension by:</span>
 
 <span class="sd">      - ordering the demes to minimise the number of lines crossing demes,</span>
@@ -429,7 +429,7 @@ title="Open an issue"
     <span class="n">labels</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;xticks-mid&quot;</span><span class="p">,</span>
     <span class="n">fill</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot a demes-as-tubes schematic of the graph and the demes&#39; relationships.</span>
 
 <span class="sd">    Each deme is depicted as a tube, where the tube’s width is</span>
@@ -646,7 +646,7 @@ title="Open an issue"
     <span class="n">offset</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">migration_line</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="o">**</span><span class="n">mig_kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Draw a migration line from source to dest at the given time.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Draw a migration line from source to dest at the given time.&quot;&quot;&quot;</span>
         <span class="n">source_size1</span><span class="p">,</span> <span class="n">source_size2</span> <span class="o">=</span> <span class="n">tubes</span><span class="p">[</span><span class="n">source</span><span class="p">]</span><span class="o">.</span><span class="n">sizes_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
         <span class="n">dest_size1</span><span class="p">,</span> <span class="n">dest_size2</span> <span class="o">=</span> <span class="n">tubes</span><span class="p">[</span><span class="n">dest</span><span class="p">]</span><span class="o">.</span><span class="n">sizes_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
 
@@ -804,7 +804,7 @@ title="Open an issue"
 <span class="c1"># https://matplotlib.org/stable/tutorials/advanced/blitting.html</span>
 <span class="k">class</span> <span class="nc">_BlitManager</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">animated_artists</span><span class="o">=</span><span class="p">()):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        canvas : FigureCanvasAgg</span>
@@ -833,7 +833,7 @@ title="Open an issue"
         <span class="bp">self</span><span class="o">.</span><span class="n">cid</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s2">&quot;draw_event&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_draw</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">on_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Callback to register with &#39;draw_event&#39;.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Callback to register with &#39;draw_event&#39;.&quot;&quot;&quot;</span>
         <span class="n">cv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span>
         <span class="k">if</span> <span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">canvas</span> <span class="o">!=</span> <span class="n">cv</span><span class="p">:</span>
@@ -842,7 +842,7 @@ title="Open an issue"
         <span class="bp">self</span><span class="o">.</span><span class="n">_draw_animated</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">add_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">art</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add an artist to be managed.</span>
 
 <span class="sd">        Parameters</span>
@@ -859,13 +859,13 @@ title="Open an issue"
         <span class="bp">self</span><span class="o">.</span><span class="n">_artists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">art</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_draw_animated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Draw all of the animated artists.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Draw all of the animated artists.&quot;&quot;&quot;</span>
         <span class="n">fig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">figure</span>
         <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_artists</span><span class="p">:</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Update the screen with animated artists.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the screen with animated artists.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">supports_blit</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw_idle</span><span class="p">()</span>
             <span class="k">return</span>
@@ -885,7 +885,7 @@ title="Open an issue"
 
 <span class="k">class</span> <span class="nc">_MouseoverPopup</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Setup interactive mouseover annotations.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Setup interactive mouseover annotations.&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">popup</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
@@ -1005,7 +1005,7 @@ title="Open an issue"
   
       &copy; Copyright 2021.<br/>
     <div class="extra_footer">
-      demesdraw 0.3.2.dev36+g6a7aa3a
+      demesdraw 0.3.2.dev38+g9309c06
     </div>
 </p>
         </footer>

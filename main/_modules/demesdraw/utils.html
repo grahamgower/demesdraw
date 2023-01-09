@@ -134,7 +134,7 @@ const thebe_selector_output = ".output, .cell_output"
              <!-- To handle the deprecated key -->
             
             <div class="navbar_extra_footer">
-            demesdraw 0.3.2.dev36
+            demesdraw 0.3.2.dev38
             </div>
             
         </div>
@@ -295,7 +295,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_get_times</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get all times in the graph.</span>
 
 <span class="sd">    :param demes.Graph: The graph.</span>
@@ -316,7 +316,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_inf_start_time</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">inf_ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">log_scale</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the value on the time axis that will be used instead of infinity.</span>
 
 <span class="sd">    :param demes.Graph graph: The graph.</span>
@@ -356,7 +356,7 @@ title="Open an issue"
     <span class="n">colours</span><span class="p">:</span> <span class="n">ColourOrColourMapping</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">default_colour</span><span class="p">:</span> <span class="n">Colour</span> <span class="o">=</span> <span class="s2">&quot;gray&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colour</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert the polymorphic ``colours`` into a dictionary of colours,</span>
 <span class="sd">    keyed by deme name.</span>
 
@@ -403,7 +403,7 @@ title="Open an issue"
 <div class="viewcode-block" id="get_fig_axes"><a class="viewcode-back" href="../../api.html#demesdraw.utils.get_fig_axes">[docs]</a><span class="k">def</span> <span class="nf">get_fig_axes</span><span class="p">(</span>
     <span class="n">aspect</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get a matplotlib figure and axes.</span>
 
 <span class="sd">    The default width and height of a matplotlib figure is 6.4 x 4.8 inches.</span>
@@ -441,7 +441,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="size_max"><a class="viewcode-back" href="../../api.html#demesdraw.utils.size_max">[docs]</a><span class="k">def</span> <span class="nf">size_max</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the maximum deme size in the graph.</span>
 
 <span class="sd">    :param demes.Graph graph: The graph.</span>
@@ -456,7 +456,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="size_min"><a class="viewcode-back" href="../../api.html#demesdraw.utils.size_min">[docs]</a><span class="k">def</span> <span class="nf">size_min</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the minimum deme size in the graph.</span>
 
 <span class="sd">    :param demes.Graph graph: The graph.</span>
@@ -471,7 +471,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="log_size_heuristic"><a class="viewcode-back" href="../../api.html#demesdraw.utils.log_size_heuristic">[docs]</a><span class="k">def</span> <span class="nf">log_size_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decide whether or not to use log scale for sizes.</span>
 
 <span class="sd">    :param demes.Graph graph: The graph.</span>
@@ -486,7 +486,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="log_time_heuristic"><a class="viewcode-back" href="../../api.html#demesdraw.utils.log_time_heuristic">[docs]</a><span class="k">def</span> <span class="nf">log_time_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decide whether or not to use log scale for times.</span>
 
 <span class="sd">    :param demes.Graph graph:</span>
@@ -505,7 +505,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_contemporaries_max</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;The maximum number of contemporary demes at any time.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The maximum number of contemporary demes at any time.&quot;&quot;&quot;</span>
     <span class="n">c_max</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">deme_j</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">:</span>
         <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span>
@@ -518,7 +518,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="separation_heuristic"><a class="viewcode-back" href="../../api.html#demesdraw.utils.separation_heuristic">[docs]</a><span class="k">def</span> <span class="nf">separation_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find a reasonable separation distance for deme positions.</span>
 
 <span class="sd">    :param demes.Graph graph:</span>
@@ -535,12 +535,12 @@ title="Open an issue"
     <span class="n">dm_j</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">demes</span><span class="o">.</span><span class="n">Deme</span><span class="p">,</span> <span class="n">demes</span><span class="o">.</span><span class="n">AsymmetricMigration</span><span class="p">],</span>
     <span class="n">dm_k</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">demes</span><span class="o">.</span><span class="n">Deme</span><span class="p">,</span> <span class="n">demes</span><span class="o">.</span><span class="n">AsymmetricMigration</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Returns true if dm_j and dm_k intersect in time.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns true if dm_j and dm_k intersect in time.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="n">dm_j</span><span class="o">.</span><span class="n">end_time</span> <span class="o">&gt;=</span> <span class="n">dm_k</span><span class="o">.</span><span class="n">start_time</span> <span class="ow">or</span> <span class="n">dm_k</span><span class="o">.</span><span class="n">end_time</span> <span class="o">&gt;=</span> <span class="n">dm_j</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">coexistence_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;Pairs of indices of demes that exist simultaneously.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pairs of indices of demes that exist simultaneously.&quot;&quot;&quot;</span>
     <span class="n">contemporaries</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme_j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">deme_k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:],</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
@@ -550,7 +550,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">successors_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;Graph successors, but use indices rather than deme names&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Graph successors, but use indices rather than deme names&quot;&quot;&quot;</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">j</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
     <span class="n">successors</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">deme</span><span class="p">,</span> <span class="n">children</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">successors</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -560,7 +560,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">interactions_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">unique</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;Pairs of indices of demes that exchange migrants (migrations or pulses).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pairs of indices of demes that exchange migrants (migrations or pulses).&quot;&quot;&quot;</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">j</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
     <span class="n">interactions</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">migration</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">migrations</span><span class="p">:</span>
@@ -621,7 +621,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_line_crossings</span><span class="p">(</span><span class="n">xx</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">candidates</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Count the number of lines that cross one or more demes.</span>
 
 <span class="sd">    :param xx:</span>
@@ -653,7 +653,7 @@ title="Open an issue"
     <span class="n">maxiter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find an ordering of demes that minimises line crossings.</span>
 
 <span class="sd">    Lines may be for ancestry, pulses, or migrations. A naive algorithm is</span>
@@ -721,7 +721,7 @@ title="Open an issue"
     <span class="n">sep</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">unique_interactions</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Optimise the given positions into a tree-like layout.</span>
 
 <span class="sd">    Convex optimisation is used to minimise the distances:</span>
@@ -797,7 +797,7 @@ title="Open an issue"
   
       &copy; Copyright 2021.<br/>
     <div class="extra_footer">
-      demesdraw 0.3.2.dev36+g6a7aa3a
+      demesdraw 0.3.2.dev38+g9309c06
     </div>
 </p>
         </footer>
