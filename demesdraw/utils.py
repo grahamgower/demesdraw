@@ -108,10 +108,15 @@ def _get_colours(
     :type: dict or str
     """
     if colours is None:
+        if hasattr(matplotlib.colormaps, "get_cmap"):
+            get_cmap = matplotlib.colormaps.get_cmap
+        else:
+            # XXX: matplotlib < 3.6 compat
+            get_cmap = matplotlib.cm.get_cmap
         if len(graph.demes) <= 10:
-            cmap = matplotlib.cm.get_cmap("tab10")
+            cmap = get_cmap("tab10")
         elif len(graph.demes) <= 20:
-            cmap = matplotlib.cm.get_cmap("tab20")
+            cmap = get_cmap("tab20")
         else:
             raise ValueError(
                 "Graph has more than 20 demes, so colours must be specified."
@@ -174,7 +179,11 @@ def get_fig_axes(
         scale = 1.0
     fig, ax = plt.subplots(figsize=scale * plt.figaspect(aspect), **kwargs)
     if not fig.get_constrained_layout():
-        fig.set_tight_layout(True)
+        if hasattr(fig, "set_layout_engine"):
+            fig.set_layout_engine("tight")
+        else:
+            # matplotlib < 3.6 compat
+            fig.set_tight_layout(True)
     return fig, ax
 
 
