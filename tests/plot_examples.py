@@ -27,7 +27,6 @@ with PdfPages("spacing.pdf") as pdf:
         plt.close(ax.figure)
 
 with PdfPages("examples.pdf") as pdf:
-
     for filename in sorted(example_files()):
         title = filename.name
         with warnings.catch_warnings():
