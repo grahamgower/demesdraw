@@ -5,11 +5,11 @@ queue_rules:
       - check-success=build-docs
       - check-success=lint
       - check-success=tests (macos-11, 3.7)
-      - check-success=tests (macos-11, 3.10)
+      - check-success=tests (macos-11, 3.11)
       - check-success=tests (ubuntu-20.04, 3.7)
-      - check-success=tests (ubuntu-20.04, 3.10)
+      - check-success=tests (ubuntu-20.04, 3.11)
       - check-success=tests (windows-2022, 3.7)
-      - check-success=tests (windows-2022, 3.10)
+      - check-success=tests (windows-2022, 3.11)
 
 pull_request_rules:
   - name: automatic merge for Dependabot pull requests
@@ -19,11 +19,11 @@ pull_request_rules:
       - check-success=build-docs
       - check-success=lint
       - check-success=tests (macos-11, 3.7)
-      - check-success=tests (macos-11, 3.10)
+      - check-success=tests (macos-11, 3.11)
       - check-success=tests (ubuntu-20.04, 3.7)
-      - check-success=tests (ubuntu-20.04, 3.10)
+      - check-success=tests (ubuntu-20.04, 3.11)
       - check-success=tests (windows-2022, 3.7)
-      - check-success=tests (windows-2022, 3.10)
+      - check-success=tests (windows-2022, 3.11)
     actions:
       queue:
         name: default
@@ -34,11 +34,11 @@ pull_request_rules:
       - check-success=build-docs
       - check-success=lint
       - check-success=tests (macos-11, 3.7)
-      - check-success=tests (macos-11, 3.10)
+      - check-success=tests (macos-11, 3.11)
       - check-success=tests (ubuntu-20.04, 3.7)
-      - check-success=tests (ubuntu-20.04, 3.10)
+      - check-success=tests (ubuntu-20.04, 3.11)
       - check-success=tests (windows-2022, 3.7)
-      - check-success=tests (windows-2022, 3.10)
+      - check-success=tests (windows-2022, 3.11)
     actions:
       queue:
         name: default
