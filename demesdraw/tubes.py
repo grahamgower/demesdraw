@@ -150,7 +150,9 @@ def find_positions(graph: demes.Graph) -> Dict[str, float]:
     positions = utils.minimal_crossing_positions(
         graph, sep=sep, unique_interactions=False
     )
-    return utils.cvxpy_optimise(graph, positions, sep=sep, unique_interactions=False)
+    return utils.optimise_positions(
+        graph, positions, sep=sep, unique_interactions=False
+    )
 
 
 def tubes(

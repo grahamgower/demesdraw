@@ -476,3 +476,357 @@ class TestLineCrossings:
             )
             == [1, 0, 1, 1, 0, 1]
         )
+
+
+class TestMinimalCrossingPositions:
+    @pytest.mark.parametrize("unique", (True, False))
+    @pytest.mark.parametrize("n", (1, 2, 3))
+    @pytest.mark.parametrize("sep", (1, math.pi, 12345))
+    def test_no_crossings_isolated_demes(self, n, unique, sep):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        for j in range(n):
+            b.add_deme(f"deme{j}")
+        graph = b.resolve()
+        positions = utils.minimal_crossing_positions(
+            graph, sep=sep, unique_interactions=unique
+        )
+        for j, deme in enumerate(graph.demes):
+            assert math.isclose(positions[deme.name], j * sep)
+
+    @pytest.mark.parametrize("unique", (True, False))
+    @pytest.mark.parametrize("sep", (1, math.pi, 12345))
+    def test_no_crossings_common_ancestor(self, unique, sep):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a", epochs=[dict(end_time=100)])
+        b.add_deme("b", ancestors=["a"])
+        b.add_deme("c", ancestors=["a"])
+        b.add_pulse(sources=["b"], dest="c", time=50, proportions=[0.1])
+        b.add_migration(demes=["b", "c"], rate=1e-5)
+        graph = b.resolve()
+
+        positions = utils.minimal_crossing_positions(
+            graph, sep=sep, unique_interactions=unique
+        )
+        for j, deme in enumerate(graph.demes):
+            assert math.isclose(positions[deme.name], j * sep)
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_ancestry_crossing(self, unique):
+        # Tree-like ancestry.
+        # We should never get positions with 'b' in the middle.
+        # |\
+        # | \
+        # |\ \
+        # a c b
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a")
+        b.add_deme("b", ancestors=["a"], start_time=100)
+        b.add_deme("c", ancestors=["a"], start_time=50)
+        graph = b.resolve()
+        positions = utils.minimal_crossing_positions(
+            graph, sep=1, unique_interactions=unique
+        )
+        assert not (positions["a"] < positions["b"] < positions["c"])
+        assert not (positions["c"] < positions["b"] < positions["a"])
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_ancestry_crossing_treelike_uses_default_ordering(self, unique):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a", epochs=[dict(end_time=100)])
+        b.add_deme("b", ancestors=["a"])
+        b.add_deme("c", ancestors=["a"], epochs=[dict(end_time=50)])
+        b.add_deme("d", ancestors=["c"])
+        b.add_deme("e", ancestors=["c"])
+        graph = b.resolve()
+        positions = utils.minimal_crossing_positions(
+            graph, sep=1, unique_interactions=unique
+        )
+
+        def order(deme_names):
+            b = True
+            for j in range(len(deme_names) - 1):
+                b = b and (positions[deme_names[j]] < positions[deme_names[j + 1]])
+            return b
+
+        assert order(["a", "b", "c", "d", "e"])
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_ancestry_crossing_multiple_ancestors(self, unique):
+        # 'c' has multiple ancestors, so should be in the middle.
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a")
+        b.add_deme("b", ancestors=["a"], start_time=100)
+        b.add_deme("c", ancestors=["a", "b"], proportions=[0.5, 0.5], start_time=50)
+        graph = b.resolve()
+        positions = utils.minimal_crossing_positions(
+            graph, sep=1, unique_interactions=unique
+        )
+
+        def order(deme_names):
+            b = True
+            for j in range(len(deme_names) - 1):
+                b = b and (positions[deme_names[j]] < positions[deme_names[j + 1]])
+            return b
+
+        assert order(["a", "c", "b"]) or order(["b", "c", "a"])
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_pulse_crossing(self, unique):
+        # Pulse from 'a' to 'c', so 'b' shouldn't be in the middle.
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a")
+        b.add_deme("b")
+        b.add_deme("c")
+        b.add_pulse(sources=["a"], dest="c", time=100, proportions=[0.1])
+        graph = b.resolve()
+        positions = utils.minimal_crossing_positions(
+            graph, sep=1, unique_interactions=unique
+        )
+
+        def order(deme_names):
+            b = True
+            for j in range(len(deme_names) - 1):
+                b = b and (positions[deme_names[j]] < positions[deme_names[j + 1]])
+            return b
+
+        assert not (order(["a", "b", "c"]) or order(["c", "b", "a"]))
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_pulse_crossing_multiple_sources(self, unique):
+        # Pulses from 'a' and 'b' into 'c', so 'c' should be in the middle.
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a")
+        b.add_deme("b")
+        b.add_deme("c")
+        b.add_pulse(sources=["a", "b"], dest="c", time=100, proportions=[0.1, 0.1])
+        graph = b.resolve()
+        positions = utils.minimal_crossing_positions(
+            graph, sep=1, unique_interactions=unique
+        )
+
+        def order(deme_names):
+            b = True
+            for j in range(len(deme_names) - 1):
+                b = b and (positions[deme_names[j]] < positions[deme_names[j + 1]])
+            return b
+
+        assert order(["a", "c", "b"]) or order(["b", "c", "a"])
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_asymmetric_migration_crossing(self, unique):
+        # Migration from 'a' to 'c', so 'b' shouldn't be in the middle.
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a")
+        b.add_deme("b")
+        b.add_deme("c")
+        b.add_migration(source="a", dest="c", rate=1e-5)
+        graph = b.resolve()
+        positions = utils.minimal_crossing_positions(
+            graph, sep=1, unique_interactions=unique
+        )
+
+        def order(deme_names):
+            b = True
+            for j in range(len(deme_names) - 1):
+                b = b and (positions[deme_names[j]] < positions[deme_names[j + 1]])
+            return b
+
+        assert not (order(["a", "b", "c"]) or order(["c", "b", "a"]))
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_symmetric_migration_crossing(self, unique):
+        # Migration from 'a' to 'c', so 'b' shouldn't be in the middle.
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a")
+        b.add_deme("b")
+        b.add_deme("c")
+        b.add_migration(demes=["a", "c"], rate=1e-5)
+        graph = b.resolve()
+        positions = utils.minimal_crossing_positions(
+            graph, sep=1, unique_interactions=unique
+        )
+
+        def order(deme_names):
+            b = True
+            for j in range(len(deme_names) - 1):
+                b = b and (positions[deme_names[j]] < positions[deme_names[j + 1]])
+            return b
+
+        assert not (order(["a", "b", "c"]) or order(["c", "b", "a"]))
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_ancestor_pulse_migration(self, unique):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a")
+        b.add_deme("b", ancestors=["a"], start_time=100)
+        b.add_deme("c", ancestors=["b"], start_time=50)
+        b.add_pulse(sources=["a"], dest="c", time=20, proportions=[0.1])
+        b.add_migration(source="b", dest="c", rate=1e-5)
+        graph = b.resolve()
+        positions = utils.minimal_crossing_positions(
+            graph, sep=1, unique_interactions=unique
+        )
+
+        def order(deme_names):
+            b = True
+            for j in range(len(deme_names) - 1):
+                b = b and (positions[deme_names[j]] < positions[deme_names[j + 1]])
+            return b
+
+        assert order(["a", "c", "b"]) or order(["b", "c", "a"])
+
+    def test_unique_interactions(self):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a")
+        b.add_deme("b", ancestors=["a"], start_time=100)
+        b.add_deme("c", ancestors=["b"], start_time=50)
+        b.add_pulse(sources=["a"], dest="c", time=40, proportions=[0.1])
+        b.add_pulse(sources=["a"], dest="c", time=30, proportions=[0.1])
+        b.add_pulse(sources=["a"], dest="b", time=40, proportions=[0.1])
+        b.add_pulse(sources=["a"], dest="b", time=30, proportions=[0.1])
+        graph = b.resolve()
+
+        def order(deme_names):
+            b = True
+            for j in range(len(deme_names) - 1):
+                b = b and (positions[deme_names[j]] < positions[deme_names[j + 1]])
+            return b
+
+        # 'a' shouldn't be in the middle.
+        positions = utils.minimal_crossing_positions(
+            graph, sep=1, unique_interactions=True
+        )
+        assert not (order(["b", "a", "c"]) or order(["c", "a", "b"]))
+
+        # 'a' should be in the middle.
+        positions = utils.minimal_crossing_positions(
+            graph, sep=1, unique_interactions=False
+        )
+        assert order(["b", "a", "c"]) or order(["c", "a", "b"]), positions
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_many_demes(self, unique):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        for j in range(20):
+            b.add_deme(f"deme{j}")
+        b.add_pulse(sources=["deme0"], dest="deme2", time=10, proportions=[1.0])
+        graph = b.resolve()
+        positions = utils.minimal_crossing_positions(
+            graph, sep=1, unique_interactions=unique
+        )
+
+        # deme0 and deme2 should be adjacent.
+        assert not positions["deme0"] < positions["deme1"] < positions["deme2"]
+        for j in range(3, 20):
+            assert not positions["deme0"] < positions[f"deme{j}"] < positions["deme2"]
+
+    @pytest.mark.parametrize("graph", tests.example_graphs())
+    @pytest.mark.parametrize("unique", (True, False))
+    @pytest.mark.parametrize("sep", (1, math.pi, 12345))
+    def test_separation_distance(self, graph, unique, sep):
+        positions = utils.minimal_crossing_positions(
+            graph, sep=sep, unique_interactions=unique
+        )
+        for d1 in graph.demes:
+            for d2 in graph.demes:
+                if d1 is d2:
+                    continue
+                assert abs(positions[d1.name] - positions[d2.name]) >= sep
+
+
+class TestCoexistenceIndices:
+    @pytest.mark.parametrize("n", (1, 2, 3))
+    def test_n_immortal_demes(self, n):
+        # All pairs of demes coexist.
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        for j in range(n):
+            b.add_deme(f"deme{j}")
+        graph = b.resolve()
+        idx = utils.coexistence_indices(graph)
+        assert set(idx) == set(itertools.combinations(range(n), 2))
+
+    @pytest.mark.parametrize("n", (1, 2, 3))
+    def test_succesive_descendents(self, n):
+        # Only one deme exists at any given time.
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        for j in range(n):
+            ancestors = []
+            if j != 0:
+                ancestors = [f"deme{j-1}"]
+            b.add_deme(f"deme{j}", ancestors=ancestors, epochs=[dict(end_time=100 - j)])
+        graph = b.resolve()
+        idx = utils.coexistence_indices(graph)
+        assert len(idx) == 0
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_tree_like1(self, unique):
+        # Tree-like ancestry.
+        # |
+        # |\
+        # | |\
+        # a b c
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a")
+        b.add_deme("b", ancestors=["a"], start_time=100)
+        b.add_deme("c", ancestors=["b"], start_time=50)
+        graph = b.resolve()
+        idx = utils.coexistence_indices(graph)
+        assert len(idx) == 3
+        assert (0, 1) in idx
+        assert (0, 2) in idx
+        assert (1, 2) in idx
+
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_tree_like2(self, unique):
+        # Tree-like ancestry.
+        # |
+        # a
+        # |\
+        # | |\
+        # b c d
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        b.add_deme("a", epochs=[dict(end_time=100)])
+        b.add_deme("b", ancestors=["a"])
+        b.add_deme("c", ancestors=["b"], start_time=50)
+        b.add_deme("d", ancestors=["c"], start_time=10)
+        graph = b.resolve()
+        idx = utils.coexistence_indices(graph)
+        assert len(idx) == 3
+        assert (1, 2) in idx
+        assert (1, 3) in idx
+        assert (2, 3) in idx
+
+
+class TestOptimisePositions:
+    @pytest.mark.parametrize("graph", tests.example_graphs())
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_ordering_doesnt_change(self, graph, unique):
+        sep = 1
+        positions1 = utils.minimal_crossing_positions(
+            graph, sep=sep, unique_interactions=unique
+        )
+        positions2 = utils.optimise_positions(
+            graph, positions1, sep=sep, unique_interactions=unique
+        )
+        for j, k in utils.coexistence_indices(graph):
+            if positions1[graph.demes[j].name] < positions1[graph.demes[j].name]:
+                assert positions2[graph.demes[j].name] < positions2[graph.demes[j].name]
+            elif positions1[graph.demes[j].name] > positions1[graph.demes[j].name]:
+                assert positions2[graph.demes[j].name] > positions2[graph.demes[j].name]
+
+    @pytest.mark.parametrize("graph", tests.example_graphs())
+    @pytest.mark.parametrize("unique", (True, False))
+    @pytest.mark.parametrize("sep", (1, math.pi, 12345))
+    def test_separation_distance(self, graph, unique, sep):
+        positions1 = utils.minimal_crossing_positions(
+            graph, sep=sep, unique_interactions=unique
+        )
+        positions2 = utils.optimise_positions(
+            graph, positions1, sep=sep, unique_interactions=unique
+        )
+        epsilon = 1e-3  # Small amount of wiggle room for numerical error.
+        for j, k in utils.coexistence_indices(graph):
+            assert (
+                abs(positions2[graph.demes[j].name] - positions2[graph.demes[k].name])
+                >= sep - epsilon
+            )

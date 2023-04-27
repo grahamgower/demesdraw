@@ -4,11 +4,11 @@ import math
 from typing import Dict, List, Mapping, Set, Tuple, Union
 import warnings
 
-import cvxpy as cp
 import demes
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.optimize
 
 __all__ = [
     "get_fig_axes",
@@ -329,6 +329,18 @@ def interactions_indices(graph: demes.Graph, *, unique: bool) -> List[Tuple[int,
 
 
 def _get_line_candidates(graph: demes.Graph, unique: bool):
+    """
+    Construct candidate orderings that, if present, would cause lines to cross.
+
+    Each candidate is a triplet of demes, [A, B, C], which says that when the
+    demes A,B,C are ordered with B between A and C, then there will be a line
+    drawn between A and C that will cross deme B.
+
+    :return:
+        A 2d numpy array of candidate indices, where each row is a candidate
+        triplet, and the array entries are the deme indexes (which correspond
+        to the ordering of the demes in the graph).
+    """
     candidates = []
     # Ancestry lines.
     for child in graph.demes:
@@ -377,7 +389,7 @@ def _line_crossings(xx: np.ndarray, candidates: np.ndarray) -> np.ndarray:
         Specifically, xx[j, k] is the position of deme k in the j'th
         proposed positions vector.
     :param candidates:
-        A 2d array of candidate indices.
+        A 2d array of candidate indices. See _get_line_candidates().
     :return:
         The number of lines crossing demes. This is a 1d array
         of counts, one for each vector of proposed positions.
@@ -397,7 +409,7 @@ def minimal_crossing_positions(
     *,
     sep: float,
     unique_interactions: bool,
-    maxiter: int = 1000000,
+    maxiter: int = 1_000_000,
     seed: int = 1234,
 ) -> Dict[str, float]:
     """
@@ -409,6 +421,10 @@ def minimal_crossing_positions(
     orderings may be evaluated; otherwise up to ``maxiter`` random
     permutations are evaluated. If a proposed ordering produces zero line
     crossings, the algorithm terminates early.
+
+    The default positions matches the ordering of demes in the graph,
+    and this order will be used in preference, if no better ordering
+    is found.
 
     :param graph:
         Graph for which positions should be obtained.
@@ -461,7 +477,7 @@ def minimal_crossing_positions(
     return {deme.name: float(pos) for deme, pos in zip(graph.demes, x_best)}
 
 
-def cvxpy_optimise(
+def optimise_positions(
     graph: demes.Graph,
     positions: Mapping[str, float],
     *,
@@ -471,16 +487,14 @@ def cvxpy_optimise(
     """
     Optimise the given positions into a tree-like layout.
 
-    Convex optimisation is used to minimise the distances:
-
+    The objective is to minimise the distances:
       - from each parent deme to the mean position of its children,
       - and between interacting demes (where interactions are either
         migrations or pulses).
 
-    Subject to the constraints that:
-
-      - demes are ordered like in the input ``positions``,
-      - and demes have a minimum separation distance ``sep``.
+    Subject to the constraints that contemporaneous demes:
+      - are ordered like in the input ``positions``,
+      - and have a minimum separation distance ``sep``.
 
     :param graph:
         Graph for which positions should be optimised.
@@ -492,35 +506,53 @@ def cvxpy_optimise(
         A dictionary mapping deme names to positions.
     """
     contemporaries = coexistence_indices(graph)
-    if len(contemporaries) == 0:
-        # There are no constraints, so stack demes on top of each other.
-        return {deme.name: 0 for deme in graph.demes}
     successors = successors_indices(graph)
     interactions = interactions_indices(graph, unique=unique_interactions)
+    if len(contemporaries) == 0 or (len(successors) == 0 and len(interactions) == 0):
+        # There are no constraints, so stack demes on top of each other.
+        return {deme.name: 0 for deme in graph.demes}
 
-    vs = [cp.Variable() for _ in graph.demes]
+    x0 = np.array([positions[deme.name] for deme in graph.demes])
     # Place the root at position 0.
-    vs[0].value = 0
+    x0 -= x0[0]
 
-    z = 0
-    for parent, children in successors.items():
-        a = vs[parent]
-        b = sum(vs[child] for child in children) / len(children)
-        z += (a - b) ** 2
-    if len(interactions) > 0:
-        z += cp.sum_squares(cp.hstack([vs[j] - vs[k] for j, k in interactions]))
-    objective = cp.Minimize(z)
+    def objective(x):
+        z = 0
+        for parent, children in successors.items():
+            a = x[parent]
+            b = sum(x[child] for child in children) / len(children)
+            z += (a - b) ** 2
+        for j, k in interactions:
+            z += (x[j] - x[k]) ** 2
+        return z
 
+    # Ensure that contemporaries are ordered and separated by sep.
     constraints = []
-    x = np.array([positions[deme.name] for deme in graph.demes])
     for j, k in contemporaries:
-        if x[j] < x[k]:
+        if x0[j] < x0[k]:
             j, k = k, j
-        constraints.append(vs[j] - vs[k] >= sep)
+        c = [0] * len(x0)
+        c[j] = 1
+        c[k] = -1
+        constraints.append(c)
+    linear_constraint = scipy.optimize.LinearConstraint(constraints, lb=sep, ub=np.inf)
 
-    prob = cp.Problem(objective, constraints)
-    prob.solve("OSQP")
-    if prob.status != cp.OPTIMAL:
-        raise RuntimeError(f"Failed to optimise: {prob}")
+    with warnings.catch_warnings():
+        # Ignore warnings asking us if we're trying to optimise a linear function.
+        # I guess this is triggered when x0 is the optimal solution.
+        warnings.filterwarnings(
+            "ignore", message="delta_grad == 0.0", category=UserWarning, module="scipy"
+        )
+        res = scipy.optimize.minimize(
+            objective,
+            x0,
+            method="trust-constr",
+            constraints=[linear_constraint],
+        )
 
-    return {graph.demes[j].name: float(v.value) for j, v in enumerate(vs)}
+    if not res.success:
+        raise RuntimeError(f"Failed to optimise: {res}")
+
+    x = res.x
+
+    return {graph.demes[j].name: float(xj) for j, xj in enumerate(x)}
