@@ -1,5 +1,11 @@
 # Changelog
 
+## unreleased
+
+* Removed dependency on `cvxpy` by going back to `scipy`
+  for optimisation of the deme positions. The trust-constr
+  method with linear constraints seems to work well.
+
 ## [0.3.1] - 2022-09-19
 
 * Added mouseover annotation popups for interactive tubes plots.

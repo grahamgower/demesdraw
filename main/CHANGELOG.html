@@ -136,7 +136,7 @@ const thebe_selector_output = ".output, .cell_output"
              <!-- To handle the deprecated key -->
             
             <div class="navbar_extra_footer">
-            demesdraw 0.3.2.dev72
+            demesdraw 0.3.2.dev74
             </div>
             
         </div>
@@ -323,6 +323,11 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#unreleased">
+   unreleased
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id1">
    [0.3.1] - 2022-09-19
   </a>
@@ -382,6 +387,11 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#unreleased">
+   unreleased
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id1">
    [0.3.1] - 2022-09-19
   </a>
@@ -433,6 +443,14 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">#</a></h1>
+<section id="unreleased">
+<h2>unreleased<a class="headerlink" href="#unreleased" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Removed dependency on <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> by going back to <code class="docutils literal notranslate"><span class="pre">scipy</span></code>
+for optimisation of the deme positions. The trust-constr
+method with linear constraints seems to work well.</p></li>
+</ul>
+</section>
 <section id="id1">
 <h2>[0.3.1] - 2022-09-19<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
@@ -554,7 +572,7 @@ from using a single <code class="docutils literal notranslate"><span class="pre"
   
       &copy; Copyright 2021.<br/>
     <div class="extra_footer">
-      demesdraw 0.3.2.dev72+g0b7d850
+      demesdraw 0.3.2.dev74+g0a1d9b1
     </div>
 </p>
         </footer>
