@@ -168,6 +168,7 @@ def tubes(
     max_time: float | None = None,
     labels: str = "xticks-mid",
     fill: bool = True,
+    scale_bar: bool = False,
 ) -> matplotlib.axes.Axes:
     """
     Plot a demes-as-tubes schematic of the graph and the demes' relationships.
@@ -247,6 +248,9 @@ def tubes(
     :param fill:
         If True, the inside of the tubes will be painted.
         If False, only the outline of the tubes will be drawn.
+    :param scale_bar:
+        If True, draw a scale bar that indicates population size.
+        If False (*default*), no scale bar will be shown.
     :return:
         The matplotlib axes onto which the figure was drawn.
     """
@@ -517,14 +521,34 @@ def tubes(
 
     ax.set_xticks(xticks)
     ax.set_xticklabels(xticklabels)
-    ax.tick_params("x", length=0)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
+    ax.tick_params(axis="x", length=0)
+    ax.tick_params(axis="x", which="minor", bottom=False)
+    ax.spines[["top", "right", "bottom"]].set_visible(False)
 
     ax.set_ylabel(f"time ago ({graph.time_units})")
 
     ax.set_ylim(1 if log_time else 0, inf_start_time)
+
+    if scale_bar:
+        # Plot a scale bar that indicates the population size.
+        width = utils.size_max(graph)
+        transform = matplotlib.transforms.blended_transform_factory(
+            ax.transData, ax.transAxes
+        )
+        x_offset = min(min(t.size1) for t in tubes.values())
+        # x_offset = max(max(t.size2) for t in tubes.values()) - width
+        ax_sb = ax.inset_axes([x_offset, -0.15, width, 0.01], transform=transform)
+
+        ax_sb.yaxis.set_major_locator(matplotlib.ticker.NullLocator())
+        ax_sb.spines[["left", "right", "top"]].set_visible(False)
+        ax_sb.xaxis.set_ticks_position("bottom")
+        locator = matplotlib.ticker.AutoLocator()
+        locator.set_params(integer=True)
+        ax_sb.xaxis.set_major_locator(locator)
+        ax_sb.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+        ax_sb.set_xlim(0, width)
+        ax_sb.set_xlabel("deme size (individuals)")
+        ax_sb.xaxis.set_label_position("top")
 
     # Status bar text when in interactive mode.
     def format_coord(x, y):
