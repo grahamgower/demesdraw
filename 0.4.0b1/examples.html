@@ -1,0 +1,602 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Examples &#8212; DemesDraw</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="CHANGELOG.html" />
+    <link rel="prev" title="Command line interface" href="cli.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">DemesDraw</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="quickstart.html">
+                    Quickstart
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="api.html">
+   API Reference
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cli.html">
+   Command line interface
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Examples
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="CHANGELOG.html">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            demesdraw 0.4.0b1
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/grahamgower/demesdraw/main?urlpath=tree/docs/examples.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/grahamgower/demesdraw"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/grahamgower/demesdraw/issues/new?title=Issue%20on%20page%20%2Fexamples.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/grahamgower/demesdraw/edit/main/docs/examples.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/examples.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Examples</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">#</a></h1>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">demes</span>
+<span class="kn">import</span> <span class="nn">demesdraw</span>
+<span class="kn">import</span> <span class="nn">demesdraw.utils</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Output SVG.</span>
+<span class="kn">from</span> <span class="nn">matplotlib_inline.backend_inline</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
+<span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Ignore warnings about simultaneous pulses in our examples.</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="s2">&quot;Multiple pulses&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">,</span> <span class="s2">&quot;demes&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_from_yaml</span><span class="p">(</span><span class="n">yaml_filename</span><span class="p">):</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">yaml_filename</span><span class="p">)</span>
+    <span class="n">log_time</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log_time_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">log_size</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log_size_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">size_history</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span>
+        <span class="n">invert_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_time</span><span class="o">=</span><span class="n">log_time</span><span class="p">,</span>
+        <span class="n">log_size</span><span class="o">=</span><span class="n">log_size</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span>
+        <span class="n">log_time</span><span class="o">=</span><span class="n">log_time</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ax1</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ax2</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">ax1</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">ax2</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    
+<span class="c1"># Plot each example yaml in the examples folder.</span>
+<span class="n">cwd</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">examples</span> <span class="o">=</span> <span class="nb">list</span><span class="p">((</span><span class="n">cwd</span> <span class="o">/</span> <span class="s2">&quot;..&quot;</span> <span class="o">/</span> <span class="s2">&quot;examples&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;**/*.yaml&quot;</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">examples</span><span class="p">):</span>
+    <span class="n">plot_from_yaml</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/examples_1_0.svg" src="_images/examples_1_0.svg" /><img alt="_images/examples_1_1.svg" src="_images/examples_1_1.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_3.svg" src="_images/examples_1_3.svg" /><img alt="_images/examples_1_4.svg" src="_images/examples_1_4.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_6.svg" src="_images/examples_1_6.svg" /><img alt="_images/examples_1_7.svg" src="_images/examples_1_7.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_9.svg" src="_images/examples_1_9.svg" /><img alt="_images/examples_1_10.svg" src="_images/examples_1_10.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_12.svg" src="_images/examples_1_12.svg" /><img alt="_images/examples_1_13.svg" src="_images/examples_1_13.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_15.svg" src="_images/examples_1_15.svg" /><img alt="_images/examples_1_16.svg" src="_images/examples_1_16.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_18.svg" src="_images/examples_1_18.svg" /><img alt="_images/examples_1_19.svg" src="_images/examples_1_19.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_21.svg" src="_images/examples_1_21.svg" /><img alt="_images/examples_1_22.svg" src="_images/examples_1_22.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_24.svg" src="_images/examples_1_24.svg" /><img alt="_images/examples_1_25.svg" src="_images/examples_1_25.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_27.svg" src="_images/examples_1_27.svg" /><img alt="_images/examples_1_28.svg" src="_images/examples_1_28.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_30.svg" src="_images/examples_1_30.svg" /><img alt="_images/examples_1_31.svg" src="_images/examples_1_31.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_33.svg" src="_images/examples_1_33.svg" /><img alt="_images/examples_1_34.svg" src="_images/examples_1_34.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_36.svg" src="_images/examples_1_36.svg" /><img alt="_images/examples_1_37.svg" src="_images/examples_1_37.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_39.svg" src="_images/examples_1_39.svg" /><img alt="_images/examples_1_40.svg" src="_images/examples_1_40.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_42.svg" src="_images/examples_1_42.svg" /><img alt="_images/examples_1_43.svg" src="_images/examples_1_43.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_45.svg" src="_images/examples_1_45.svg" /><img alt="_images/examples_1_46.svg" src="_images/examples_1_46.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_48.svg" src="_images/examples_1_48.svg" /><img alt="_images/examples_1_49.svg" src="_images/examples_1_49.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_51.svg" src="_images/examples_1_51.svg" /><img alt="_images/examples_1_52.svg" src="_images/examples_1_52.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_54.svg" src="_images/examples_1_54.svg" /><img alt="_images/examples_1_55.svg" src="_images/examples_1_55.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_57.svg" src="_images/examples_1_57.svg" /><img alt="_images/examples_1_58.svg" src="_images/examples_1_58.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_60.svg" src="_images/examples_1_60.svg" /><img alt="_images/examples_1_61.svg" src="_images/examples_1_61.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_63.svg" src="_images/examples_1_63.svg" /><img alt="_images/examples_1_64.svg" src="_images/examples_1_64.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_66.svg" src="_images/examples_1_66.svg" /><img alt="_images/examples_1_67.svg" src="_images/examples_1_67.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_69.svg" src="_images/examples_1_69.svg" /><img alt="_images/examples_1_70.svg" src="_images/examples_1_70.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_72.svg" src="_images/examples_1_72.svg" /><img alt="_images/examples_1_73.svg" src="_images/examples_1_73.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_75.svg" src="_images/examples_1_75.svg" /><img alt="_images/examples_1_76.svg" src="_images/examples_1_76.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_78.svg" src="_images/examples_1_78.svg" /><img alt="_images/examples_1_79.svg" src="_images/examples_1_79.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_81.svg" src="_images/examples_1_81.svg" /><img alt="_images/examples_1_82.svg" src="_images/examples_1_82.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_84.svg" src="_images/examples_1_84.svg" /><img alt="_images/examples_1_85.svg" src="_images/examples_1_85.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_87.svg" src="_images/examples_1_87.svg" /><img alt="_images/examples_1_88.svg" src="_images/examples_1_88.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_90.svg" src="_images/examples_1_90.svg" /><img alt="_images/examples_1_91.svg" src="_images/examples_1_91.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_93.svg" src="_images/examples_1_93.svg" /><img alt="_images/examples_1_94.svg" src="_images/examples_1_94.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_96.svg" src="_images/examples_1_96.svg" /><img alt="_images/examples_1_97.svg" src="_images/examples_1_97.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_99.svg" src="_images/examples_1_99.svg" /><img alt="_images/examples_1_100.svg" src="_images/examples_1_100.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_102.svg" src="_images/examples_1_102.svg" /><img alt="_images/examples_1_103.svg" src="_images/examples_1_103.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_105.svg" src="_images/examples_1_105.svg" /><img alt="_images/examples_1_106.svg" src="_images/examples_1_106.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_108.svg" src="_images/examples_1_108.svg" /><img alt="_images/examples_1_109.svg" src="_images/examples_1_109.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/examples_1_111.svg" src="_images/examples_1_111.svg" /><img alt="_images/examples_1_112.svg" src="_images/examples_1_112.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="cli.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Command line interface</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="CHANGELOG.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Changelog</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Graham Gower<br/>
+  
+      &copy; Copyright 2021.<br/>
+    <div class="extra_footer">
+      demesdraw 0.4.0b1
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

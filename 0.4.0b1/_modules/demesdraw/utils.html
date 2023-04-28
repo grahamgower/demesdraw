@@ -1,0 +1,858 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>demesdraw.utils &#8212; DemesDraw</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">DemesDraw</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../quickstart.html">
+                    Quickstart
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../api.html">
+   API Reference
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../cli.html">
+   Command line interface
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../examples.html">
+   Examples
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../CHANGELOG.html">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            demesdraw 0.4.0b1
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/grahamgower/demesdraw"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/grahamgower/demesdraw/issues/new?title=Issue%20on%20page%20%2F_modules/demesdraw/utils.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for demesdraw.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">demes</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;get_fig_axes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;size_max&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;size_min&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;log_size_heuristic&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;log_time_heuristic&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;separation_heuristic&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="c1"># Override the symbols that are returned when calling dir(&lt;module-name&gt;).</span>
+<span class="k">def</span> <span class="fm">__dir__</span><span class="p">():</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">__all__</span><span class="p">)</span>
+
+
+<span class="c1"># A colour is either a colour name string (e.g. &quot;blue&quot;), or an RGB triple,</span>
+<span class="c1"># or an RGBA triple.</span>
+<span class="n">Colour</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+<span class="c1"># A mapping from a string to a colour, or just a single colour</span>
+<span class="n">ColourOrColourMapping</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colour</span><span class="p">],</span> <span class="n">Colour</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_get_times</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get all times in the graph.</span>
+
+<span class="sd">    :param demes.Graph: The graph.</span>
+<span class="sd">    :return: The set of times found in the graph.</span>
+<span class="sd">    :rtype: set[float]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">:</span>
+        <span class="n">times</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">deme</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">deme</span><span class="o">.</span><span class="n">epochs</span><span class="p">:</span>
+            <span class="n">times</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">epoch</span><span class="o">.</span><span class="n">end_time</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">migration</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">migrations</span><span class="p">:</span>
+        <span class="n">times</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">migration</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span>
+        <span class="n">times</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">migration</span><span class="o">.</span><span class="n">end_time</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
+        <span class="n">times</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">times</span>
+
+
+<span class="k">def</span> <span class="nf">_inf_start_time</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">inf_ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">log_scale</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the value on the time axis that will be used instead of infinity.</span>
+
+<span class="sd">    :param demes.Graph graph: The graph.</span>
+<span class="sd">    :param float inf_ratio: The proportion of the time axis that will be used</span>
+<span class="sd">        for the time interval which stretches towards infinity.</span>
+<span class="sd">    :param bool log_scale: The time axis uses a log scale.</span>
+<span class="sd">    :return: The time.</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">_get_times</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">times</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+    <span class="n">oldest_noninf_time</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">oldest_noninf_time</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># All demes are root demes and have a constant size.</span>
+        <span class="c1"># About 100 generations is a nice time scale to draw, and we use 113</span>
+        <span class="c1"># specifically so that the infinity line extends slightly beyond the</span>
+        <span class="c1"># last tick mark that matplotlib autogenerates.</span>
+        <span class="n">inf_start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">113</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">log_scale</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">oldest_noninf_time</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># A log scale is a terrible choice for this graph.</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Graph contains features at 0 &lt; time &lt;= 1, which will not &quot;</span>
+                    <span class="s2">&quot;be visible on a log scale.&quot;</span>
+                <span class="p">)</span>
+                <span class="n">oldest_noninf_time</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">inf_start_time</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">oldest_noninf_time</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">inf_ratio</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inf_start_time</span> <span class="o">=</span> <span class="n">oldest_noninf_time</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">inf_ratio</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">inf_start_time</span>
+
+
+<span class="k">def</span> <span class="nf">_get_colours</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
+    <span class="n">colours</span><span class="p">:</span> <span class="n">ColourOrColourMapping</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">default_colour</span><span class="p">:</span> <span class="n">Colour</span> <span class="o">=</span> <span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colour</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert the polymorphic ``colours`` into a dictionary of colours,</span>
+<span class="sd">    keyed by deme name.</span>
+
+<span class="sd">    :param demes.Graph graph: The graph to which colours will apply.</span>
+<span class="sd">    :param colours: The colour or colours.</span>
+<span class="sd">        * If ``colours`` is ``None``, the default colour map will be used.</span>
+<span class="sd">        * If ``colours`` is a dict, it must map deme names to colours.</span>
+<span class="sd">          All demes not in the dict will be drawn with ``default_colour``.</span>
+<span class="sd">        * Otherwise, if ``colours`` can be interpreted as a matplotlib</span>
+<span class="sd">          colour, all demes will be drawn with this colour.</span>
+<span class="sd">    :type: dict or str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">colours</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">colormaps</span><span class="p">,</span> <span class="s2">&quot;get_cmap&quot;</span><span class="p">):</span>
+            <span class="n">get_cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colormaps</span><span class="o">.</span><span class="n">get_cmap</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># XXX: matplotlib &lt; 3.6 compat</span>
+            <span class="n">get_cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;tab10&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;tab20&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Graph has more than 20 demes, so colours must be specified.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">new_colours</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">cmap</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colours</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="n">bad_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">colours</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bad_names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Colours given for deme(s) </span><span class="si">{</span><span class="n">bad_names</span><span class="si">}</span><span class="s2">, but deme(s) were &quot;</span>
+                <span class="s2">&quot;not found in the graph.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">new_colours</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">default_colour</span> <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">}</span>
+        <span class="n">new_colours</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">colours</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Try to interpret as a matplotlib colour.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">colour</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">colours</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Colour &#39;</span><span class="si">{</span><span class="n">colours</span><span class="si">}</span><span class="s2">&#39; not interpretable as a matplotlib colour&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="n">new_colours</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">colour</span> <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">new_colours</span>
+
+
+<div class="viewcode-block" id="get_fig_axes"><a class="viewcode-back" href="../../api.html#demesdraw.utils.get_fig_axes">[docs]</a><span class="k">def</span> <span class="nf">get_fig_axes</span><span class="p">(</span>
+    <span class="n">aspect</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a matplotlib figure and axes.</span>
+
+<span class="sd">    The default width and height of a matplotlib figure is 6.4 x 4.8 inches.</span>
+<span class="sd">    To create axes on a figure with other sizes, the ``figsize`` argument</span>
+<span class="sd">    can be passed to :func:`matplotlib.pyplot.subplots`.</span>
+<span class="sd">    The ``get_fig_axes()`` function creates an axes on a figure with an</span>
+<span class="sd">    alternative parameterisation that is useful for screen display of</span>
+<span class="sd">    vector images.</span>
+
+<span class="sd">    An ``aspect`` parameter sets the aspect ratio, and a ``scale`` parameter</span>
+<span class="sd">    multiplies the figure size. Increasing the scale will have the effect of</span>
+<span class="sd">    decreasing the size of objects in the figure (including fonts),</span>
+<span class="sd">    and increasing the amount of space between objects.</span>
+
+<span class="sd">    :param aspect: The aspect ratio (height/width) of the figure.</span>
+<span class="sd">        This value will be passed to :func:`matplotlib.figure.figaspect` to</span>
+<span class="sd">        obtain the figure&#39;s width and height dimensions.</span>
+<span class="sd">        If not specified, 9/16 will be used.</span>
+<span class="sd">    :param scale: Multiply the figure width and height by this value.</span>
+<span class="sd">        If not specified, 1.0 will be used.</span>
+<span class="sd">    :param kwargs: Further keyword args will be passed directly to</span>
+<span class="sd">        :func:`matplotlib.pyplot.subplots`.</span>
+<span class="sd">    :return: A 2-tuple containing the matplotlib figure and axes,</span>
+<span class="sd">        as returned by :func:`matplotlib.pyplot.subplots`.</span>
+<span class="sd">    :rtype: tuple[matplotlib.figure.Figure, matplotlib.axes.Axes]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">aspect</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">aspect</span> <span class="o">=</span> <span class="mf">9.0</span> <span class="o">/</span> <span class="mf">16.0</span>
+    <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">scale</span> <span class="o">*</span> <span class="n">plt</span><span class="o">.</span><span class="n">figaspect</span><span class="p">(</span><span class="n">aspect</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">fig</span><span class="o">.</span><span class="n">get_constrained_layout</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">&quot;set_layout_engine&quot;</span><span class="p">):</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">set_layout_engine</span><span class="p">(</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># matplotlib &lt; 3.6 compat</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
+
+
+<div class="viewcode-block" id="size_max"><a class="viewcode-back" href="../../api.html#demesdraw.utils.size_max">[docs]</a><span class="k">def</span> <span class="nf">size_max</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the maximum deme size in the graph.</span>
+
+<span class="sd">    :param demes.Graph graph: The graph.</span>
+<span class="sd">    :return: The maximum deme size.</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span>
+        <span class="nb">max</span><span class="p">(</span><span class="n">epoch</span><span class="o">.</span><span class="n">start_size</span><span class="p">,</span> <span class="n">epoch</span><span class="o">.</span><span class="n">end_size</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span>
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">deme</span><span class="o">.</span><span class="n">epochs</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="size_min"><a class="viewcode-back" href="../../api.html#demesdraw.utils.size_min">[docs]</a><span class="k">def</span> <span class="nf">size_min</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the minimum deme size in the graph.</span>
+
+<span class="sd">    :param demes.Graph graph: The graph.</span>
+<span class="sd">    :return: The minimum deme size.</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span>
+        <span class="nb">min</span><span class="p">(</span><span class="n">epoch</span><span class="o">.</span><span class="n">start_size</span><span class="p">,</span> <span class="n">epoch</span><span class="o">.</span><span class="n">end_size</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span>
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">deme</span><span class="o">.</span><span class="n">epochs</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="log_size_heuristic"><a class="viewcode-back" href="../../api.html#demesdraw.utils.log_size_heuristic">[docs]</a><span class="k">def</span> <span class="nf">log_size_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decide whether or not to use log scale for sizes.</span>
+
+<span class="sd">    :param demes.Graph graph: The graph.</span>
+<span class="sd">    :return: True if log scale should be used or False otherwise.</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">size_max</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span> <span class="o">/</span> <span class="n">size_min</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="n">log_size</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">log_size</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">log_size</span></div>
+
+
+<div class="viewcode-block" id="log_time_heuristic"><a class="viewcode-back" href="../../api.html#demesdraw.utils.log_time_heuristic">[docs]</a><span class="k">def</span> <span class="nf">log_time_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decide whether or not to use log scale for times.</span>
+
+<span class="sd">    :param demes.Graph graph:</span>
+<span class="sd">        The graph.</span>
+<span class="sd">    :return:</span>
+<span class="sd">        True if log scale should be used or False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">_get_times</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">times</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">times</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">max</span><span class="p">(</span><span class="n">times</span><span class="p">)</span> <span class="o">/</span> <span class="nb">min</span><span class="p">(</span><span class="n">times</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="n">log_time</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">log_time</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">log_time</span></div>
+
+
+<span class="k">def</span> <span class="nf">_contemporaries_max</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The maximum number of contemporary demes at any time.&quot;&quot;&quot;</span>
+    <span class="n">c_max</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">deme_j</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">deme_k</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">deme_j</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">deme_k</span> <span class="ow">and</span> <span class="n">_intersect</span><span class="p">(</span><span class="n">deme_j</span><span class="p">,</span> <span class="n">deme_k</span><span class="p">):</span>
+                <span class="n">c</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">c_max</span><span class="p">:</span>
+            <span class="n">c_max</span> <span class="o">=</span> <span class="n">c</span>
+    <span class="k">return</span> <span class="n">c_max</span>
+
+
+<div class="viewcode-block" id="separation_heuristic"><a class="viewcode-back" href="../../api.html#demesdraw.utils.separation_heuristic">[docs]</a><span class="k">def</span> <span class="nf">separation_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find a reasonable separation distance for deme positions.</span>
+
+<span class="sd">    :param demes.Graph graph:</span>
+<span class="sd">        The graph.</span>
+<span class="sd">    :return:</span>
+<span class="sd">        The separation distance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># This looks ok. See spacing.pdf produced by tests/plot_examples.py.</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">_contemporaries_max</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="o">*</span> <span class="n">size_max</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_intersect</span><span class="p">(</span>
+    <span class="n">dm_j</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">demes</span><span class="o">.</span><span class="n">Deme</span><span class="p">,</span> <span class="n">demes</span><span class="o">.</span><span class="n">AsymmetricMigration</span><span class="p">],</span>
+    <span class="n">dm_k</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">demes</span><span class="o">.</span><span class="n">Deme</span><span class="p">,</span> <span class="n">demes</span><span class="o">.</span><span class="n">AsymmetricMigration</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns true if dm_j and dm_k intersect in time.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="n">dm_j</span><span class="o">.</span><span class="n">end_time</span> <span class="o">&gt;=</span> <span class="n">dm_k</span><span class="o">.</span><span class="n">start_time</span> <span class="ow">or</span> <span class="n">dm_k</span><span class="o">.</span><span class="n">end_time</span> <span class="o">&gt;=</span> <span class="n">dm_j</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">coexistence_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pairs of indices of demes that exist simultaneously.&quot;&quot;&quot;</span>
+    <span class="n">contemporaries</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme_j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">deme_k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:],</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">_intersect</span><span class="p">(</span><span class="n">deme_j</span><span class="p">,</span> <span class="n">deme_k</span><span class="p">):</span>
+                <span class="n">contemporaries</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">contemporaries</span>
+
+
+<span class="k">def</span> <span class="nf">successors_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Graph successors, but use indices rather than deme names&quot;&quot;&quot;</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">j</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
+    <span class="n">successors</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">deme</span><span class="p">,</span> <span class="n">children</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">successors</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">successors</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">deme</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">successors</span>
+
+
+<span class="k">def</span> <span class="nf">interactions_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">unique</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pairs of indices of demes that exchange migrants (migrations or pulses).&quot;&quot;&quot;</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">j</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
+    <span class="n">interactions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">migration</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">migrations</span><span class="p">:</span>
+        <span class="n">interactions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">idx</span><span class="p">[</span><span class="n">migration</span><span class="o">.</span><span class="n">source</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="n">migration</span><span class="o">.</span><span class="n">dest</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">pulse</span><span class="o">.</span><span class="n">sources</span><span class="p">:</span>
+            <span class="n">interactions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">idx</span><span class="p">[</span><span class="n">source</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="n">pulse</span><span class="o">.</span><span class="n">dest</span><span class="p">]))</span>
+
+    <span class="k">if</span> <span class="n">unique</span><span class="p">:</span>
+        <span class="c1"># Remove duplicates.</span>
+        <span class="n">i2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">interactions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="ow">in</span> <span class="n">i2</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">i2</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+        <span class="n">interactions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">i2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">interactions</span>
+
+
+<span class="k">def</span> <span class="nf">_get_line_candidates</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">unique</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Construct candidate orderings that, if present, would cause lines to cross.</span>
+
+<span class="sd">    Each candidate is a triplet of demes, [A, B, C], which says that when the</span>
+<span class="sd">    demes A,B,C are ordered with B between A and C, then there will be a line</span>
+<span class="sd">    drawn between A and C that will cross deme B.</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        A 2d numpy array of candidate indices, where each row is a candidate</span>
+<span class="sd">        triplet, and the array entries are the deme indexes (which correspond</span>
+<span class="sd">        to the ordering of the demes in the graph).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Ancestry lines.</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">parent_name</span> <span class="ow">in</span> <span class="n">child</span><span class="o">.</span><span class="n">ancestors</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">deme</span> <span class="ow">is</span> <span class="n">child</span> <span class="ow">or</span> <span class="n">deme</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">parent_name</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">deme</span><span class="o">.</span><span class="n">start_time</span> <span class="o">&gt;</span> <span class="n">child</span><span class="o">.</span><span class="n">start_time</span> <span class="o">&gt;</span> <span class="n">deme</span><span class="o">.</span><span class="n">end_time</span><span class="p">:</span>
+                    <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">child</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_name</span><span class="p">))</span>
+    <span class="c1"># Pulse lines.</span>
+    <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">pulse</span><span class="o">.</span><span class="n">sources</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">deme</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pulse</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">source</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">deme</span><span class="o">.</span><span class="n">start_time</span> <span class="o">&gt;</span> <span class="n">pulse</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;</span> <span class="n">deme</span><span class="o">.</span><span class="n">end_time</span><span class="p">:</span>
+                    <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">source</span><span class="p">,</span> <span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">pulse</span><span class="o">.</span><span class="n">dest</span><span class="p">))</span>
+    <span class="c1"># Migration blocks.</span>
+    <span class="k">for</span> <span class="n">migration</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">migrations</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">deme</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="n">migration</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">migration</span><span class="o">.</span><span class="n">source</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">_intersect</span><span class="p">(</span><span class="n">deme</span><span class="p">,</span> <span class="n">migration</span><span class="p">):</span>
+                <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">migration</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">migration</span><span class="o">.</span><span class="n">dest</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">unique</span><span class="p">:</span>
+        <span class="c1"># Remove duplicates.</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="ow">in</span> <span class="n">c2</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">c2</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">j</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">idx</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">_line_crossings</span><span class="p">(</span><span class="n">xx</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">candidates</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Count the number of lines that cross one or more demes.</span>
+
+<span class="sd">    :param xx:</span>
+<span class="sd">        The positions of the demes in the graph. This is a 2d array,</span>
+<span class="sd">        where each row in xx is a distinct vector of proposed positions.</span>
+<span class="sd">        Specifically, xx[j, k] is the position of deme k in the j&#39;th</span>
+<span class="sd">        proposed positions vector.</span>
+<span class="sd">    :param candidates:</span>
+<span class="sd">        A 2d array of candidate indices. See _get_line_candidates().</span>
+<span class="sd">    :return:</span>
+<span class="sd">        The number of lines crossing demes. This is a 1d array</span>
+<span class="sd">        of counts, one for each vector of proposed positions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">candidates</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">xx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">candidates</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">xx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">candidates</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">xx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">candidates</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">,</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="n">c</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">,</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">c</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">minimal_crossing_positions</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">sep</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">unique_interactions</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">maxiter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1_000_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find an ordering of demes that minimises line crossings.</span>
+
+<span class="sd">    Lines may be for ancestry, pulses, or migrations. A naive algorithm is</span>
+<span class="sd">    used to search for the optimal ordering: if :math:`n!` &lt;= ``maxiter``,</span>
+<span class="sd">    where ``n`` is the number of demes in the graph, then all possible</span>
+<span class="sd">    orderings may be evaluated; otherwise up to ``maxiter`` random</span>
+<span class="sd">    permutations are evaluated. If a proposed ordering produces zero line</span>
+<span class="sd">    crossings, the algorithm terminates early.</span>
+
+<span class="sd">    The default positions matches the ordering of demes in the graph,</span>
+<span class="sd">    and this order will be used in preference, if no better ordering</span>
+<span class="sd">    is found.</span>
+
+<span class="sd">    :param graph:</span>
+<span class="sd">        Graph for which positions should be obtained.</span>
+<span class="sd">    :param sep:</span>
+<span class="sd">        The separation distance between demes.</span>
+<span class="sd">    :param maxiter:</span>
+<span class="sd">        Maximum number of orderings to search through.</span>
+<span class="sd">    :param seed:</span>
+<span class="sd">        Seed for the random number generator.</span>
+<span class="sd">    :return:</span>
+<span class="sd">        A dictionary mapping deme names to positions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Initial ordering.</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sep</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">),</span> <span class="n">sep</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">propose_positions_batches</span><span class="p">(</span><span class="n">num_proposals</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">num_proposals</span><span class="p">:</span>
+            <span class="c1"># Generate all permutations.</span>
+            <span class="n">iperms</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">permutations</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">x_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">islice</span><span class="p">(</span><span class="n">iperms</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)))</span>
+                <span class="k">if</span> <span class="n">x_batch</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">yield</span> <span class="n">x_batch</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Generate random permutations.</span>
+            <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+            <span class="n">remaining</span> <span class="o">=</span> <span class="n">num_proposals</span>
+            <span class="k">while</span> <span class="n">remaining</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">remaining</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="n">rng</span><span class="o">.</span><span class="n">permuted</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+                <span class="p">)</span>
+                <span class="n">remaining</span> <span class="o">-=</span> <span class="n">batch_size</span>
+
+    <span class="n">candidates</span> <span class="o">=</span> <span class="n">_get_line_candidates</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="n">unique_interactions</span><span class="p">)</span>
+    <span class="n">crosses</span> <span class="o">=</span> <span class="n">_line_crossings</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">candidates</span><span class="p">)</span>
+    <span class="n">x_best</span> <span class="o">=</span> <span class="n">x0</span>
+    <span class="k">if</span> <span class="n">crosses</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">x_proposal_batch</span> <span class="ow">in</span> <span class="n">propose_positions_batches</span><span class="p">(</span><span class="n">maxiter</span><span class="p">):</span>
+            <span class="n">proposal_crosses</span> <span class="o">=</span> <span class="n">_line_crossings</span><span class="p">(</span><span class="n">x_proposal_batch</span><span class="p">,</span> <span class="n">candidates</span><span class="p">)</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">proposal_crosses</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">proposal_crosses</span><span class="p">[</span><span class="n">best</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">crosses</span><span class="p">:</span>
+                <span class="n">crosses</span> <span class="o">=</span> <span class="n">proposal_crosses</span><span class="p">[</span><span class="n">best</span><span class="p">]</span>
+                <span class="n">x_best</span> <span class="o">=</span> <span class="n">x_proposal_batch</span><span class="p">[</span><span class="n">best</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">crosses</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">deme</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">,</span> <span class="n">x_best</span><span class="p">)}</span>
+
+
+<span class="k">def</span> <span class="nf">optimise_positions</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
+    <span class="n">positions</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">sep</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">unique_interactions</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Optimise the given positions into a tree-like layout.</span>
+
+<span class="sd">    The objective is to minimise the distances:</span>
+<span class="sd">      - from each parent deme to the mean position of its children,</span>
+<span class="sd">      - and between interacting demes (where interactions are either</span>
+<span class="sd">        migrations or pulses).</span>
+
+<span class="sd">    Subject to the constraints that contemporaneous demes:</span>
+<span class="sd">      - are ordered like in the input ``positions``,</span>
+<span class="sd">      - and have a minimum separation distance ``sep``.</span>
+
+<span class="sd">    :param graph:</span>
+<span class="sd">        Graph for which positions should be optimised.</span>
+<span class="sd">    :param positions:</span>
+<span class="sd">        A dictionary mapping deme names to positions.</span>
+<span class="sd">    :param sep:</span>
+<span class="sd">        The minimum separation distance between contemporary demes.</span>
+<span class="sd">    :return:</span>
+<span class="sd">        A dictionary mapping deme names to positions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">contemporaries</span> <span class="o">=</span> <span class="n">coexistence_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">successors</span> <span class="o">=</span> <span class="n">successors_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">interactions</span> <span class="o">=</span> <span class="n">interactions_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="n">unique_interactions</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contemporaries</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">successors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">interactions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="c1"># There are no constraints, so stack demes on top of each other.</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">}</span>
+
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">positions</span><span class="p">[</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">])</span>
+    <span class="c1"># Place the root at position 0.</span>
+    <span class="n">x0</span> <span class="o">-=</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">parent</span><span class="p">,</span> <span class="n">children</span> <span class="ow">in</span> <span class="n">successors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">)</span>
+            <span class="n">z</span> <span class="o">+=</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">interactions</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">+=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">z</span>
+
+    <span class="c1"># Ensure that contemporaries are ordered and separated by sep.</span>
+    <span class="n">constraints</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">contemporaries</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x0</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x0</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+            <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="p">,</span> <span class="n">j</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+        <span class="n">c</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">c</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">linear_constraint</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">LinearConstraint</span><span class="p">(</span><span class="n">constraints</span><span class="p">,</span> <span class="n">lb</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span> <span class="n">ub</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+        <span class="c1"># Ignore warnings asking us if we&#39;re trying to optimise a linear function.</span>
+        <span class="c1"># I guess this is triggered when x0 is the optimal solution.</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+            <span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;delta_grad == 0.0&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span>
+        <span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span>
+            <span class="n">objective</span><span class="p">,</span>
+            <span class="n">x0</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;trust-constr&quot;</span><span class="p">,</span>
+            <span class="n">constraints</span><span class="o">=</span><span class="p">[</span><span class="n">linear_constraint</span><span class="p">],</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to optimise: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">xj</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">xj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">)}</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Graham Gower<br/>
+  
+      &copy; Copyright 2021.<br/>
+    <div class="extra_footer">
+      demesdraw 0.4.0b1
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
