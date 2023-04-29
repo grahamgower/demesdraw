@@ -413,18 +413,21 @@ def minimal_crossing_positions(
     seed: int = 1234,
 ) -> Dict[str, float]:
     """
-    Find an ordering of demes that minimises line crossings.
+    Find an ordering of demes that minimises lines crossing demes.
 
-    Lines may be for ancestry, pulses, or migrations. A naive algorithm is
-    used to search for the optimal ordering: if :math:`n!` <= ``maxiter``,
-    where ``n`` is the number of demes in the graph, then all possible
-    orderings may be evaluated; otherwise up to ``maxiter`` random
-    permutations are evaluated. If a proposed ordering produces zero line
-    crossings, the algorithm terminates early.
+    Lines may be for ancestry, pulses, or migrations. Finding the optimal
+    ordering is hard, but counting how many lines cross for any given ordering
+    is simple, and can be calculated for multiple candidate orderings using
+    vectorised numpy operations. So a naive algorithm is used to search for
+    a good ordering:
+      - if :math:`n!` <= ``maxiter``, where ``n`` is the number of demes in the
+        graph, then all possible orderings may be evaluated,
+      - otherwise up to ``maxiter`` random orderings are evaluated.
 
-    The default positions matches the ordering of demes in the graph,
-    and this order will be used in preference, if no better ordering
-    is found.
+    If a proposed ordering produces zero line crossings, the algorithm
+    terminates early. Furthermore, if no ordering is superior to the order
+    that demes were specified in the model (i.e. the order in ``graph.demes``),
+    then the model's order will be used.
 
     :param graph:
         Graph for which positions should be obtained.
@@ -437,7 +440,7 @@ def minimal_crossing_positions(
     :return:
         A dictionary mapping deme names to positions.
     """
-    # Initial ordering.
+    # Initial ordering according to the model.
     x0 = np.arange(0, sep * len(graph.demes), sep)
 
     def propose_positions_batches(num_proposals: int, batch_size=200):
@@ -477,6 +480,30 @@ def minimal_crossing_positions(
     return {deme.name: float(pos) for deme, pos in zip(graph.demes, x_best)}
 
 
+def _optimise_positions_objective(x, successors, interactions):
+    """
+    Objective to be minimised by optimise_positions().
+
+    :return:
+        A 2-tuple of (f(x), g(x)), where f is the objective function
+        and g is the Jacobian (a vector of partial derivatives of f).
+    """
+    f = 0
+    g = np.zeros_like(x)
+    for parent, children in successors.items():
+        a = x[parent]
+        b = np.mean([x[child] for child in children])
+        f += (a - b) ** 2
+        g[parent] += 2 * (a - b)
+        for child in children:
+            g[child] += 2 * (b - a) / len(children)
+    for j, k in interactions:
+        f += (x[j] - x[k]) ** 2
+        g[j] += 2 * (x[j] - x[k])
+        g[k] += 2 * (x[k] - x[j])
+    return f, g
+
+
 def optimise_positions(
     graph: demes.Graph,
     positions: Mapping[str, float],
@@ -508,50 +535,60 @@ def optimise_positions(
     contemporaries = coexistence_indices(graph)
     successors = successors_indices(graph)
     interactions = interactions_indices(graph, unique=unique_interactions)
-    if len(contemporaries) == 0 or (len(successors) == 0 and len(interactions) == 0):
+    if len(contemporaries) == 0:
         # There are no constraints, so stack demes on top of each other.
         return {deme.name: 0 for deme in graph.demes}
+    if len(successors) == 0 and len(interactions) == 0:
+        # Nothing to optimise. Use the positions provided to us.
+        return dict(positions)
 
     x0 = np.array([positions[deme.name] for deme in graph.demes])
-    # Place the root at position 0.
+    # Place the first deme at position 0.
     x0 -= x0[0]
 
-    def objective(x):
-        z = 0
-        for parent, children in successors.items():
-            a = x[parent]
-            b = sum(x[child] for child in children) / len(children)
-            z += (a - b) ** 2
-        for j, k in interactions:
-            z += (x[j] - x[k]) ** 2
-        return z
-
-    # Ensure that contemporaries are ordered and separated by sep.
-    constraints = []
+    # Build matrix of linear constraints to ensure that contemporaries
+    # are ordered and separated by sep.
+    C = []
     for j, k in contemporaries:
         if x0[j] < x0[k]:
             j, k = k, j
         c = [0] * len(x0)
         c[j] = 1
         c[k] = -1
-        constraints.append(c)
-    linear_constraint = scipy.optimize.LinearConstraint(constraints, lb=sep, ub=np.inf)
+        C.append(c)
+    constraints = [scipy.optimize.LinearConstraint(C, lb=sep, ub=np.inf)]
 
     with warnings.catch_warnings():
-        # Ignore warnings asking us if we're trying to optimise a linear function.
-        # I guess this is triggered when x0 is the optimal solution.
-        warnings.filterwarnings(
-            "ignore", message="delta_grad == 0.0", category=UserWarning, module="scipy"
-        )
         res = scipy.optimize.minimize(
-            objective,
+            _optimise_positions_objective,
             x0,
+            args=(successors, interactions),
+            # The objective function returns a 2-tuple of (f_x, g_x), where f_x
+            # is the objective evalutated at x, and g_x is the Jacobian of f
+            # evaluated at x.
+            jac=True,
+            # Don't use the quasi-Newton Hessian approximation (the default for
+            # method="trust-constr" if nothing is specified). This performs
+            # poorly, and produces warnings, for some of the test cases.
+            # Writing the Hessian function manually would be tedious,
+            # and I'd certainly get it wrong. But since I did manually
+            # implement the Jacobian, scipy can use a finite-difference
+            # approximation for the Hessian, by specifying either "2-point",
+            # "3-point", or "cs". The "2-point" option seems to work fine.
+            hess="2-point",
             method="trust-constr",
-            constraints=[linear_constraint],
+            constraints=constraints,
+            bounds=scipy.optimize.Bounds(lb=np.min(x0) - sep, ub=np.max(x0) + sep),
         )
 
     if not res.success:
-        raise RuntimeError(f"Failed to optimise: {res}")
+        warnings.warn(
+            f"Failed to optimise: {res}\n\n"
+            "Demesdraw can probably do better. "
+            "Please report this in the issue tracker at "
+            "https://github.com/grahamgower/demesdraw/issues"
+        )
+        return dict(positions)
 
     x = res.x
 
