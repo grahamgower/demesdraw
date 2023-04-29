@@ -1,4 +1,5 @@
 import collections
+import functools
 import itertools
 import math
 
@@ -830,3 +831,71 @@ class TestOptimisePositions:
                 abs(positions2[graph.demes[j].name] - positions2[graph.demes[k].name])
                 >= sep - epsilon
             )
+
+    @pytest.mark.parametrize("n", range(5, 10, 15))
+    @pytest.mark.parametrize("unique", (True, False))
+    @pytest.mark.parametrize("migrations", (True, False))
+    def test_island_model(self, n, unique, migrations):
+        b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
+        for j in range(n):
+            b.add_deme(f"d{j}")
+            if migrations and j > 0:
+                b.add_migration(demes=[f"d{j - 1}", f"d{j}"], rate=1e-5)
+        graph = b.resolve()
+
+        sep = utils.separation_heuristic(graph)
+        positions1 = utils.minimal_crossing_positions(
+            graph, sep=sep, unique_interactions=unique
+        )
+        positions2 = utils.optimise_positions(
+            graph, positions1, sep=sep, unique_interactions=unique
+        )
+        epsilon = 1e-3  # Small amount of wiggle room for numerical error.
+        for j, k in utils.coexistence_indices(graph):
+            assert (
+                abs(positions2[graph.demes[j].name] - positions2[graph.demes[k].name])
+                >= sep - epsilon
+            )
+
+    @pytest.mark.parametrize("graph", tests.example_graphs())
+    @pytest.mark.parametrize("unique", (True, False))
+    def test_optimise_gradients(self, graph, unique):
+        # Check that the Jacobian of the objective function is calculated
+        # correctly by comparing it against a numerical approximation.
+        # The mpmath package is used to obtain a good approximation.
+        # This test isn't comprehensive---it only compares the gradients
+        # at the starting position x0.
+        sep = utils.separation_heuristic(graph)
+        positions = utils.minimal_crossing_positions(
+            graph, sep=sep, unique_interactions=unique
+        )
+        successors = utils.successors_indices(graph)
+        interactions = utils.interactions_indices(graph, unique=unique)
+
+        x0 = np.array([positions[deme.name] for deme in graph.demes])
+        # Place the first deme at position 0.
+        x0 -= x0[0]
+
+        fg = functools.partial(
+            utils._optimise_positions_objective,
+            successors=successors,
+            interactions=interactions,
+        )
+
+        def f(*x):
+            # transformed for mpmath.diff
+            return fg(x)[0]
+
+        _, g_x0 = fg(x0)
+        np.testing.assert_almost_equal(g_x0, jacobian(f, x0))
+
+
+def jacobian(f, x):
+    """
+    Jacobian of function f, evaluated at x.
+    """
+    from mpmath import mp
+
+    eye = np.eye(len(x), dtype=int)
+    jac = [mp.diff(f, x, n=row) for row in eye]
+    return jac

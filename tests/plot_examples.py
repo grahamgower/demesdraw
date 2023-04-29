@@ -12,6 +12,7 @@ from tests import example_files
 with PdfPages("spacing.pdf") as pdf:
     for _n in range(30):
         n = _n + 1
+        print(n)
         b = demes.Builder(defaults=dict(epoch=dict(start_size=100)))
         for j in range(n):
             b.add_deme(f"d{j}")
@@ -29,6 +30,7 @@ with PdfPages("spacing.pdf") as pdf:
 with PdfPages("examples.pdf") as pdf:
     for filename in sorted(example_files()):
         title = filename.name
+        print(title)
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", "Multiple pulses", UserWarning, "demes")
             graph = demes.load(filename)
