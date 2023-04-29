@@ -134,7 +134,7 @@ const thebe_selector_output = ".output, .cell_output"
              <!-- To handle the deprecated key -->
             
             <div class="navbar_extra_footer">
-            demesdraw 0.3.2.dev76
+            demesdraw 0.4.0b2.dev2
             </div>
             
         </div>
@@ -675,18 +675,21 @@ title="Open an issue"
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Find an ordering of demes that minimises line crossings.</span>
+<span class="sd">    Find an ordering of demes that minimises lines crossing demes.</span>
 
-<span class="sd">    Lines may be for ancestry, pulses, or migrations. A naive algorithm is</span>
-<span class="sd">    used to search for the optimal ordering: if :math:`n!` &lt;= ``maxiter``,</span>
-<span class="sd">    where ``n`` is the number of demes in the graph, then all possible</span>
-<span class="sd">    orderings may be evaluated; otherwise up to ``maxiter`` random</span>
-<span class="sd">    permutations are evaluated. If a proposed ordering produces zero line</span>
-<span class="sd">    crossings, the algorithm terminates early.</span>
+<span class="sd">    Lines may be for ancestry, pulses, or migrations. Finding the optimal</span>
+<span class="sd">    ordering is hard, but counting how many lines cross for any given ordering</span>
+<span class="sd">    is simple, and can be calculated for multiple candidate orderings using</span>
+<span class="sd">    vectorised numpy operations. So a naive algorithm is used to search for</span>
+<span class="sd">    a good ordering:</span>
+<span class="sd">      - if :math:`n!` &lt;= ``maxiter``, where ``n`` is the number of demes in the</span>
+<span class="sd">        graph, then all possible orderings may be evaluated,</span>
+<span class="sd">      - otherwise up to ``maxiter`` random orderings are evaluated.</span>
 
-<span class="sd">    The default positions matches the ordering of demes in the graph,</span>
-<span class="sd">    and this order will be used in preference, if no better ordering</span>
-<span class="sd">    is found.</span>
+<span class="sd">    If a proposed ordering produces zero line crossings, the algorithm</span>
+<span class="sd">    terminates early. Furthermore, if no ordering is superior to the order</span>
+<span class="sd">    that demes were specified in the model (i.e. the order in ``graph.demes``),</span>
+<span class="sd">    then the model&#39;s order will be used.</span>
 
 <span class="sd">    :param graph:</span>
 <span class="sd">        Graph for which positions should be obtained.</span>
@@ -699,7 +702,7 @@ title="Open an issue"
 <span class="sd">    :return:</span>
 <span class="sd">        A dictionary mapping deme names to positions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Initial ordering.</span>
+    <span class="c1"># Initial ordering according to the model.</span>
     <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sep</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">),</span> <span class="n">sep</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">propose_positions_batches</span><span class="p">(</span><span class="n">num_proposals</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
@@ -739,6 +742,30 @@ title="Open an issue"
     <span class="k">return</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">deme</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">,</span> <span class="n">x_best</span><span class="p">)}</span>
 
 
+<span class="k">def</span> <span class="nf">_optimise_positions_objective</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">successors</span><span class="p">,</span> <span class="n">interactions</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Objective to be minimised by optimise_positions().</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        A 2-tuple of (f(x), g(x)), where f is the objective function</span>
+<span class="sd">        and g is the Jacobian (a vector of partial derivatives of f).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">parent</span><span class="p">,</span> <span class="n">children</span> <span class="ow">in</span> <span class="n">successors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">])</span>
+        <span class="n">f</span> <span class="o">+=</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">g</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">interactions</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">+=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">g</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span>
+
+
 <span class="k">def</span> <span class="nf">optimise_positions</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">positions</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
@@ -770,50 +797,60 @@ title="Open an issue"
     <span class="n">contemporaries</span> <span class="o">=</span> <span class="n">coexistence_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
     <span class="n">successors</span> <span class="o">=</span> <span class="n">successors_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
     <span class="n">interactions</span> <span class="o">=</span> <span class="n">interactions_indices</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="n">unique_interactions</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contemporaries</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">successors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">interactions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contemporaries</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># There are no constraints, so stack demes on top of each other.</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">}</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">successors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">interactions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Nothing to optimise. Use the positions provided to us.</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
 
     <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">positions</span><span class="p">[</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">])</span>
-    <span class="c1"># Place the root at position 0.</span>
+    <span class="c1"># Place the first deme at position 0.</span>
     <span class="n">x0</span> <span class="o">-=</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">parent</span><span class="p">,</span> <span class="n">children</span> <span class="ow">in</span> <span class="n">successors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span>
-            <span class="n">b</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">)</span>
-            <span class="n">z</span> <span class="o">+=</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
-        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">interactions</span><span class="p">:</span>
-            <span class="n">z</span> <span class="o">+=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
-        <span class="k">return</span> <span class="n">z</span>
-
-    <span class="c1"># Ensure that contemporaries are ordered and separated by sep.</span>
-    <span class="n">constraints</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Build matrix of linear constraints to ensure that contemporaries</span>
+    <span class="c1"># are ordered and separated by sep.</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">contemporaries</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">x0</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x0</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
             <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="p">,</span> <span class="n">j</span>
         <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
         <span class="n">c</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">c</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="n">constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-    <span class="n">linear_constraint</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">LinearConstraint</span><span class="p">(</span><span class="n">constraints</span><span class="p">,</span> <span class="n">lb</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span> <span class="n">ub</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+        <span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">LinearConstraint</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">lb</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span> <span class="n">ub</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span>
 
     <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-        <span class="c1"># Ignore warnings asking us if we&#39;re trying to optimise a linear function.</span>
-        <span class="c1"># I guess this is triggered when x0 is the optimal solution.</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
-            <span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;delta_grad == 0.0&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span>
-        <span class="p">)</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span>
-            <span class="n">objective</span><span class="p">,</span>
+            <span class="n">_optimise_positions_objective</span><span class="p">,</span>
             <span class="n">x0</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">successors</span><span class="p">,</span> <span class="n">interactions</span><span class="p">),</span>
+            <span class="c1"># The objective function returns a 2-tuple of (f_x, g_x), where f_x</span>
+            <span class="c1"># is the objective evalutated at x, and g_x is the Jacobian of f</span>
+            <span class="c1"># evaluated at x.</span>
+            <span class="n">jac</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="c1"># Don&#39;t use the quasi-Newton Hessian approximation (the default for</span>
+            <span class="c1"># method=&quot;trust-constr&quot; if nothing is specified). This performs</span>
+            <span class="c1"># poorly, and produces warnings, for some of the test cases.</span>
+            <span class="c1"># Writing the Hessian function manually would be tedious,</span>
+            <span class="c1"># and I&#39;d certainly get it wrong. But since I did manually</span>
+            <span class="c1"># implement the Jacobian, scipy can use a finite-difference</span>
+            <span class="c1"># approximation for the Hessian, by specifying either &quot;2-point&quot;,</span>
+            <span class="c1"># &quot;3-point&quot;, or &quot;cs&quot;. The &quot;2-point&quot; option seems to work fine.</span>
+            <span class="n">hess</span><span class="o">=</span><span class="s2">&quot;2-point&quot;</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;trust-constr&quot;</span><span class="p">,</span>
-            <span class="n">constraints</span><span class="o">=</span><span class="p">[</span><span class="n">linear_constraint</span><span class="p">],</span>
+            <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">Bounds</span><span class="p">(</span><span class="n">lb</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">-</span> <span class="n">sep</span><span class="p">,</span> <span class="n">ub</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">+</span> <span class="n">sep</span><span class="p">),</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to optimise: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Failed to optimise: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;Demesdraw can probably do better. &quot;</span>
+            <span class="s2">&quot;Please report this in the issue tracker at &quot;</span>
+            <span class="s2">&quot;https://github.com/grahamgower/demesdraw/issues&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
 
     <span class="n">x</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span>
 
@@ -838,7 +875,7 @@ title="Open an issue"
   
       &copy; Copyright 2021.<br/>
     <div class="extra_footer">
-      demesdraw 0.3.2.dev76+g039b47f
+      demesdraw 0.4.0b2.dev2+gc002511
     </div>
 </p>
         </footer>
