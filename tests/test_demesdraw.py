@@ -56,6 +56,11 @@ class TestTubes:
     def test_labels_params(self, graph, labels):
         self.check_tubes(graph, labels=labels)
 
+    @pytest.mark.parametrize("scale_bar", [True, False])
+    @pytest.mark.parametrize("graph", tests.example_graphs())
+    def test_scale_bar(self, graph, scale_bar):
+        self.check_tubes(graph, scale_bar=scale_bar)
+
     @pytest.mark.parametrize(
         "colours", [None, "black", dict(), dict(A="red", B="blue", C="pink")]
     )
