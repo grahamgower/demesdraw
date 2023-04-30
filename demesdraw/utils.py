@@ -108,15 +108,10 @@ def _get_colours(
     :type: dict or str
     """
     if colours is None:
-        if hasattr(matplotlib.colormaps, "get_cmap"):
-            get_cmap = matplotlib.colormaps.get_cmap
-        else:
-            # XXX: matplotlib < 3.6 compat
-            get_cmap = matplotlib.cm.get_cmap
         if len(graph.demes) <= 10:
-            cmap = get_cmap("tab10")
+            cmap = plt.get_cmap("tab10")
         elif len(graph.demes) <= 20:
-            cmap = get_cmap("tab20")
+            cmap = plt.get_cmap("tab20")
         else:
             raise ValueError(
                 "Graph has more than 20 demes, so colours must be specified."
