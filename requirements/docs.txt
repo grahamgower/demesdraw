@@ -1,3 +1,4 @@
-jupyter-book==0.13.2
+jupyter-book==0.15.1
+piccolo_theme==0.15.0
 sphinx-issues==3.0.1
 sphinxcontrib-programoutput==0.17
