@@ -1,5 +1,5 @@
 
-# Command line interface
+# CLI reference
 
 ```{program-output} python -m demesdraw -h
 ```
