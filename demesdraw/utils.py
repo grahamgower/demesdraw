@@ -283,7 +283,7 @@ def _intersect(
     return not (dm_j.end_time >= dm_k.start_time or dm_k.end_time >= dm_j.start_time)
 
 
-def coexistence_indices(graph: demes.Graph) -> List[Tuple[int, int]]:
+def _coexistence_indices(graph: demes.Graph) -> List[Tuple[int, int]]:
     """Pairs of indices of demes that exist simultaneously."""
     contemporaries = []
     for j, deme_j in enumerate(graph.demes):
@@ -293,7 +293,7 @@ def coexistence_indices(graph: demes.Graph) -> List[Tuple[int, int]]:
     return contemporaries
 
 
-def successors_indices(graph: demes.Graph) -> Dict[int, List[int]]:
+def _successors_indices(graph: demes.Graph) -> Dict[int, List[int]]:
     """Graph successors, but use indices rather than deme names"""
     idx = {deme.name: j for j, deme in enumerate(graph.demes)}
     successors = dict()
@@ -303,7 +303,7 @@ def successors_indices(graph: demes.Graph) -> Dict[int, List[int]]:
     return successors
 
 
-def interactions_indices(graph: demes.Graph, *, unique: bool) -> List[Tuple[int, int]]:
+def _interactions_indices(graph: demes.Graph, *, unique: bool) -> List[Tuple[int, int]]:
     """Pairs of indices of demes that exchange migrants (migrations or pulses)."""
     idx = {deme.name: j for j, deme in enumerate(graph.demes)}
     interactions = []
@@ -530,9 +530,9 @@ def optimise_positions(
     :return:
         A dictionary mapping deme names to positions.
     """
-    contemporaries = coexistence_indices(graph)
-    successors = successors_indices(graph)
-    interactions = interactions_indices(graph, unique=unique_interactions)
+    contemporaries = _coexistence_indices(graph)
+    successors = _successors_indices(graph)
+    interactions = _interactions_indices(graph, unique=unique_interactions)
     if len(contemporaries) == 0:
         # There are no constraints, so stack demes on top of each other.
         return {deme.name: 0 for deme in graph.demes}
@@ -556,33 +556,31 @@ def optimise_positions(
         C.append(c)
     constraints = [scipy.optimize.LinearConstraint(C, lb=sep, ub=np.inf)]
 
-    with warnings.catch_warnings():
-        res = scipy.optimize.minimize(
-            _optimise_positions_objective,
-            x0,
-            args=(successors, interactions),
-            # The objective function returns a 2-tuple of (f_x, g_x), where f_x
-            # is the objective evalutated at x, and g_x is the Jacobian of f
-            # evaluated at x.
-            jac=True,
-            # Don't use the quasi-Newton Hessian approximation (the default for
-            # method="trust-constr" if nothing is specified). This performs
-            # poorly, and produces warnings, for some of the test cases.
-            # Writing the Hessian function manually would be tedious,
-            # and I'd certainly get it wrong. But since I did manually
-            # implement the Jacobian, scipy can use a finite-difference
-            # approximation for the Hessian, by specifying either "2-point",
-            # "3-point", or "cs". The "2-point" option seems to work fine.
-            hess="2-point",
-            method="trust-constr",
-            constraints=constraints,
-            bounds=scipy.optimize.Bounds(lb=np.min(x0) - sep, ub=np.max(x0) + sep),
-        )
+    res = scipy.optimize.minimize(
+        _optimise_positions_objective,
+        x0,
+        args=(successors, interactions),
+        # The objective function returns a 2-tuple of (f_x, g_x), where f_x
+        # is the objective evalutated at x, and g_x is the Jacobian of f
+        # evaluated at x.
+        jac=True,
+        # Don't use the quasi-Newton Hessian approximation (the default for
+        # method="trust-constr" if nothing is specified). This performs
+        # poorly, and produces warnings, for some of the test cases.
+        # Writing the Hessian function manually would be tedious,
+        # and I'd certainly get it wrong. But since I did manually
+        # implement the Jacobian, scipy can use a finite-difference
+        # approximation for the Hessian, by specifying either "2-point",
+        # "3-point", or "cs". The "2-point" option seems to work fine.
+        hess="2-point",
+        method="trust-constr",
+        constraints=constraints,
+        bounds=scipy.optimize.Bounds(lb=np.min(x0) - sep, ub=np.max(x0) + sep),
+    )
 
     if not res.success:
         warnings.warn(
             f"Failed to optimise: {res}\n\n"
-            "Demesdraw can probably do better. "
             "Please report this in the issue tracker at "
             "https://github.com/grahamgower/demesdraw/issues"
         )
