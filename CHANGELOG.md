@@ -1,9 +1,11 @@
 # Changelog
 
-## unreleased
+## [0.4.0] - 2023-05-03
 
-* Added `scale_bar` option to `demesdraw.tubes()` to draw a scale bar
-  that indicates the population size.
+* Documented the layout algorithm used in tubes plots.
+* Added `scale_bar` option to `demesdraw.tubes()`, and `--scale-bar` option
+  to the `demesdraw tubes` CLI, to draw a scale bar that indicates the
+  population size.
 * Removed dependency on `cvxpy` by going back to `scipy`
   for optimisation of the deme positions. The trust-constr
   method with linear constraints seems to work well.
