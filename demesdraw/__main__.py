@@ -66,10 +66,23 @@ class TubesCommand(Command):
     def __init__(self, subparsers):
         super().__init__(subparsers, "tubes")
 
+        self.parser.add_argument(
+            "--scale-bar",
+            action="store_true",
+            default=False,
+            help="Draw a scale bar that indicates population size.",
+        )
+
     def __call__(self, args):
         graph = demes.load(args.input_file)
         fig, ax = demesdraw.utils.get_fig_axes(aspect=args.aspect, scale=args.scale)
-        demesdraw.tubes(graph, ax=ax, log_time=args.log_time, title=args.title)
+        demesdraw.tubes(
+            graph,
+            ax=ax,
+            log_time=args.log_time,
+            title=args.title,
+            scale_bar=args.scale_bar,
+        )
         if args.output_file is not None:
             fig.savefig(args.output_file)
         else:
