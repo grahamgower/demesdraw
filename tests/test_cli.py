@@ -73,6 +73,9 @@ class TestSubCommand:
             assert output_file.exists()
             assert output_file.stat().st_size > 0
 
+    def test_tubes_scale_bar(self):
+        self.test_output_file_is_created("tubes", "--scale-bar")
+
     @pytest.mark.parametrize("subcommand", ["tubes", "size_history"])
     def test_input_from_stdin(self, subcommand):
         input_file = tests.example_files()[0]

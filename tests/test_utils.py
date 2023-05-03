@@ -137,7 +137,7 @@ class TestInteractionIndices:
         for j in range(n):
             b.add_deme(f"deme{j}")
         graph = b.resolve()
-        interactions = utils.interactions_indices(graph, unique=unique)
+        interactions = utils._interactions_indices(graph, unique=unique)
         assert len(interactions) == 0
 
     @pytest.mark.parametrize("unique", (True, False))
@@ -147,7 +147,7 @@ class TestInteractionIndices:
         b.add_deme("b", ancestors=["a"])
         b.add_deme("c", ancestors=["a"])
         graph = b.resolve()
-        interactions = utils.interactions_indices(graph, unique=unique)
+        interactions = utils._interactions_indices(graph, unique=unique)
         assert len(interactions) == 0
 
     @pytest.mark.parametrize("n_migrations", (1, 2, 3))
@@ -166,12 +166,12 @@ class TestInteractionIndices:
                 rate=1e-5,
             )
         graph = b.resolve()
-        interactions = utils.interactions_indices(graph, unique=False)
+        interactions = utils._interactions_indices(graph, unique=False)
         assert (
             interactions == [(1, 2)] * n_migrations
             or interactions == [(2, 1)] * n_migrations
         )
-        interactions = utils.interactions_indices(graph, unique=True)
+        interactions = utils._interactions_indices(graph, unique=True)
         assert interactions == [(1, 2)] or interactions == [(2, 1)]
 
     @pytest.mark.parametrize("n_migrations", (1, 2, 3))
@@ -186,13 +186,13 @@ class TestInteractionIndices:
                 demes=["b", "c"], start_time=start_time, end_time=end_time, rate=1e-5
             )
         graph = b.resolve()
-        interactions = utils.interactions_indices(graph, unique=False)
+        interactions = utils._interactions_indices(graph, unique=False)
         assert len(interactions) == 2 * n_migrations
         counts = collections.Counter(interactions)
         assert len(counts) == 2
         assert counts[(1, 2)] == n_migrations
         assert counts[(2, 1)] == n_migrations
-        interactions = utils.interactions_indices(graph, unique=True)
+        interactions = utils._interactions_indices(graph, unique=True)
         assert interactions == [(1, 2)] or interactions == [(2, 1)]
 
     @pytest.mark.parametrize("n_pulses", (1, 2, 3))
@@ -206,11 +206,11 @@ class TestInteractionIndices:
                 sources=["b"], dest="c", time=100 * j / n_pulses + 1, proportions=[0.1]
             )
         graph = b.resolve()
-        interactions = utils.interactions_indices(graph, unique=False)
+        interactions = utils._interactions_indices(graph, unique=False)
         assert (
             interactions == [(1, 2)] * n_pulses or interactions == [(2, 1)] * n_pulses
         )
-        interactions = utils.interactions_indices(graph, unique=True)
+        interactions = utils._interactions_indices(graph, unique=True)
         assert interactions == [(1, 2)] or interactions == [(2, 1)]
 
 
@@ -743,7 +743,7 @@ class TestCoexistenceIndices:
         for j in range(n):
             b.add_deme(f"deme{j}")
         graph = b.resolve()
-        idx = utils.coexistence_indices(graph)
+        idx = utils._coexistence_indices(graph)
         assert set(idx) == set(itertools.combinations(range(n), 2))
 
     @pytest.mark.parametrize("n", (1, 2, 3))
@@ -756,7 +756,7 @@ class TestCoexistenceIndices:
                 ancestors = [f"deme{j-1}"]
             b.add_deme(f"deme{j}", ancestors=ancestors, epochs=[dict(end_time=100 - j)])
         graph = b.resolve()
-        idx = utils.coexistence_indices(graph)
+        idx = utils._coexistence_indices(graph)
         assert len(idx) == 0
 
     @pytest.mark.parametrize("unique", (True, False))
@@ -771,7 +771,7 @@ class TestCoexistenceIndices:
         b.add_deme("b", ancestors=["a"], start_time=100)
         b.add_deme("c", ancestors=["b"], start_time=50)
         graph = b.resolve()
-        idx = utils.coexistence_indices(graph)
+        idx = utils._coexistence_indices(graph)
         assert len(idx) == 3
         assert (0, 1) in idx
         assert (0, 2) in idx
@@ -791,7 +791,7 @@ class TestCoexistenceIndices:
         b.add_deme("c", ancestors=["b"], start_time=50)
         b.add_deme("d", ancestors=["c"], start_time=10)
         graph = b.resolve()
-        idx = utils.coexistence_indices(graph)
+        idx = utils._coexistence_indices(graph)
         assert len(idx) == 3
         assert (1, 2) in idx
         assert (1, 3) in idx
@@ -809,7 +809,7 @@ class TestOptimisePositions:
         positions2 = utils.optimise_positions(
             graph, positions=positions1, sep=sep, unique_interactions=unique
         )
-        for j, k in utils.coexistence_indices(graph):
+        for j, k in utils._coexistence_indices(graph):
             if positions1[graph.demes[j].name] < positions1[graph.demes[j].name]:
                 assert positions2[graph.demes[j].name] < positions2[graph.demes[j].name]
             elif positions1[graph.demes[j].name] > positions1[graph.demes[j].name]:
@@ -826,7 +826,7 @@ class TestOptimisePositions:
             graph, positions=positions1, sep=sep, unique_interactions=unique
         )
         epsilon = 1e-3  # Small amount of wiggle room for numerical error.
-        for j, k in utils.coexistence_indices(graph):
+        for j, k in utils._coexistence_indices(graph):
             assert (
                 abs(positions2[graph.demes[j].name] - positions2[graph.demes[k].name])
                 >= sep - epsilon
@@ -851,7 +851,7 @@ class TestOptimisePositions:
             graph, positions=positions1, sep=sep, unique_interactions=unique
         )
         epsilon = 1e-3  # Small amount of wiggle room for numerical error.
-        for j, k in utils.coexistence_indices(graph):
+        for j, k in utils._coexistence_indices(graph):
             assert (
                 abs(positions2[graph.demes[j].name] - positions2[graph.demes[k].name])
                 >= sep - epsilon
@@ -869,8 +869,8 @@ class TestOptimisePositions:
         positions = utils.minimal_crossing_positions(
             graph, sep=sep, unique_interactions=unique
         )
-        successors = utils.successors_indices(graph)
-        interactions = utils.interactions_indices(graph, unique=unique)
+        successors = utils._successors_indices(graph)
+        interactions = utils._interactions_indices(graph, unique=unique)
 
         x0 = np.array([positions[deme.name] for deme in graph.demes])
         # Place the first deme at position 0.

@@ -536,19 +536,18 @@ def tubes(
             ax.transData, ax.transAxes
         )
         x_offset = min(min(t.size1) for t in tubes.values())
-        # x_offset = max(max(t.size2) for t in tubes.values()) - width
-        ax_sb = ax.inset_axes([x_offset, -0.15, width, 0.01], transform=transform)
+        ax_sb = ax.inset_axes([x_offset, -0.16, width, 1e-6], transform=transform)
 
         ax_sb.yaxis.set_major_locator(matplotlib.ticker.NullLocator())
         ax_sb.spines[["left", "right", "top"]].set_visible(False)
-        ax_sb.xaxis.set_ticks_position("bottom")
+        ax_sb.xaxis.set_ticks_position("top")
         locator = matplotlib.ticker.AutoLocator()
         locator.set_params(integer=True)
         ax_sb.xaxis.set_major_locator(locator)
         ax_sb.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
         ax_sb.set_xlim(0, width)
         ax_sb.set_xlabel("deme size (individuals)")
-        ax_sb.xaxis.set_label_position("top")
+        ax_sb.xaxis.set_label_position("bottom")
 
     # Status bar text when in interactive mode.
     def format_coord(x, y):
