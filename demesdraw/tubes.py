@@ -151,7 +151,7 @@ def find_positions(graph: demes.Graph) -> Dict[str, float]:
         graph, sep=sep, unique_interactions=False
     )
     return utils.optimise_positions(
-        graph, positions, sep=sep, unique_interactions=False
+        graph, positions=positions, sep=sep, unique_interactions=False
     )
 
 

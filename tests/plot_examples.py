@@ -55,6 +55,7 @@ with PdfPages("examples.pdf") as pdf:
             log_time=log_time,
             # fill=False,
             # colours="black",
+            scale_bar=True,
         )
 
         pdf.savefig(fig)
