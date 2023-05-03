@@ -1,0 +1,583 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Layout algorithm &#8212; DemesDraw</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/basic_mod.css?v=0.7.0-1" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <script src="_static/js/petite-vue.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="CHANGELOG.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+  </head><body data-dark_mode_code_blocks="true">
+
+<div id="top_nav">
+    
+
+    <nav>
+        
+            
+        
+
+        <p id="toggle_sidebar">
+            <a href="#" title="Toggle sidebar">|||</a>
+        </p>
+        <h1><a href="quickstart.html" title="Go to homepage">DemesDraw</a></h1>
+            <a id="source_link" href="https://github.com/grahamgower/demesdraw">
+    
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+            <path fill="white" d="M 244.8,8 C 106.1,8 0,113.3 0,252 c 0,110.9 69.8,205.8 169.5,239.2 12.8,2.3 17.3,-5.6 17.3,-12.1 0,-6.2 -0.3,-40.4 -0.3,-61.4 0,0 -70,15 -84.7,-29.8 0,0 -11.4,-29.1 -27.8,-36.6 0,0 -22.9,-15.7 1.6,-15.4 0,0 24.9,2 38.6,25.8 21.9,38.6 58.6,27.5 72.9,20.9 2.3,-16 8.8,-27.1 16,-33.7 -55.9,-6.2 -112.3,-14.3 -112.3,-110.5 0,-27.5 7.6,-41.3 23.6,-58.9 -2.6,-6.5 -11.1,-33.3 2.6,-67.9 20.9,-6.5 69,27 69,27 20,-5.6 41.5,-8.5 62.8,-8.5 21.3,0 42.8,2.9 62.8,8.5 0,0 48.1,-33.6 69,-27 13.7,34.7 5.2,61.4 2.6,67.9 16,17.7 25.8,31.5 25.8,58.9 0,96.5 -58.9,104.2 -114.8,110.5 9.2,7.9 17,22.9 17,46.4 0,33.7 -0.3,75.4 -0.3,83.6 0,6.5 4.6,14.4 17.3,12.1 C 428.2,457.8 496,362.9 496,252 496,113.3 383.5,8 244.8,8 Z"/>
+        </svg>
+    
+</a>
+        
+
+        <a id="mode_toggle" href="#" @click.prevent="handleClick" :title="mode">
+    <template v-if="mode == 'light'">
+        <svg width="100%" height="100%" viewBox="0 0 79 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="mode_light"><rect id="Bounds" x="0" y="-0" width="78.623" height="79.049" style="fill:none;"/><circle cx="39.311" cy="39.524" r="15.734" style="fill:#fff;"/><g id="beams"><g id="beam"><path id="beam1" serif:id="beam" d="M44.212,4.901c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.9,2.196 -4.9,4.901l-0,9.614c-0,2.705 2.196,4.901 4.9,4.901c2.705,0 4.901,-2.196 4.901,-4.901l0,-9.614Z" style="fill:#fff;"/></g><g id="beam2" serif:id="beam"><path id="beam3" serif:id="beam" d="M67.48,18.073c1.913,-1.912 1.913,-5.018 0,-6.931c-1.912,-1.912 -5.018,-1.912 -6.931,0l-6.798,6.799c-1.912,1.912 -1.912,5.018 0,6.931c1.913,1.912 5.018,1.912 6.931,-0l6.798,-6.799Z" style="fill:#fff;"/></g><g id="beam4" serif:id="beam"><path id="beam5" serif:id="beam" d="M25.728,61.108c1.912,-1.913 1.912,-5.018 -0,-6.931c-1.913,-1.913 -5.019,-1.913 -6.931,-0l-6.799,6.798c-1.912,1.913 -1.912,5.019 0,6.931c1.913,1.913 5.019,1.913 6.931,0l6.799,-6.798Z" style="fill:#fff;"/></g><g id="beam6" serif:id="beam"><path id="beam7" serif:id="beam" d="M60.682,54.177c-1.913,-1.913 -5.018,-1.913 -6.931,-0c-1.912,1.913 -1.912,5.018 0,6.931l6.798,6.798c1.913,1.913 5.019,1.913 6.931,0c1.913,-1.912 1.913,-5.018 0,-6.931l-6.798,-6.798Z" style="fill:#fff;"/></g><g id="beam8" serif:id="beam"><path id="beam9" serif:id="beam" d="M4.901,34.623c-2.705,0 -4.901,2.196 -4.901,4.901c0,2.705 2.196,4.901 4.901,4.901l9.614,0c2.705,0 4.901,-2.196 4.901,-4.901c0,-2.705 -2.196,-4.901 -4.901,-4.901l-9.614,0Z" style="fill:#fff;"/></g><g id="beam10" serif:id="beam"><path id="beam11" serif:id="beam" d="M44.212,64.534c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.9,2.196 -4.9,4.901l-0,9.614c-0,2.705 2.196,4.901 4.9,4.901c2.705,-0 4.901,-2.196 4.901,-4.901l0,-9.614Z" style="fill:#fff;"/></g><g id="beam12" serif:id="beam"><path id="beam13" serif:id="beam" d="M18.929,11.142c-1.912,-1.912 -5.018,-1.912 -6.931,0c-1.912,1.913 -1.912,5.019 0,6.931l6.799,6.799c1.912,1.912 5.018,1.912 6.931,-0c1.912,-1.913 1.912,-5.019 -0,-6.931l-6.799,-6.799Z" style="fill:#fff;"/></g><g id="beam14" serif:id="beam"><path id="beam15" serif:id="beam" d="M64.108,34.623c-2.705,0 -4.901,2.196 -4.901,4.901c-0,2.705 2.196,4.901 4.901,4.901l9.614,0c2.705,0 4.901,-2.196 4.901,-4.901c-0,-2.705 -2.196,-4.901 -4.901,-4.901l-9.614,0Z" style="fill:#fff;"/></g></g></g></svg>
+    </template>
+
+    <template v-if="mode == 'dark'">
+        <svg width="100%" height="100%" viewBox="0 0 79 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="mode_dark"><rect id="Bounds" x="0" y="-0" width="78.623" height="79.049" style="fill:none;"/><circle cx="39.311" cy="39.524" r="15.734" style="fill:#fff;"/><g id="beams"><g id="beam"><path id="beam1" serif:id="beam" d="M44.212,14.515c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,0 -4.901,2.196 -4.901,4.901c0,2.705 2.197,4.901 4.901,4.901c2.705,0 4.901,-2.196 4.901,-4.901Z" style="fill:#fff;"/></g><g id="beam2" serif:id="beam"><path id="beam3" serif:id="beam" d="M60.662,24.892c1.902,-1.902 1.902,-4.99 0,-6.892l-0.04,-0.039c-1.901,-1.902 -4.989,-1.902 -6.891,-0c-1.901,1.901 -1.901,4.989 0,6.891l0.04,0.04c1.902,1.901 4.989,1.901 6.891,-0Z" style="fill:#fff;"/></g><g id="beam4" serif:id="beam"><path id="beam5" serif:id="beam" d="M25.732,61.103c1.91,-1.91 1.91,-5.011 0,-6.921l-0.009,-0.01c-1.91,-1.91 -5.012,-1.91 -6.921,-0c-1.91,1.91 -1.91,5.011 -0,6.921l0.01,0.01c1.909,1.91 5.011,1.91 6.92,-0Z" style="fill:#fff;"/></g><g id="beam6" serif:id="beam"><path id="beam7" serif:id="beam" d="M60.672,54.167c-1.907,-1.907 -5.004,-1.907 -6.911,0l-0.02,0.02c-1.907,1.907 -1.907,5.004 0,6.911c1.907,1.907 5.004,1.907 6.911,-0l0.02,-0.02c1.907,-1.907 1.907,-5.004 0,-6.911Z" style="fill:#fff;"/></g><g id="beam8" serif:id="beam"><path id="beam9" serif:id="beam" d="M14.52,34.623c-2.702,0 -4.896,2.194 -4.896,4.896l0,0.01c0,2.702 2.194,4.896 4.896,4.896c2.702,0 4.896,-2.194 4.896,-4.896l-0,-0.01c-0,-2.702 -2.194,-4.896 -4.896,-4.896Z" style="fill:#fff;"/></g><g id="beam10" serif:id="beam"><path id="beam11" serif:id="beam" d="M44.212,64.534c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.901,2.196 -4.901,4.901c0,2.704 2.197,4.9 4.901,4.9c2.705,0 4.901,-2.196 4.901,-4.9Z" style="fill:#fff;"/></g><g id="beam12" serif:id="beam"><path id="beam13" serif:id="beam" d="M25.73,17.943c-1.911,-1.911 -5.015,-1.911 -6.926,0l-0.005,0.005c-1.911,1.911 -1.911,5.015 0,6.926c1.911,1.911 5.015,1.911 6.926,0l0.005,-0.005c1.911,-1.911 1.911,-5.014 -0,-6.926Z" style="fill:#fff;"/></g><g id="beam14" serif:id="beam"><path id="beam15" serif:id="beam" d="M64.098,34.623c-2.699,0 -4.891,2.192 -4.891,4.892l-0,0.019c-0,2.699 2.192,4.891 4.891,4.891c2.7,0 4.892,-2.192 4.892,-4.891l0,-0.019c0,-2.7 -2.192,-4.892 -4.892,-4.892Z" style="fill:#fff;"/></g></g></g></svg>
+    </template>
+
+    <template v-if="mode == 'darkest'">
+        <svg width="100%" height="100%" viewBox="0 0 79 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="mode_darkest"><rect id="Bounds" x="0" y="-0" width="78.623" height="79.049" style="fill:none;"/><path d="M39.315,23.791c8.684,-0 15.734,7.05 15.734,15.733c0,8.684 -7.05,15.734 -15.734,15.734c-8.683,0 -15.733,-7.05 -15.733,-15.734c-0,-8.683 7.05,-15.733 15.733,-15.733Zm0,4.737c6.069,0 10.997,4.927 10.997,10.996c-0,6.069 -4.928,10.996 -10.997,10.996c-6.068,0 -10.996,-4.927 -10.996,-10.996c0,-6.069 4.928,-10.996 10.996,-10.996Z" style="fill:#fff;"/><g id="beams"><g id="beam"><path id="beam1" serif:id="beam" d="M44.216,14.515c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,0 -4.9,2.196 -4.9,4.901c-0,2.705 2.196,4.901 4.9,4.901c2.705,0 4.901,-2.196 4.901,-4.901Z" style="fill:#fff;"/></g><g id="beam2" serif:id="beam"><path id="beam3" serif:id="beam" d="M60.666,24.892c1.902,-1.902 1.902,-4.99 0,-6.892l-0.04,-0.039c-1.901,-1.902 -4.989,-1.902 -6.891,-0c-1.901,1.901 -1.901,4.989 0,6.891l0.04,0.04c1.902,1.901 4.99,1.901 6.891,-0Z" style="fill:#fff;"/></g><g id="beam4" serif:id="beam"><path id="beam5" serif:id="beam" d="M25.737,61.103c1.909,-1.91 1.909,-5.011 -0,-6.921l-0.01,-0.01c-1.91,-1.91 -5.011,-1.91 -6.921,-0c-1.91,1.91 -1.91,5.011 -0,6.921l0.01,0.01c1.91,1.91 5.011,1.91 6.921,-0Z" style="fill:#fff;"/></g><g id="beam6" serif:id="beam"><path id="beam7" serif:id="beam" d="M60.676,54.167c-1.907,-1.907 -5.004,-1.907 -6.911,0l-0.02,0.02c-1.907,1.907 -1.907,5.004 0,6.911c1.907,1.907 5.004,1.907 6.911,-0l0.02,-0.02c1.907,-1.907 1.907,-5.004 0,-6.911Z" style="fill:#fff;"/></g><g id="beam8" serif:id="beam"><path id="beam9" serif:id="beam" d="M14.524,34.623c-2.702,0 -4.896,2.194 -4.896,4.896l0,0.01c0,2.702 2.194,4.896 4.896,4.896c2.702,0 4.896,-2.194 4.896,-4.896l0,-0.01c0,-2.702 -2.194,-4.896 -4.896,-4.896Z" style="fill:#fff;"/></g><g id="beam10" serif:id="beam"><path id="beam11" serif:id="beam" d="M44.216,64.534c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.9,2.196 -4.9,4.901c-0,2.704 2.196,4.9 4.9,4.9c2.705,0 4.901,-2.196 4.901,-4.9Z" style="fill:#fff;"/></g><g id="beam12" serif:id="beam"><path id="beam13" serif:id="beam" d="M25.734,17.943c-1.911,-1.911 -5.015,-1.911 -6.926,0l-0.005,0.005c-1.911,1.911 -1.911,5.015 0,6.926c1.911,1.911 5.015,1.911 6.926,0l0.005,-0.005c1.911,-1.911 1.911,-5.014 0,-6.926Z" style="fill:#fff;"/></g><g id="beam14" serif:id="beam"><path id="beam15" serif:id="beam" d="M64.103,34.623c-2.7,0 -4.892,2.192 -4.892,4.892l-0,0.019c-0,2.699 2.192,4.891 4.892,4.891c2.699,0 4.891,-2.192 4.891,-4.891l0,-0.019c0,-2.7 -2.192,-4.892 -4.891,-4.892Z" style="fill:#fff;"/></g></g></g></svg>
+    </template>
+</a>
+
+<script>
+(function() {
+    const LOCAL_STORAGE_KEY = 'piccoloThemeMode'
+
+    var initialMode = localStorage.getItem(LOCAL_STORAGE_KEY)
+
+    if (initialMode) {
+        // Make sure the value in local storage is valid
+        if (['light', 'dark', 'darkest'].indexOf(initialMode) == -1) {
+            initialMode = 'light'
+            localStorage.setItem(LOCAL_STORAGE_KEY, initialMode)
+        }
+    } else {
+        // Check if the client prefers dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            initialMode = 'dark'
+        } else {
+            initialMode = 'light'
+        }
+        localStorage.setItem(LOCAL_STORAGE_KEY, initialMode)
+    }
+
+    document.documentElement.dataset.mode = initialMode
+
+    PetiteVue.createApp({
+        'mode': initialMode,
+        handleClick() {
+            let currentMode = this.mode
+
+            if (currentMode == 'light') {
+                this.mode = 'dark'
+            } else if (currentMode == 'dark') {
+                this.mode = 'darkest'
+            } else if (currentMode == 'darkest') {
+                this.mode = 'light'
+            }
+
+            document.documentElement.dataset.mode = this.mode
+            localStorage.setItem(LOCAL_STORAGE_KEY, this.mode)
+
+            console.log(this.mode)
+        }
+    }).mount('#mode_toggle')
+})()
+</script>
+            <p class="mobile_search_link">
+                <a href="search.html" title="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 65 64" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2">
+                        <path d="M14.873 40.009c-2.315-3.943-3.642-8.532-3.642-13.429C11.231 11.91 23.141 0 37.811 0s26.58 11.91 26.58 26.58-11.91 26.58-26.58 26.58a26.44 26.44 0 0 1-14.277-4.161L9.739 62.794a3.12 3.12 0 0 1-4.413 0L.913 58.382c-1.217-1.218-1.217-3.196 0-4.413l13.96-13.96zM37.811 8.054c10.225 0 18.526 8.301 18.526 18.526s-8.301 18.526-18.526 18.526-18.526-8.301-18.526-18.526S27.586 8.054 37.811 8.054z" fill="#fff" />
+                    </svg>
+                </a>
+            </p>
+        
+
+        <div class="searchbox_wrapper">
+            
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">CLI reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Layout algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="layout-algorithm">
+<h1>Layout algorithm<a class="headerlink" href="#layout-algorithm" title="Permalink to this heading">¶</a></h1>
+<p>This page describes <code class="docutils literal notranslate"><span class="pre">demesdraw</span></code> implementation details that affect
+the layout of tubes plots.
+The <a class="reference internal" href="api.html#demesdraw.tubes" title="demesdraw.tubes"><code class="xref py py-func docutils literal notranslate"><span class="pre">tubes()</span></code></a> function attempts to construct a visually-appealing
+layout that clearly depicts how demes, and their relationships, change
+over time.
+The key features in a Demes model are population sizes,
+ancestor/descendant relationships, periods of continuous migration,
+and instantaneous pulses of migration.
+A concerted effort is made to produce a layout that makes each
+of these features visible, for arbitrarily complex input models.</p>
+<section id="infinite-start-times">
+<h2>Infinite start times<a class="headerlink" href="#infinite-start-times" title="Permalink to this heading">¶</a></h2>
+<p>In any Demes model, there must be at least one deme with an infinite
+<code class="docutils literal notranslate"><span class="pre">start_time</span></code>. Clearly, drawing infinitely long lines is not practical.
+However, there is only a finite period of time in which demes and
+their relationships change, which applies from the present until
+time <span class="math notranslate nohighlight">\(t\)</span> in the past.
+Before time <span class="math notranslate nohighlight">\(t\)</span>, demes and their relationships are fixed.
+To draw a model, <code class="docutils literal notranslate"><span class="pre">demesdraw</span></code> first identifies the time, <span class="math notranslate nohighlight">\(t\)</span>,
+and then uses a fixed amount of vertical space to draw
+the time interval that stretches towards infinity.
+The proportion of the time axis that is used for times &gt; <span class="math notranslate nohighlight">\(t\)</span>
+can be configured via the <code class="docutils literal notranslate"><span class="pre">inf_ratio</span></code> parameter.
+For the model below, <span class="math notranslate nohighlight">\(t=100\)</span>.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model1</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">time_units: generations</span>
+<span class="sd">defaults:</span>
+<span class="sd">  epoch:</span>
+<span class="sd">    start_size: 500</span>
+<span class="sd">demes:</span>
+<span class="sd">  - name: A</span>
+<span class="sd">  - name: B</span>
+<span class="sd">    start_time: 100</span>
+<span class="sd">    ancestors: [A]</span>
+<span class="sd">  - name: C</span>
+<span class="sd">    start_time: 50</span>
+<span class="sd">    ancestors: [B]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="n">inf_ratio</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="n">inf_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;inf_ratio=0.2 (default)&quot;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;inf_ratio=0.5&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/169d5a41c8a86639742ca6bf7c2334d42171f9b3124e89d8d14a4125b9998b94.svg" src="_images/169d5a41c8a86639742ca6bf7c2334d42171f9b3124e89d8d14a4125b9998b94.svg" /></div>
+</div>
+</section>
+<section id="deme-positions">
+<h2>Deme positions<a class="headerlink" href="#deme-positions" title="Permalink to this heading">¶</a></h2>
+<p>The vertical axis in tubes plots has a single interpretation as the time axis.
+In contrast, the horizontal axis has a dual purpose:</p>
+<ul class="simple">
+<li><p>it provides space to plot distinct demes side-by-side, and,</p></li>
+<li><p>the horizontal extent of each deme (its width) indicates its population size.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">positions</span></code> parameter can be used to set the horizontal midpoint
+of each deme.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">positions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span> <span class="n">scale_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/92a127849794436c0f0b2be2994dafed0d363400c2dd101e3bee58c9099c30d5.svg" src="_images/92a127849794436c0f0b2be2994dafed0d363400c2dd101e3bee58c9099c30d5.svg" /></div>
+</div>
+<p>However if the width of the demes are not taken into account when
+choosing positions, the resulting figure may look strange.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">positions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span> <span class="n">scale_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/285a022fe0911d05553da36481beecfd3005c48b27f42bc339994db660e1e60d.svg" src="_images/285a022fe0911d05553da36481beecfd3005c48b27f42bc339994db660e1e60d.svg" /></div>
+</div>
+</section>
+<section id="blank-space">
+<h2>Blank space<a class="headerlink" href="#blank-space" title="Permalink to this heading">¶</a></h2>
+<p>While the width of tubes provides information about population sizes,
+the relative position of distinct demes has no meaningful interpretation.
+But the amount of blank space between demes can be important for
+producing an aesthetically pleasing figure. Compare the two plots below.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">island_model</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">defaults</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">500</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">add_deme</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;d</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">add_migration</span><span class="p">(</span><span class="n">demes</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;d</span><span class="si">{</span><span class="n">j</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;d</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span> <span class="n">rate</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">graph</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">im3</span> <span class="o">=</span> <span class="n">island_model</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="mi">500</span> <span class="o">+</span> <span class="mi">50</span>  <span class="c1"># deme size + 50</span>
+<span class="n">positions50</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">j</span><span class="o">*</span><span class="n">w</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">im3</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">im3</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions50</span><span class="p">,</span> <span class="n">scale_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="mi">500</span> <span class="o">+</span> <span class="mi">500</span>  <span class="c1"># deme size + 500</span>
+<span class="n">positions500</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">j</span><span class="o">*</span><span class="n">w</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">im3</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">im3</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions500</span><span class="p">,</span> <span class="n">scale_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/0623980ba38b802e73b85dae63b9ae173d1567d6a56309207bc615fe3dabe570.svg" src="_images/0623980ba38b802e73b85dae63b9ae173d1567d6a56309207bc615fe3dabe570.svg" /><img alt="_images/8caa5baf8cfe4fef5bfbc250e10af7e6e9e34b919227931aad55ec749fd372b5.svg" src="_images/8caa5baf8cfe4fef5bfbc250e10af7e6e9e34b919227931aad55ec749fd372b5.svg" /></div>
+</div>
+<p>Finding a good separation distance is dependent on the
+number of demes and their sizes. To avoid having to find a good
+separation distance by trial and error, demesdraw uses a heuristic
+which looks reasonable in most cases.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">12</span><span class="p">):</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">island_model</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">separation_heuristic</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+    <span class="n">positions</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">j</span><span class="o">*</span><span class="n">w</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
+    <span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/7571bca629e02cc3bdbbea5248e759fa1416b3646f689a16ce57da301ee56fd5.svg" src="_images/7571bca629e02cc3bdbbea5248e759fa1416b3646f689a16ce57da301ee56fd5.svg" /><img alt="_images/3b16fb4622072a9dff7e8e12102d0a19cc843ec440bfe4b86e3115c7b9543b89.svg" src="_images/3b16fb4622072a9dff7e8e12102d0a19cc843ec440bfe4b86e3115c7b9543b89.svg" /><img alt="_images/526e6f4bcd4b7c2355a9e819cd1f6689463abb945e8a6db123fad0d50695fdb7.svg" src="_images/526e6f4bcd4b7c2355a9e819cd1f6689463abb945e8a6db123fad0d50695fdb7.svg" /></div>
+</div>
+<p>The equation used by the <a class="reference internal" href="api.html#demesdraw.utils.separation_heuristic" title="demesdraw.utils.separation_heuristic"><code class="xref py py-func docutils literal notranslate"><span class="pre">utils.separation_heuristic()</span></code></a> function is</p>
+<div class="math notranslate nohighlight">
+\[
+(1 + 0.5 * \log(c)) * \max(size),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(c\)</span> is the maximum number of demes that coexist at any
+given time,
+and <span class="math notranslate nohighlight">\(\max(size)\)</span> is the maximum deme size in the model.</p>
+</section>
+<section id="left-to-right-ordering-of-demes">
+<h2>Left-to-right ordering of demes<a class="headerlink" href="#left-to-right-ordering-of-demes" title="Permalink to this heading">¶</a></h2>
+<p>For a variety of models, a simple ordering of demes along the
+horizontal axis doesn’t produce a good layout.
+In the model below, the line indicating the ancestor/descendant
+relationship between A and C crosses the deme B.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model2</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">time_units: generations</span>
+<span class="sd">defaults:</span>
+<span class="sd">  epoch:</span>
+<span class="sd">    start_size: 500</span>
+<span class="sd">demes:</span>
+<span class="sd">  - name: A</span>
+<span class="sd">  - name: B</span>
+<span class="sd">    start_time: 100</span>
+<span class="sd">    ancestors: [A]</span>
+<span class="sd">  - name: C</span>
+<span class="sd">    start_time: 50</span>
+<span class="sd">    ancestors: [A]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">separation_heuristic</span><span class="p">(</span><span class="n">model2</span><span class="p">)</span>
+<span class="n">positions</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">j</span><span class="o">*</span><span class="n">w</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">model2</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">model2</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/4d994c8c96dfbd9931537e501236bb0ea5ffa803dfb49fb8309d103568e80867.svg" src="_images/4d994c8c96dfbd9931537e501236bb0ea5ffa803dfb49fb8309d103568e80867.svg" /></div>
+</div>
+<p>For this particular model, we could just draw deme C on the left of deme A.
+However, the best choice is not always so obvious.
+We note that it is not possible, in general, to avoid lines from crossing
+other demes and/or lines.
+For example, the well-known
+<a class="reference external" href="https://en.wikipedia.org/wiki/Three_utilities_problem">utility graph</a>
+is “non-planar”—i.e.
+there is no way to draw the graph without having lines cross.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">utility_graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../examples/utility_graph.yaml&quot;</span><span class="p">)</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">utility_graph</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/5f903083c2bb37e3eb7d6204fec17fa8e2f015581d44d9cc4026adcb610cc35f.svg" src="_images/5f903083c2bb37e3eb7d6204fec17fa8e2f015581d44d9cc4026adcb610cc35f.svg" /></div>
+</div>
+<p>While it may not be possible to prevent lines from crossing,
+it certainly is possible to limit the number of crossings.
+Lets consider a more complex example with a naive left-to-right
+ordering.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model3</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../examples/reticulate.yaml&quot;</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">separation_heuristic</span><span class="p">(</span><span class="n">model3</span><span class="p">)</span>
+<span class="n">positions</span> <span class="o">=</span> <span class="p">{</span><span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">j</span><span class="o">*</span><span class="n">w</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">model3</span><span class="o">.</span><span class="n">demes</span><span class="p">)}</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">model3</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span> <span class="n">log_time</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/c6ef236772d1b82cd926f8a0f9cbc564bfc1f306a5e356ba3eb7c5b8e111ce28.svg" src="_images/c6ef236772d1b82cd926f8a0f9cbc564bfc1f306a5e356ba3eb7c5b8e111ce28.svg" /></div>
+</div>
+<p>What we would like, is to use a left-to-right ordering that <em>minimizes</em>
+the number of lines crossing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">positions</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">minimal_crossing_positions</span><span class="p">(</span>
+    <span class="n">model3</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">unique_interactions</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">model3</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span> <span class="n">log_time</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/8e10c2765122f552b6d86555d56ac62be00d25ccc9b118d58f6ae2871d64b850.svg" src="_images/8e10c2765122f552b6d86555d56ac62be00d25ccc9b118d58f6ae2871d64b850.svg" /></div>
+</div>
+<p>The <a class="reference internal" href="api.html#demesdraw.utils.minimal_crossing_positions" title="demesdraw.utils.minimal_crossing_positions"><code class="xref py py-func docutils literal notranslate"><span class="pre">utils.minimal_crossing_positions()</span></code></a> function is not perfect.
+Actually, the problem of finding the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Crossing_number_%28graph_theory%29">minimum number of crossings</a>
+is NP-hard.
+But if we propose an ordering, it is quite simple to count how many lines
+will cross.
+E.g. if there is a line from A to B at time <code class="docutils literal notranslate"><span class="pre">t</span></code>, then any deme C
+that exists at time <code class="docutils literal notranslate"><span class="pre">t</span></code>, and is ordered between A and B,
+will have a line drawn over it.
+From this, we make two observations:</p>
+<ul class="simple">
+<li><p>when the number of demes in a graph, <span class="math notranslate nohighlight">\(n\)</span>, is small, it’s reasonable
+to do a brute force check of all <span class="math notranslate nohighlight">\(n!\)</span> possible orderings to identify
+the optimal ordering,</p></li>
+<li><p>when <span class="math notranslate nohighlight">\(n\)</span> is large, we can obtain a “good” ordering, by proposing a large
+number of random orderings and using the best that is observed.</p></li>
+</ul>
+<p>It turns out that it’s straightforward to use <code class="docutils literal notranslate"><span class="pre">numpy</span></code> to vectorize
+the computation of counting line crossing on a set of proposed orderings.
+By default, <a class="reference internal" href="api.html#demesdraw.utils.minimal_crossing_positions" title="demesdraw.utils.minimal_crossing_positions"><code class="xref py py-func docutils literal notranslate"><span class="pre">utils.minimal_crossing_positions()</span></code></a> enumerates all orderings
+if <span class="math notranslate nohighlight">\(n!\)</span> &lt; 1 million, i.e. if there are 9 or fewer demes. For 10 or more demes,
+1 million random orderings are proposed to identify a good ordering.</p>
+</section>
+<section id="optimising-positions">
+<h2>Optimising positions<a class="headerlink" href="#optimising-positions" title="Permalink to this heading">¶</a></h2>
+<p>Given an ordering for the demes, the positions could yet be improved
+by using less horizontal space.
+In particular, when two demes do not coexist, it may be possible to
+place them on top of each other (e.g. in the utility graph, deme A
+can be placed above deme X).
+More generally, we would like for demes that are more closely related
+to be placed closer together.
+To a large extent, this property arises already by choosing an
+ordering that minimises line crossings, but we can do better.
+The code below shows how <a class="reference internal" href="api.html#demesdraw.tubes" title="demesdraw.tubes"><code class="xref py py-func docutils literal notranslate"><span class="pre">tubes()</span></code></a> obtains positions
+when none are specified.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">positions1</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">minimal_crossing_positions</span><span class="p">(</span>
+    <span class="n">model3</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">unique_interactions</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="n">positions2</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">optimise_positions</span><span class="p">(</span>
+    <span class="n">model3</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions1</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">unique_interactions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">model3</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions2</span><span class="p">,</span> <span class="n">log_time</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/53e871e42a1e1928a729ea48584cecbd7d920c74b876de04524994c56aa9dfb5.svg" src="_images/53e871e42a1e1928a729ea48584cecbd7d920c74b876de04524994c56aa9dfb5.svg" /></div>
+</div>
+<p>The <a class="reference internal" href="api.html#demesdraw.utils.optimise_positions" title="demesdraw.utils.optimise_positions"><code class="xref py py-func docutils literal notranslate"><span class="pre">utils.optimise_positions()</span></code></a> function minimises the
+squared distances</p>
+<ul class="simple">
+<li><p>from each parent deme to the mean positions of its children</p></li>
+<li><p>and between interacting demes (where interactions are either
+continuous periods of migration or instantaneous migration pulses).</p></li>
+</ul>
+<p>Subject to the constraints that contemporaneous demes</p>
+<ul class="simple">
+<li><p>are ordered like in the input positions,</p></li>
+<li><p>and have a minimum separation distance.</p></li>
+</ul>
+<p>This is a
+<a class="reference external" href="https://en.wikipedia.org/wiki/Quadratic_programming">quadratic programming</a>
+optimisation problem:
+least-squares minimisation with linear inequality constraints.
+In <code class="docutils literal notranslate"><span class="pre">demesdraw</span></code>, we perform this optimisation with <code class="docutils literal notranslate"><span class="pre">scipy.optimize.minimize()</span></code>
+using the “trust-constr” method.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+    
+        <div id="show_right_sidebar">
+            <p><a class="toggle_right_sidebar" href="#"><span class="icon">&lt;</span><span>Page contents<span></a></p>
+        </div>
+
+        <div id="right_sidebar">
+            <p><a class="toggle_right_sidebar" href="#"><span class="icon">&gt;</span><span>Page contents:<span></a></p>
+            <div class="page_toc">
+                <ul>
+<li><a class="reference internal" href="#">Layout algorithm</a><ul>
+<li><a class="reference internal" href="#infinite-start-times">Infinite start times</a></li>
+<li><a class="reference internal" href="#deme-positions">Deme positions</a></li>
+<li><a class="reference internal" href="#blank-space">Blank space</a></li>
+<li><a class="reference internal" href="#left-to-right-ordering-of-demes">Left-to-right ordering of demes</a></li>
+<li><a class="reference internal" href="#optimising-positions">Optimising positions</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+        </div>
+    
+
+      <div class="clearer"></div>
+    </div>
+    <div class="button_nav_wrapper">
+        <div class="button_nav">
+            <div class="left">
+                
+                <a href="examples.html">
+                    <span class="icon">&lt;</span><span>Examples</span></a>
+                
+            </div>
+
+            <div class="right">
+                
+                    <a href="CHANGELOG.html"><span>Changelog</span><span class="icon">&gt;</span></a>
+                
+            </div>
+        </div>
+    </div>
+
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021-2023.
+    </div>
+
+<p id="theme_credit">Styled using the <a href="https://github.com/piccolo-orm/piccolo_theme">Piccolo Theme</a></p>
+  </body>
+</html>

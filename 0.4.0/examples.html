@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Examples &#8212; DemesDraw</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/basic_mod.css?v=0.7.0-1" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <script src="_static/js/petite-vue.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Layout algorithm" href="layout.html" />
+    <link rel="prev" title="CLI reference" href="cli.html" /> 
+  </head><body data-dark_mode_code_blocks="true">
+
+<div id="top_nav">
+    
+
+    <nav>
+        
+            
+        
+
+        <p id="toggle_sidebar">
+            <a href="#" title="Toggle sidebar">|||</a>
+        </p>
+        <h1><a href="quickstart.html" title="Go to homepage">DemesDraw</a></h1>
+            <a id="source_link" href="https://github.com/grahamgower/demesdraw">
+    
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+            <path fill="white" d="M 244.8,8 C 106.1,8 0,113.3 0,252 c 0,110.9 69.8,205.8 169.5,239.2 12.8,2.3 17.3,-5.6 17.3,-12.1 0,-6.2 -0.3,-40.4 -0.3,-61.4 0,0 -70,15 -84.7,-29.8 0,0 -11.4,-29.1 -27.8,-36.6 0,0 -22.9,-15.7 1.6,-15.4 0,0 24.9,2 38.6,25.8 21.9,38.6 58.6,27.5 72.9,20.9 2.3,-16 8.8,-27.1 16,-33.7 -55.9,-6.2 -112.3,-14.3 -112.3,-110.5 0,-27.5 7.6,-41.3 23.6,-58.9 -2.6,-6.5 -11.1,-33.3 2.6,-67.9 20.9,-6.5 69,27 69,27 20,-5.6 41.5,-8.5 62.8,-8.5 21.3,0 42.8,2.9 62.8,8.5 0,0 48.1,-33.6 69,-27 13.7,34.7 5.2,61.4 2.6,67.9 16,17.7 25.8,31.5 25.8,58.9 0,96.5 -58.9,104.2 -114.8,110.5 9.2,7.9 17,22.9 17,46.4 0,33.7 -0.3,75.4 -0.3,83.6 0,6.5 4.6,14.4 17.3,12.1 C 428.2,457.8 496,362.9 496,252 496,113.3 383.5,8 244.8,8 Z"/>
+        </svg>
+    
+</a>
+        
+
+        <a id="mode_toggle" href="#" @click.prevent="handleClick" :title="mode">
+    <template v-if="mode == 'light'">
+        <svg width="100%" height="100%" viewBox="0 0 79 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="mode_light"><rect id="Bounds" x="0" y="-0" width="78.623" height="79.049" style="fill:none;"/><circle cx="39.311" cy="39.524" r="15.734" style="fill:#fff;"/><g id="beams"><g id="beam"><path id="beam1" serif:id="beam" d="M44.212,4.901c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.9,2.196 -4.9,4.901l-0,9.614c-0,2.705 2.196,4.901 4.9,4.901c2.705,0 4.901,-2.196 4.901,-4.901l0,-9.614Z" style="fill:#fff;"/></g><g id="beam2" serif:id="beam"><path id="beam3" serif:id="beam" d="M67.48,18.073c1.913,-1.912 1.913,-5.018 0,-6.931c-1.912,-1.912 -5.018,-1.912 -6.931,0l-6.798,6.799c-1.912,1.912 -1.912,5.018 0,6.931c1.913,1.912 5.018,1.912 6.931,-0l6.798,-6.799Z" style="fill:#fff;"/></g><g id="beam4" serif:id="beam"><path id="beam5" serif:id="beam" d="M25.728,61.108c1.912,-1.913 1.912,-5.018 -0,-6.931c-1.913,-1.913 -5.019,-1.913 -6.931,-0l-6.799,6.798c-1.912,1.913 -1.912,5.019 0,6.931c1.913,1.913 5.019,1.913 6.931,0l6.799,-6.798Z" style="fill:#fff;"/></g><g id="beam6" serif:id="beam"><path id="beam7" serif:id="beam" d="M60.682,54.177c-1.913,-1.913 -5.018,-1.913 -6.931,-0c-1.912,1.913 -1.912,5.018 0,6.931l6.798,6.798c1.913,1.913 5.019,1.913 6.931,0c1.913,-1.912 1.913,-5.018 0,-6.931l-6.798,-6.798Z" style="fill:#fff;"/></g><g id="beam8" serif:id="beam"><path id="beam9" serif:id="beam" d="M4.901,34.623c-2.705,0 -4.901,2.196 -4.901,4.901c0,2.705 2.196,4.901 4.901,4.901l9.614,0c2.705,0 4.901,-2.196 4.901,-4.901c0,-2.705 -2.196,-4.901 -4.901,-4.901l-9.614,0Z" style="fill:#fff;"/></g><g id="beam10" serif:id="beam"><path id="beam11" serif:id="beam" d="M44.212,64.534c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.9,2.196 -4.9,4.901l-0,9.614c-0,2.705 2.196,4.901 4.9,4.901c2.705,-0 4.901,-2.196 4.901,-4.901l0,-9.614Z" style="fill:#fff;"/></g><g id="beam12" serif:id="beam"><path id="beam13" serif:id="beam" d="M18.929,11.142c-1.912,-1.912 -5.018,-1.912 -6.931,0c-1.912,1.913 -1.912,5.019 0,6.931l6.799,6.799c1.912,1.912 5.018,1.912 6.931,-0c1.912,-1.913 1.912,-5.019 -0,-6.931l-6.799,-6.799Z" style="fill:#fff;"/></g><g id="beam14" serif:id="beam"><path id="beam15" serif:id="beam" d="M64.108,34.623c-2.705,0 -4.901,2.196 -4.901,4.901c-0,2.705 2.196,4.901 4.901,4.901l9.614,0c2.705,0 4.901,-2.196 4.901,-4.901c-0,-2.705 -2.196,-4.901 -4.901,-4.901l-9.614,0Z" style="fill:#fff;"/></g></g></g></svg>
+    </template>
+
+    <template v-if="mode == 'dark'">
+        <svg width="100%" height="100%" viewBox="0 0 79 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="mode_dark"><rect id="Bounds" x="0" y="-0" width="78.623" height="79.049" style="fill:none;"/><circle cx="39.311" cy="39.524" r="15.734" style="fill:#fff;"/><g id="beams"><g id="beam"><path id="beam1" serif:id="beam" d="M44.212,14.515c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,0 -4.901,2.196 -4.901,4.901c0,2.705 2.197,4.901 4.901,4.901c2.705,0 4.901,-2.196 4.901,-4.901Z" style="fill:#fff;"/></g><g id="beam2" serif:id="beam"><path id="beam3" serif:id="beam" d="M60.662,24.892c1.902,-1.902 1.902,-4.99 0,-6.892l-0.04,-0.039c-1.901,-1.902 -4.989,-1.902 -6.891,-0c-1.901,1.901 -1.901,4.989 0,6.891l0.04,0.04c1.902,1.901 4.989,1.901 6.891,-0Z" style="fill:#fff;"/></g><g id="beam4" serif:id="beam"><path id="beam5" serif:id="beam" d="M25.732,61.103c1.91,-1.91 1.91,-5.011 0,-6.921l-0.009,-0.01c-1.91,-1.91 -5.012,-1.91 -6.921,-0c-1.91,1.91 -1.91,5.011 -0,6.921l0.01,0.01c1.909,1.91 5.011,1.91 6.92,-0Z" style="fill:#fff;"/></g><g id="beam6" serif:id="beam"><path id="beam7" serif:id="beam" d="M60.672,54.167c-1.907,-1.907 -5.004,-1.907 -6.911,0l-0.02,0.02c-1.907,1.907 -1.907,5.004 0,6.911c1.907,1.907 5.004,1.907 6.911,-0l0.02,-0.02c1.907,-1.907 1.907,-5.004 0,-6.911Z" style="fill:#fff;"/></g><g id="beam8" serif:id="beam"><path id="beam9" serif:id="beam" d="M14.52,34.623c-2.702,0 -4.896,2.194 -4.896,4.896l0,0.01c0,2.702 2.194,4.896 4.896,4.896c2.702,0 4.896,-2.194 4.896,-4.896l-0,-0.01c-0,-2.702 -2.194,-4.896 -4.896,-4.896Z" style="fill:#fff;"/></g><g id="beam10" serif:id="beam"><path id="beam11" serif:id="beam" d="M44.212,64.534c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.901,2.196 -4.901,4.901c0,2.704 2.197,4.9 4.901,4.9c2.705,0 4.901,-2.196 4.901,-4.9Z" style="fill:#fff;"/></g><g id="beam12" serif:id="beam"><path id="beam13" serif:id="beam" d="M25.73,17.943c-1.911,-1.911 -5.015,-1.911 -6.926,0l-0.005,0.005c-1.911,1.911 -1.911,5.015 0,6.926c1.911,1.911 5.015,1.911 6.926,0l0.005,-0.005c1.911,-1.911 1.911,-5.014 -0,-6.926Z" style="fill:#fff;"/></g><g id="beam14" serif:id="beam"><path id="beam15" serif:id="beam" d="M64.098,34.623c-2.699,0 -4.891,2.192 -4.891,4.892l-0,0.019c-0,2.699 2.192,4.891 4.891,4.891c2.7,0 4.892,-2.192 4.892,-4.891l0,-0.019c0,-2.7 -2.192,-4.892 -4.892,-4.892Z" style="fill:#fff;"/></g></g></g></svg>
+    </template>
+
+    <template v-if="mode == 'darkest'">
+        <svg width="100%" height="100%" viewBox="0 0 79 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="mode_darkest"><rect id="Bounds" x="0" y="-0" width="78.623" height="79.049" style="fill:none;"/><path d="M39.315,23.791c8.684,-0 15.734,7.05 15.734,15.733c0,8.684 -7.05,15.734 -15.734,15.734c-8.683,0 -15.733,-7.05 -15.733,-15.734c-0,-8.683 7.05,-15.733 15.733,-15.733Zm0,4.737c6.069,0 10.997,4.927 10.997,10.996c-0,6.069 -4.928,10.996 -10.997,10.996c-6.068,0 -10.996,-4.927 -10.996,-10.996c0,-6.069 4.928,-10.996 10.996,-10.996Z" style="fill:#fff;"/><g id="beams"><g id="beam"><path id="beam1" serif:id="beam" d="M44.216,14.515c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,0 -4.9,2.196 -4.9,4.901c-0,2.705 2.196,4.901 4.9,4.901c2.705,0 4.901,-2.196 4.901,-4.901Z" style="fill:#fff;"/></g><g id="beam2" serif:id="beam"><path id="beam3" serif:id="beam" d="M60.666,24.892c1.902,-1.902 1.902,-4.99 0,-6.892l-0.04,-0.039c-1.901,-1.902 -4.989,-1.902 -6.891,-0c-1.901,1.901 -1.901,4.989 0,6.891l0.04,0.04c1.902,1.901 4.99,1.901 6.891,-0Z" style="fill:#fff;"/></g><g id="beam4" serif:id="beam"><path id="beam5" serif:id="beam" d="M25.737,61.103c1.909,-1.91 1.909,-5.011 -0,-6.921l-0.01,-0.01c-1.91,-1.91 -5.011,-1.91 -6.921,-0c-1.91,1.91 -1.91,5.011 -0,6.921l0.01,0.01c1.91,1.91 5.011,1.91 6.921,-0Z" style="fill:#fff;"/></g><g id="beam6" serif:id="beam"><path id="beam7" serif:id="beam" d="M60.676,54.167c-1.907,-1.907 -5.004,-1.907 -6.911,0l-0.02,0.02c-1.907,1.907 -1.907,5.004 0,6.911c1.907,1.907 5.004,1.907 6.911,-0l0.02,-0.02c1.907,-1.907 1.907,-5.004 0,-6.911Z" style="fill:#fff;"/></g><g id="beam8" serif:id="beam"><path id="beam9" serif:id="beam" d="M14.524,34.623c-2.702,0 -4.896,2.194 -4.896,4.896l0,0.01c0,2.702 2.194,4.896 4.896,4.896c2.702,0 4.896,-2.194 4.896,-4.896l0,-0.01c0,-2.702 -2.194,-4.896 -4.896,-4.896Z" style="fill:#fff;"/></g><g id="beam10" serif:id="beam"><path id="beam11" serif:id="beam" d="M44.216,64.534c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.9,2.196 -4.9,4.901c-0,2.704 2.196,4.9 4.9,4.9c2.705,0 4.901,-2.196 4.901,-4.9Z" style="fill:#fff;"/></g><g id="beam12" serif:id="beam"><path id="beam13" serif:id="beam" d="M25.734,17.943c-1.911,-1.911 -5.015,-1.911 -6.926,0l-0.005,0.005c-1.911,1.911 -1.911,5.015 0,6.926c1.911,1.911 5.015,1.911 6.926,0l0.005,-0.005c1.911,-1.911 1.911,-5.014 0,-6.926Z" style="fill:#fff;"/></g><g id="beam14" serif:id="beam"><path id="beam15" serif:id="beam" d="M64.103,34.623c-2.7,0 -4.892,2.192 -4.892,4.892l-0,0.019c-0,2.699 2.192,4.891 4.892,4.891c2.699,0 4.891,-2.192 4.891,-4.891l0,-0.019c0,-2.7 -2.192,-4.892 -4.891,-4.892Z" style="fill:#fff;"/></g></g></g></svg>
+    </template>
+</a>
+
+<script>
+(function() {
+    const LOCAL_STORAGE_KEY = 'piccoloThemeMode'
+
+    var initialMode = localStorage.getItem(LOCAL_STORAGE_KEY)
+
+    if (initialMode) {
+        // Make sure the value in local storage is valid
+        if (['light', 'dark', 'darkest'].indexOf(initialMode) == -1) {
+            initialMode = 'light'
+            localStorage.setItem(LOCAL_STORAGE_KEY, initialMode)
+        }
+    } else {
+        // Check if the client prefers dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            initialMode = 'dark'
+        } else {
+            initialMode = 'light'
+        }
+        localStorage.setItem(LOCAL_STORAGE_KEY, initialMode)
+    }
+
+    document.documentElement.dataset.mode = initialMode
+
+    PetiteVue.createApp({
+        'mode': initialMode,
+        handleClick() {
+            let currentMode = this.mode
+
+            if (currentMode == 'light') {
+                this.mode = 'dark'
+            } else if (currentMode == 'dark') {
+                this.mode = 'darkest'
+            } else if (currentMode == 'darkest') {
+                this.mode = 'light'
+            }
+
+            document.documentElement.dataset.mode = this.mode
+            localStorage.setItem(LOCAL_STORAGE_KEY, this.mode)
+
+            console.log(this.mode)
+        }
+    }).mount('#mode_toggle')
+})()
+</script>
+            <p class="mobile_search_link">
+                <a href="search.html" title="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 65 64" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2">
+                        <path d="M14.873 40.009c-2.315-3.943-3.642-8.532-3.642-13.429C11.231 11.91 23.141 0 37.811 0s26.58 11.91 26.58 26.58-11.91 26.58-26.58 26.58a26.44 26.44 0 0 1-14.277-4.161L9.739 62.794a3.12 3.12 0 0 1-4.413 0L.913 58.382c-1.217-1.218-1.217-3.196 0-4.413l13.96-13.96zM37.811 8.054c10.225 0 18.526 8.301 18.526 18.526s-8.301 18.526-18.526 18.526-18.526-8.301-18.526-18.526S27.586 8.054 37.811 8.054z" fill="#fff" />
+                    </svg>
+                </a>
+            </p>
+        
+
+        <div class="searchbox_wrapper">
+            
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">CLI reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layout.html">Layout algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h1>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">demes</span>
+<span class="kn">import</span> <span class="nn">demesdraw</span>
+<span class="kn">import</span> <span class="nn">demesdraw.utils</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Output SVG.</span>
+<span class="kn">from</span> <span class="nn">matplotlib_inline.backend_inline</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
+<span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Ignore warnings about simultaneous pulses in our examples.</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="s2">&quot;Multiple pulses&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">,</span> <span class="s2">&quot;demes&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_from_yaml</span><span class="p">(</span><span class="n">yaml_filename</span><span class="p">):</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">yaml_filename</span><span class="p">)</span>
+    <span class="n">log_time</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log_time_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">log_size</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log_size_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">size_history</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span>
+        <span class="n">invert_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_time</span><span class="o">=</span><span class="n">log_time</span><span class="p">,</span>
+        <span class="n">log_size</span><span class="o">=</span><span class="n">log_size</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span>
+        <span class="n">log_time</span><span class="o">=</span><span class="n">log_time</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ax1</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ax2</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">ax1</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">ax2</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    
+<span class="c1"># Plot each example yaml in the examples folder.</span>
+<span class="n">cwd</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">examples</span> <span class="o">=</span> <span class="nb">list</span><span class="p">((</span><span class="n">cwd</span> <span class="o">/</span> <span class="s2">&quot;..&quot;</span> <span class="o">/</span> <span class="s2">&quot;examples&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;**/*.yaml&quot;</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">examples</span><span class="p">):</span>
+    <span class="n">plot_from_yaml</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/064075757915e833ddd4e17d1c32a1d3b9dbef3d75759f9a8977882c4441fb43.svg" src="_images/064075757915e833ddd4e17d1c32a1d3b9dbef3d75759f9a8977882c4441fb43.svg" /><img alt="_images/c4986392687373d6a45c223c994c3e6113390e90e6feae1e83833785ff086924.svg" src="_images/c4986392687373d6a45c223c994c3e6113390e90e6feae1e83833785ff086924.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/0e74664ce231eeab85c887f5bc1d3e80166850d1efeebe8bff028edcb7f77846.svg" src="_images/0e74664ce231eeab85c887f5bc1d3e80166850d1efeebe8bff028edcb7f77846.svg" /><img alt="_images/668d631c9f8b4685c17874856c8204af1bab7d60ba5bd389b37c2527266ceebf.svg" src="_images/668d631c9f8b4685c17874856c8204af1bab7d60ba5bd389b37c2527266ceebf.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/bd7ec95e17b9243d89a20effcdbf597a1ec39f3e0f0b7538c967c2cefe207431.svg" src="_images/bd7ec95e17b9243d89a20effcdbf597a1ec39f3e0f0b7538c967c2cefe207431.svg" /><img alt="_images/7bebd331aadac3689008997123f132fe606039fa99ef169e2fd13636ed676558.svg" src="_images/7bebd331aadac3689008997123f132fe606039fa99ef169e2fd13636ed676558.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/006a8f96bc49fc371a6816450849e1786981e7c7447504e926049c8c49b5f4bd.svg" src="_images/006a8f96bc49fc371a6816450849e1786981e7c7447504e926049c8c49b5f4bd.svg" /><img alt="_images/211a7217cede7e9c215a1c5fb9c1b00ff09b3fbdf23b6af402ca269c0a89071b.svg" src="_images/211a7217cede7e9c215a1c5fb9c1b00ff09b3fbdf23b6af402ca269c0a89071b.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/b264b5934a80b06509c4dad88e72e7887faebb230f049a994af28dc3be241db5.svg" src="_images/b264b5934a80b06509c4dad88e72e7887faebb230f049a994af28dc3be241db5.svg" /><img alt="_images/1845229367123a8d8e6dc6877a38685bf641333bdfbb48dc279325175a8835da.svg" src="_images/1845229367123a8d8e6dc6877a38685bf641333bdfbb48dc279325175a8835da.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/4240c580ee2f79b707a5dabdaf97a84a2f61e6483da018cc97c773f0c41efa3c.svg" src="_images/4240c580ee2f79b707a5dabdaf97a84a2f61e6483da018cc97c773f0c41efa3c.svg" /><img alt="_images/31819bfab8a313d9e6792d4a86ce3e86c6d8f96484651ee81e4ad09d36a8a0ef.svg" src="_images/31819bfab8a313d9e6792d4a86ce3e86c6d8f96484651ee81e4ad09d36a8a0ef.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/dbf30e3bb56d44d74b9959a652c72a094a057a8f54d4ed570c756cfc160c3023.svg" src="_images/dbf30e3bb56d44d74b9959a652c72a094a057a8f54d4ed570c756cfc160c3023.svg" /><img alt="_images/e3354439275fefcd32d80baa487d893465bd909ec7cfc6e69465344c98a325b8.svg" src="_images/e3354439275fefcd32d80baa487d893465bd909ec7cfc6e69465344c98a325b8.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/446a490b0b0fca04232da1e288bf39b92df365b88ac4428b69b288524436882c.svg" src="_images/446a490b0b0fca04232da1e288bf39b92df365b88ac4428b69b288524436882c.svg" /><img alt="_images/413b945c28b3933dd5063d0086a3d3e4499ff2873c5757667e2a7e70f95dc41c.svg" src="_images/413b945c28b3933dd5063d0086a3d3e4499ff2873c5757667e2a7e70f95dc41c.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/72c231881f537d14987080e36732d8be497ae07ea70813d8b675aa744d99aadb.svg" src="_images/72c231881f537d14987080e36732d8be497ae07ea70813d8b675aa744d99aadb.svg" /><img alt="_images/2ca6bc418a901a5c9f8f753572862c90d64675c197e93880d68a0268421fe519.svg" src="_images/2ca6bc418a901a5c9f8f753572862c90d64675c197e93880d68a0268421fe519.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/586fdc914a61a7691da37b0922b51814efa3702f862d99d5cce9fd75600585c7.svg" src="_images/586fdc914a61a7691da37b0922b51814efa3702f862d99d5cce9fd75600585c7.svg" /><img alt="_images/bc3beccf54b503e6bd35b45238bc46257dba6a7db5e1c9fbdbf9a3e028ae4e32.svg" src="_images/bc3beccf54b503e6bd35b45238bc46257dba6a7db5e1c9fbdbf9a3e028ae4e32.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/a8d382d04c407be10f8dc8ccbd83199c7deefc099726a03ae00caf3720b02df5.svg" src="_images/a8d382d04c407be10f8dc8ccbd83199c7deefc099726a03ae00caf3720b02df5.svg" /><img alt="_images/971b2a7de4d3f90ed9b3cc124f473410bf2c6e222c79cf28521c35489b2a3cc2.svg" src="_images/971b2a7de4d3f90ed9b3cc124f473410bf2c6e222c79cf28521c35489b2a3cc2.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/2c5a5b199212168a18e4f32848a489383b7eb2fe0b1c92cff6db667753762b6f.svg" src="_images/2c5a5b199212168a18e4f32848a489383b7eb2fe0b1c92cff6db667753762b6f.svg" /><img alt="_images/99b728c9c7e143357fd1c8623cff27c9b73b41659065096b2714bdb58b9d93aa.svg" src="_images/99b728c9c7e143357fd1c8623cff27c9b73b41659065096b2714bdb58b9d93aa.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/132262679e077f51baa39e0aa1e7a83d032bfbf6163544ec330982da104dd8ab.svg" src="_images/132262679e077f51baa39e0aa1e7a83d032bfbf6163544ec330982da104dd8ab.svg" /><img alt="_images/065f108c6db10174800389523eb0f42c50b49110a0abf7793fa5432125fe5b3a.svg" src="_images/065f108c6db10174800389523eb0f42c50b49110a0abf7793fa5432125fe5b3a.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/53fa1b438e5af483795f131858171254f69f4936df4d5521aa3f1e56008e1f8c.svg" src="_images/53fa1b438e5af483795f131858171254f69f4936df4d5521aa3f1e56008e1f8c.svg" /><img alt="_images/e95a14d2a1350db5c508325a8f6fb46d0e368d7873b9e31b4168e00bc0b5e3d7.svg" src="_images/e95a14d2a1350db5c508325a8f6fb46d0e368d7873b9e31b4168e00bc0b5e3d7.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/1136b507eaaf791197e35c20351e90598ee9a807afce178a6faa8b30e21b1469.svg" src="_images/1136b507eaaf791197e35c20351e90598ee9a807afce178a6faa8b30e21b1469.svg" /><img alt="_images/6d3e22107a0ce991b304ec9cf020bf522a30fe1403f81510894bdc5863f9eeeb.svg" src="_images/6d3e22107a0ce991b304ec9cf020bf522a30fe1403f81510894bdc5863f9eeeb.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/a583c26a295319d8d2f118d38e20d026d5fc0f8000be292cfc599444cff8dbc3.svg" src="_images/a583c26a295319d8d2f118d38e20d026d5fc0f8000be292cfc599444cff8dbc3.svg" /><img alt="_images/736e6604a897875f3c7fc58a6f9c30434f6084be1ca50091c2477cc890a8851a.svg" src="_images/736e6604a897875f3c7fc58a6f9c30434f6084be1ca50091c2477cc890a8851a.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/f37c4306efd1d956e4f673e956860c700986e4729e03e65b36cf2695ba0a44e2.svg" src="_images/f37c4306efd1d956e4f673e956860c700986e4729e03e65b36cf2695ba0a44e2.svg" /><img alt="_images/bb955606655b5abbea1920c1a2dc2af52d59fdaf5d8c78a1a10043cf037de20f.svg" src="_images/bb955606655b5abbea1920c1a2dc2af52d59fdaf5d8c78a1a10043cf037de20f.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/958d52c8c902f87bec6bb0b25940cfbddc1cdd677fd184efb07f3ec31f449e2a.svg" src="_images/958d52c8c902f87bec6bb0b25940cfbddc1cdd677fd184efb07f3ec31f449e2a.svg" /><img alt="_images/7dce37a1f758a48644c8b39b33d8dbdd622da481b3356a694e7badc02b3dad94.svg" src="_images/7dce37a1f758a48644c8b39b33d8dbdd622da481b3356a694e7badc02b3dad94.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/7bf801f91c72679c9543da4bbabf5587053eaa765f30e05fee5d4d42a58854a7.svg" src="_images/7bf801f91c72679c9543da4bbabf5587053eaa765f30e05fee5d4d42a58854a7.svg" /><img alt="_images/85b853e82a8f136a7648a67b77ec2a1d40cfd0657cd87888815ed1826b7df2a9.svg" src="_images/85b853e82a8f136a7648a67b77ec2a1d40cfd0657cd87888815ed1826b7df2a9.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/e0c5dedcd20a632be1be998a01c12353430af54c68d7086de0c8af30efcb4c14.svg" src="_images/e0c5dedcd20a632be1be998a01c12353430af54c68d7086de0c8af30efcb4c14.svg" /><img alt="_images/64d5f02295ebdf718d39dee780ae2249fb900e024d073bff88c86b315af6e69b.svg" src="_images/64d5f02295ebdf718d39dee780ae2249fb900e024d073bff88c86b315af6e69b.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/dd72f101358d39c090e3ac7810b7895b3cfdeb81938a8f7235fae1e412addac7.svg" src="_images/dd72f101358d39c090e3ac7810b7895b3cfdeb81938a8f7235fae1e412addac7.svg" /><img alt="_images/313164c1b697fd9789e991649088088f341812ee349888641c00e69d06571078.svg" src="_images/313164c1b697fd9789e991649088088f341812ee349888641c00e69d06571078.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/8846cdfa7370c532e633bcb0b0429f4d95fd22b659ca4b2c0a7f2fbb5aad3e88.svg" src="_images/8846cdfa7370c532e633bcb0b0429f4d95fd22b659ca4b2c0a7f2fbb5aad3e88.svg" /><img alt="_images/6dcff0b4cd3d8acd036f335b8f16c34f0d3532bf2029a97a8799ed00042553de.svg" src="_images/6dcff0b4cd3d8acd036f335b8f16c34f0d3532bf2029a97a8799ed00042553de.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/ecdd969d2f8da3b350edcb07ad6993e4cd2c17665333d15d5579804938db4e52.svg" src="_images/ecdd969d2f8da3b350edcb07ad6993e4cd2c17665333d15d5579804938db4e52.svg" /><img alt="_images/91564ae6a6c55b34145ae3f45074842c7c40ce390c7f83ae55e63c3c346d7351.svg" src="_images/91564ae6a6c55b34145ae3f45074842c7c40ce390c7f83ae55e63c3c346d7351.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/eb28e99f6782269c604611d38a0533a59f3bec3a965f07fe7640d1982f86680c.svg" src="_images/eb28e99f6782269c604611d38a0533a59f3bec3a965f07fe7640d1982f86680c.svg" /><img alt="_images/4a584a75d24ddc445ae0016144bc1bd88c7e7f94aab4b9e1ba518364febaccde.svg" src="_images/4a584a75d24ddc445ae0016144bc1bd88c7e7f94aab4b9e1ba518364febaccde.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/5d5c9d75f0a638ac3fc82b04793b7cf30534bafe6507ed6ef7e09c61815e5965.svg" src="_images/5d5c9d75f0a638ac3fc82b04793b7cf30534bafe6507ed6ef7e09c61815e5965.svg" /><img alt="_images/98e247904706c9e61fb3a0d113a5be26ba2603b01ed3f96bf5c6eccedeaa3574.svg" src="_images/98e247904706c9e61fb3a0d113a5be26ba2603b01ed3f96bf5c6eccedeaa3574.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/11c9acb2b78f339f11b832197e42b82ad0e0155fb0234be5f6d215f78137ce51.svg" src="_images/11c9acb2b78f339f11b832197e42b82ad0e0155fb0234be5f6d215f78137ce51.svg" /><img alt="_images/3d10c30902963165f5740157b8cdaee887d1ff05a30aad1a36981d55e304287b.svg" src="_images/3d10c30902963165f5740157b8cdaee887d1ff05a30aad1a36981d55e304287b.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/1a0dfde9d28a99a1e3297baa13fec8f5f43c78e1826a5815d1677f769ad36c41.svg" src="_images/1a0dfde9d28a99a1e3297baa13fec8f5f43c78e1826a5815d1677f769ad36c41.svg" /><img alt="_images/5abf192c9beadbfe268418dff550594be0fbda837eac9dd7c77a9e11274087a0.svg" src="_images/5abf192c9beadbfe268418dff550594be0fbda837eac9dd7c77a9e11274087a0.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/de7a0af5e86bf9592779bcce2438805089b7e271f3035ee7a1618e86b59eff24.svg" src="_images/de7a0af5e86bf9592779bcce2438805089b7e271f3035ee7a1618e86b59eff24.svg" /><img alt="_images/7095e10319f6716c4f18e78fce7d767c2bfaa7e890e5b022ca284bf471116318.svg" src="_images/7095e10319f6716c4f18e78fce7d767c2bfaa7e890e5b022ca284bf471116318.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/0bd88a3048db2842bf5d0109002c99c50c509ef4b1516a177908396ac0c7ab7c.svg" src="_images/0bd88a3048db2842bf5d0109002c99c50c509ef4b1516a177908396ac0c7ab7c.svg" /><img alt="_images/da0268cb38f7a9da29d58baaf8be2cc640476bd948bd47922bf73476a28f318d.svg" src="_images/da0268cb38f7a9da29d58baaf8be2cc640476bd948bd47922bf73476a28f318d.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/3c8dd79e3f41930f80770c5bef46185ecf1c969df96305448e88c1c8381f3506.svg" src="_images/3c8dd79e3f41930f80770c5bef46185ecf1c969df96305448e88c1c8381f3506.svg" /><img alt="_images/17e23dbc4ab80e9cd2d935822ed03b0a22afc5593cb525e32e1a1d79855623f1.svg" src="_images/17e23dbc4ab80e9cd2d935822ed03b0a22afc5593cb525e32e1a1d79855623f1.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/16ebb40d69832020be1a0012b9bcfcc94af8471f195f2c389885723ca783215f.svg" src="_images/16ebb40d69832020be1a0012b9bcfcc94af8471f195f2c389885723ca783215f.svg" /><img alt="_images/c5b95854db380da5cf7511087788652e67f81985488786c91c1d4320a2bae85c.svg" src="_images/c5b95854db380da5cf7511087788652e67f81985488786c91c1d4320a2bae85c.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/508af7d741316287164f2a589bc812dfc200c653339068dbcd1289b6d3cbea01.svg" src="_images/508af7d741316287164f2a589bc812dfc200c653339068dbcd1289b6d3cbea01.svg" /><img alt="_images/08c1b55a1cb627ae61c8bbf8379b0347dda2987dd54db92c74c6d0af093b085c.svg" src="_images/08c1b55a1cb627ae61c8bbf8379b0347dda2987dd54db92c74c6d0af093b085c.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/3748c3351fa041a6b739c4d7781d6b8bf8cd4e2a911b52ecfc1b16f786efe7c5.svg" src="_images/3748c3351fa041a6b739c4d7781d6b8bf8cd4e2a911b52ecfc1b16f786efe7c5.svg" /><img alt="_images/e8a0c26df81f0d29e125a571efe9af283cae2640a341a550b63dc846b76e81ce.svg" src="_images/e8a0c26df81f0d29e125a571efe9af283cae2640a341a550b63dc846b76e81ce.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/4411a2d88d3b3ca2f18a9b693c64ba772a3d09a67209dcc711af5a13f18e66a0.svg" src="_images/4411a2d88d3b3ca2f18a9b693c64ba772a3d09a67209dcc711af5a13f18e66a0.svg" /><img alt="_images/c852fa2cb6e8124942c6e063532494cfe36cc2359cb0f785b01a924c56a2b188.svg" src="_images/c852fa2cb6e8124942c6e063532494cfe36cc2359cb0f785b01a924c56a2b188.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/e77a54827c5d78d37ed175cecf04006456a206dd34227fcb74ab5d3115854cae.svg" src="_images/e77a54827c5d78d37ed175cecf04006456a206dd34227fcb74ab5d3115854cae.svg" /><img alt="_images/1144a03706fe246c495cd1f816fc48db0bfbfd9fe556df381e8f59a0c75b0a61.svg" src="_images/1144a03706fe246c495cd1f816fc48db0bfbfd9fe556df381e8f59a0c75b0a61.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/ef13062be96c1a259e5fe127e67b55e9e0762b7469380865b056f374fd5dbaa4.svg" src="_images/ef13062be96c1a259e5fe127e67b55e9e0762b7469380865b056f374fd5dbaa4.svg" /><img alt="_images/4d81369b0a72d926d6e0d84c12ede91255e7371b8f094f280bd0185735a7b911.svg" src="_images/4d81369b0a72d926d6e0d84c12ede91255e7371b8f094f280bd0185735a7b911.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/c44e2a2164922fadb4f5716c21bf45f79354c4b6406e8b9e00e34d80e85d7fa3.svg" src="_images/c44e2a2164922fadb4f5716c21bf45f79354c4b6406e8b9e00e34d80e85d7fa3.svg" /><img alt="_images/f52822b1874c8086b7323bd1bbfc0cfb71be9f8444bbfa326756e77f9a60e34b.svg" src="_images/f52822b1874c8086b7323bd1bbfc0cfb71be9f8444bbfa326756e77f9a60e34b.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/0c1ec2cb50e6a73148f187eb905e2e42420ffdb5b33e8d89c5fab248a7948260.svg" src="_images/0c1ec2cb50e6a73148f187eb905e2e42420ffdb5b33e8d89c5fab248a7948260.svg" /><img alt="_images/dd08602e75cd6e57627141b08998e5f64132288b92a02e2674e61e47eb162e3b.svg" src="_images/dd08602e75cd6e57627141b08998e5f64132288b92a02e2674e61e47eb162e3b.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+    
+
+      <div class="clearer"></div>
+    </div>
+    <div class="button_nav_wrapper">
+        <div class="button_nav">
+            <div class="left">
+                
+                <a href="cli.html">
+                    <span class="icon">&lt;</span><span>CLI reference</span></a>
+                
+            </div>
+
+            <div class="right">
+                
+                    <a href="layout.html"><span>Layout algorithm</span><span class="icon">&gt;</span></a>
+                
+            </div>
+        </div>
+    </div>
+
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021-2023.
+    </div>
+
+<p id="theme_credit">Styled using the <a href="https://github.com/piccolo-orm/piccolo_theme">Piccolo Theme</a></p>
+  </body>
+</html>
