@@ -16,4 +16,6 @@
 .. autofunction:: demesdraw.utils.log_size_heuristic
 .. autofunction:: demesdraw.utils.log_time_heuristic
 .. autofunction:: demesdraw.utils.separation_heuristic
+.. autofunction:: demesdraw.utils.minimal_crossing_positions
+.. autofunction:: demesdraw.utils.optimise_positions
 ```

@@ -807,7 +807,7 @@ class TestOptimisePositions:
             graph, sep=sep, unique_interactions=unique
         )
         positions2 = utils.optimise_positions(
-            graph, positions1, sep=sep, unique_interactions=unique
+            graph, positions=positions1, sep=sep, unique_interactions=unique
         )
         for j, k in utils.coexistence_indices(graph):
             if positions1[graph.demes[j].name] < positions1[graph.demes[j].name]:
@@ -823,7 +823,7 @@ class TestOptimisePositions:
             graph, sep=sep, unique_interactions=unique
         )
         positions2 = utils.optimise_positions(
-            graph, positions1, sep=sep, unique_interactions=unique
+            graph, positions=positions1, sep=sep, unique_interactions=unique
         )
         epsilon = 1e-3  # Small amount of wiggle room for numerical error.
         for j, k in utils.coexistence_indices(graph):
@@ -848,7 +848,7 @@ class TestOptimisePositions:
             graph, sep=sep, unique_interactions=unique
         )
         positions2 = utils.optimise_positions(
-            graph, positions1, sep=sep, unique_interactions=unique
+            graph, positions=positions1, sep=sep, unique_interactions=unique
         )
         epsilon = 1e-3  # Small amount of wiggle room for numerical error.
         for j, k in utils.coexistence_indices(graph):

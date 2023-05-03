@@ -17,6 +17,8 @@ __all__ = [
     "log_size_heuristic",
     "log_time_heuristic",
     "separation_heuristic",
+    "minimal_crossing_positions",
+    "optimise_positions",
 ]
 
 
@@ -415,6 +417,7 @@ def minimal_crossing_positions(
     is simple, and can be calculated for multiple candidate orderings using
     vectorised numpy operations. So a naive algorithm is used to search for
     a good ordering:
+
       - if :math:`n!` <= ``maxiter``, where ``n`` is the number of demes in the
         graph, then all possible orderings may be evaluated,
       - otherwise up to ``maxiter`` random orderings are evaluated.
@@ -501,8 +504,8 @@ def _optimise_positions_objective(x, successors, interactions):
 
 def optimise_positions(
     graph: demes.Graph,
-    positions: Mapping[str, float],
     *,
+    positions: Mapping[str, float],
     sep: float,
     unique_interactions: bool,
 ) -> Dict[str, float]:
