@@ -1,4 +1,4 @@
 pytest==7.4.4
 pytest-cov==4.1.0
-pytest-xdist==3.5.0
+pytest-xdist==3.6.1
 mpmath==1.3.0
