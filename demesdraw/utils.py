@@ -479,28 +479,78 @@ def minimal_crossing_positions(
     return {deme.name: float(pos) for deme, pos in zip(graph.demes, x_best)}
 
 
-def _optimise_positions_objective(x, successors, interactions):
+class _PositionsObjective:
     """
-    Objective to be minimised by optimise_positions().
+    Helper class encapsulating the quadratic objective for
+    :func:`optimise_positions`, its gradient and Hessian.
+    """
 
-    :return:
-        A 2-tuple of (f(x), g(x)), where f is the objective function
-        and g is the Jacobian (a vector of partial derivatives of f).
-    """
-    f = 0
-    g = np.zeros_like(x)
-    for parent, children in successors.items():
-        a = x[parent]
-        b = np.mean([x[child] for child in children])
-        f += (a - b) ** 2
-        g[parent] += 2 * (a - b)
-        for child in children:
-            g[child] += 2 * (b - a) / len(children)
-    for j, k in interactions:
-        f += (x[j] - x[k]) ** 2
-        g[j] += 2 * (x[j] - x[k])
-        g[k] += 2 * (x[k] - x[j])
-    return f, g
+    def __init__(
+        self, successors: Dict[int, List[int]], interactions: List[Tuple[int, int]]
+    ):
+        self._successors = successors
+        self._interactions = interactions
+        # Hessian matrix: computed lazily on first request.
+        self._H = None
+
+    def f(self, x):
+        """
+        Return the sum of the squared distances between interacting demes.
+        This is the minimisation objective for :func:`optimise_positions`.
+        """
+        val = 0
+        for parent, children in self._successors.items():
+            a = x[parent]
+            b = np.mean([x[child] for child in children])
+            val += (a - b) ** 2
+        for j, k in self._interactions:
+            val += (x[j] - x[k]) ** 2
+        return val
+
+    def g(self, x):
+        """
+        Return the Jacobian (partial derivatives) of :func:`f`.
+        """
+        g = np.zeros_like(x)
+        for parent, children in self._successors.items():
+            a = x[parent]
+            b = np.mean([x[child] for child in children])
+            g[parent] += 2 * (a - b)
+            m = len(children)
+            for child in children:
+                g[child] += 2 * (b - a) / m
+        for j, k in self._interactions:
+            g[j] += 2 * (x[j] - x[k])
+            g[k] += 2 * (x[k] - x[j])
+        return g
+
+    def h(self, x):
+        """
+        Return the Hessian (matrix of second partial derivatives) of :func:`f`.
+        This is constant with respect to x, so we compute it only once and
+        cache the result.
+        """
+        if self._H is None:
+            # Compute the Hessian.
+            n = len(x)
+            H = np.zeros((n, n), dtype=float)
+            for parent, children in self._successors.items():
+                m = len(children)
+                H[parent, parent] += 2.0
+                for child in children:
+                    H[parent, child] += -2.0 / m
+                    H[child, parent] += -2.0 / m
+                contrib = 2.0 / (m * m)
+                for s in children:
+                    for t in children:
+                        H[s, t] += contrib
+            for j, k in self._interactions:
+                H[j, j] += 2.0
+                H[k, k] += 2.0
+                H[j, k] += -2.0
+                H[k, j] += -2.0
+            self._H = H
+        return self._H
 
 
 def optimise_positions(
@@ -557,23 +607,13 @@ def optimise_positions(
         C.append(c)
     constraints = [scipy.optimize.LinearConstraint(C, lb=sep, ub=np.inf)]
 
+    obj = _PositionsObjective(successors, interactions)
+
     res = scipy.optimize.minimize(
-        _optimise_positions_objective,
+        obj.f,
         x0,
-        args=(successors, interactions),
-        # The objective function returns a 2-tuple of (f_x, g_x), where f_x
-        # is the objective evalutated at x, and g_x is the Jacobian of f
-        # evaluated at x.
-        jac=True,
-        # Don't use the quasi-Newton Hessian approximation (the default for
-        # method="trust-constr" if nothing is specified). This performs
-        # poorly, and produces warnings, for some of the test cases.
-        # Writing the Hessian function manually would be tedious,
-        # and I'd certainly get it wrong. But since I did manually
-        # implement the Jacobian, scipy can use a finite-difference
-        # approximation for the Hessian, by specifying either "2-point",
-        # "3-point", or "cs". The "2-point" option seems to work fine.
-        hess="2-point",
+        jac=obj.g,
+        hess=obj.h,
         method="trust-constr",
         constraints=constraints,
         bounds=scipy.optimize.Bounds(lb=np.min(x0) - sep, ub=np.max(x0) + sep),

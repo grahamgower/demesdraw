@@ -1,5 +1,4 @@
 import collections
-import functools
 import itertools
 import math
 
@@ -860,9 +859,10 @@ class TestOptimisePositions:
     @pytest.mark.parametrize("graph", tests.example_graphs())
     @pytest.mark.parametrize("unique", (True, False))
     def test_optimise_gradients(self, graph, unique):
-        # Check that the Jacobian of the objective function is calculated
-        # correctly by comparing it against a numerical approximation.
-        # The mpmath package is used to obtain a good approximation.
+        # Check that the Jacobian and Hessian of the objective function
+        # are calculated correctly by comparing them against a numerical
+        # approximation.
+        # The mpmath package is used to obtain good approximations.
         # This test isn't comprehensive---it only compares the gradients
         # at the starting position x0.
         sep = utils.separation_heuristic(graph)
@@ -876,18 +876,14 @@ class TestOptimisePositions:
         # Place the first deme at position 0.
         x0 -= x0[0]
 
-        fg = functools.partial(
-            utils._optimise_positions_objective,
-            successors=successors,
-            interactions=interactions,
-        )
+        obj = utils._PositionsObjective(successors, interactions)
 
         def f(*x):
             # transformed for mpmath.diff
-            return fg(x)[0]
+            return obj.f(x)
 
-        _, g_x0 = fg(x0)
-        np.testing.assert_almost_equal(g_x0, jacobian(f, x0))
+        np.testing.assert_almost_equal(obj.g(x0), jacobian(f, x0))
+        np.testing.assert_almost_equal(obj.h(x0), hessian(f, x0))
 
 
 def jacobian(f, x):
@@ -899,3 +895,21 @@ def jacobian(f, x):
     eye = np.eye(len(x), dtype=int)
     jac = [mp.diff(f, x, n=row) for row in eye]
     return jac
+
+
+def hessian(f, x):
+    """
+    Hessian (matrix of second partial derivatives) of function f, evaluated at x.
+    """
+    from mpmath import mp
+
+    n = len(x)
+    H = np.empty((n, n), dtype=float)
+    for i in range(n):
+        for j in range(n):
+            # multi-index for second derivative wrt i and j
+            order = tuple(
+                ((1 if k == i else 0) + (1 if k == j else 0)) for k in range(n)
+            )
+            H[i, j] = mp.diff(f, x, n=order)
+    return H
