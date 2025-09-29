@@ -4,12 +4,12 @@ queue_rules:
       - base=main
       - check-success=build-docs
       - check-success=lint
-      - check-success=tests (macos-11, 3.7)
-      - check-success=tests (macos-11, 3.11)
-      - check-success=tests (ubuntu-20.04, 3.7)
-      - check-success=tests (ubuntu-20.04, 3.11)
-      - check-success=tests (windows-2022, 3.7)
-      - check-success=tests (windows-2022, 3.11)
+      - check-success=tests (macos-latest, 3.9)
+      - check-success=tests (macos-latest, 3.13)
+      - check-success=tests (ubuntu-latest, 3.9)
+      - check-success=tests (ubuntu-latest, 3.13)
+      - check-success=tests (windows-latest, 3.9)
+      - check-success=tests (windows-latest, 3.13)
 
 pull_request_rules:
   - name: automatic merge for Dependabot pull requests
@@ -18,12 +18,12 @@ pull_request_rules:
       - author~=^dependabot(|-preview)\[bot\]$
       - check-success=build-docs
       - check-success=lint
-      - check-success=tests (macos-11, 3.7)
-      - check-success=tests (macos-11, 3.11)
-      - check-success=tests (ubuntu-20.04, 3.7)
-      - check-success=tests (ubuntu-20.04, 3.11)
-      - check-success=tests (windows-2022, 3.7)
-      - check-success=tests (windows-2022, 3.11)
+      - check-success=tests (macos-latest, 3.9)
+      - check-success=tests (macos-latest, 3.13)
+      - check-success=tests (ubuntu-latest, 3.9)
+      - check-success=tests (ubuntu-latest, 3.13)
+      - check-success=tests (windows-latest, 3.9)
+      - check-success=tests (windows-latest, 3.13)
     actions:
       queue:
         name: default
@@ -33,12 +33,12 @@ pull_request_rules:
       - base=main
       - check-success=build-docs
       - check-success=lint
-      - check-success=tests (macos-11, 3.7)
-      - check-success=tests (macos-11, 3.11)
-      - check-success=tests (ubuntu-20.04, 3.7)
-      - check-success=tests (ubuntu-20.04, 3.11)
-      - check-success=tests (windows-2022, 3.7)
-      - check-success=tests (windows-2022, 3.11)
+      - check-success=tests (macos-latest, 3.9)
+      - check-success=tests (macos-latest, 3.13)
+      - check-success=tests (ubuntu-latest, 3.9)
+      - check-success=tests (ubuntu-latest, 3.13)
+      - check-success=tests (windows-latest, 3.9)
+      - check-success=tests (windows-latest, 3.13)
     actions:
       queue:
         name: default

@@ -8,7 +8,7 @@ on:
 
 jobs:
   canceller:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: cancel previous runs
         uses: styfle/cancel-workflow-action@0.12.1
@@ -23,8 +23,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04, windows-2022, macos-11]
-        python-version: [3.7, "3.11"]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: [3.9, "3.11", "3.13"]
     env:
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python-version }}
