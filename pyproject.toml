@@ -3,3 +3,6 @@ requires = ["setuptools>=45", "wheel", "setuptools_scm>=6.2"]
 
 [tool.setuptools_scm]
 write_to = "demesdraw/_version.py"
+
+[tool.coverage.run]
+patch = ["subprocess"]
