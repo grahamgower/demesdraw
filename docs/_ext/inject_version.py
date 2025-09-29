@@ -1,6 +1,7 @@
 """
 Add version string to the navbar and footer.
 """
+
 import demesdraw
 
 
