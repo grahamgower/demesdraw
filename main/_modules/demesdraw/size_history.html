@@ -271,7 +271,9 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="c1"># Line2D and Patch use different keywords for the capstyle. *Sigh*</span>
         <span class="n">legend_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">solid_capstyle</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;capstyle&quot;</span><span class="p">))</span>
 
-        <span class="n">legend_handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([],</span> <span class="p">[],</span> <span class="o">**</span><span class="n">legend_kwargs</span><span class="p">))</span>
+        <span class="n">legend_handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([],</span> <span class="p">[],</span> <span class="o">**</span><span class="n">legend_kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+        <span class="p">)</span>
 
         <span class="c1"># Path for the main line (solid).</span>
         <span class="n">vertices_main</span> <span class="o">=</span> <span class="p">[]</span>

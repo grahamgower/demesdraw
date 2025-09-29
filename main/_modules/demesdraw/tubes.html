@@ -232,8 +232,8 @@ const thebe_selector_output = ".output, .cell_output"
 
             <span class="k">if</span> <span class="n">epoch</span><span class="o">.</span><span class="n">size_function</span> <span class="o">==</span> <span class="s2">&quot;constant&quot;</span><span class="p">:</span>
                 <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">])</span>
-                <span class="n">N1</span> <span class="o">=</span> <span class="p">[</span><span class="n">mid</span> <span class="o">-</span> <span class="n">epoch</span><span class="o">.</span><span class="n">start_size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
-                <span class="n">N2</span> <span class="o">=</span> <span class="p">[</span><span class="n">mid</span> <span class="o">+</span> <span class="n">epoch</span><span class="o">.</span><span class="n">end_size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+                <span class="n">N1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mid</span> <span class="o">-</span> <span class="n">epoch</span><span class="o">.</span><span class="n">start_size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">N2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mid</span> <span class="o">+</span> <span class="n">epoch</span><span class="o">.</span><span class="n">end_size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">epoch</span><span class="o">.</span><span class="n">size_function</span> <span class="o">==</span> <span class="s2">&quot;exponential&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">log_time</span><span class="p">:</span>
                     <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
@@ -479,7 +479,7 @@ const thebe_selector_output = ".output, .cell_output"
                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                 <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">poly</span><span class="o">.</span><span class="n">_demesdraw_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">deme</span><span class="o">=</span><span class="n">deme</span><span class="p">)</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">_demesdraw_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">deme</span><span class="o">=</span><span class="n">deme</span><span class="p">)</span>  <span class="c1"># type: ignore[attr-defined]</span>
 
         <span class="c1"># Indicate ancestry from ancestor demes.</span>
         <span class="n">tube_frac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
@@ -547,7 +547,7 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">time</span><span class="p">),</span>
             <span class="n">connectionstyle</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;arc3,rad=</span><span class="si">{</span><span class="n">radius</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="n">edgecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">arrow_kwargs</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">arrow_kwargs</span><span class="p">,</span>  <span class="c1"># type: ignore[arg-type]</span>
         <span class="p">)</span>
         <span class="n">arr</span><span class="o">.</span><span class="n">set_sketch_params</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="c1"># Ignore potential overflow when using log scale. Infinity is fine.</span>
@@ -655,9 +655,11 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="n">handles</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span>
                     <span class="n">edgecolor</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">colours</span><span class="p">[</span><span class="n">deme_name</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">),</span>
-                    <span class="n">facecolor</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">colours</span><span class="p">[</span><span class="n">deme_name</span><span class="p">],</span> <span class="mf">0.3</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">fill</span>
-                    <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">facecolor</span><span class="o">=</span><span class="p">(</span>
+                        <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">colours</span><span class="p">[</span><span class="n">deme_name</span><span class="p">],</span> <span class="mf">0.3</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">fill</span>
+                        <span class="k">else</span> <span class="kc">None</span>
+                    <span class="p">),</span>
                     <span class="n">label</span><span class="o">=</span><span class="n">deme_name</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="k">for</span> <span class="n">deme_name</span> <span class="ow">in</span> <span class="n">deme_labels</span>
@@ -708,7 +710,7 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span>
         <span class="p">)</span>
         <span class="n">x_offset</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">size1</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tubes</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-        <span class="n">ax_sb</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">inset_axes</span><span class="p">([</span><span class="n">x_offset</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.16</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">],</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
+        <span class="n">ax_sb</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">inset_axes</span><span class="p">((</span><span class="n">x_offset</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.16</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
 
         <span class="n">ax_sb</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">NullLocator</span><span class="p">())</span>
         <span class="n">ax_sb</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -725,12 +727,14 @@ const thebe_selector_output = ".output, .cell_output"
     <span class="k">def</span><span class="w"> </span><span class="nf">format_coord</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;time=</span><span class="si">{</span><span class="n">y</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">format_coord</span> <span class="o">=</span> <span class="n">format_coord</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">format_coord</span> <span class="o">=</span> <span class="n">format_coord</span>  <span class="c1"># type: ignore[method-assign]</span>
 
     <span class="c1"># Note: we must hold a reference to the motion_notify_event callback,</span>
     <span class="c1"># or the callback will get garbage collected and thus disabled.</span>
     <span class="c1"># So we just add an attribute to the returned Axes object.</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">_demesdraw_mouseoverpopup</span> <span class="o">=</span> <span class="n">_MouseoverPopup</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">_demesdraw_mouseoverpopup</span> <span class="o">=</span> <span class="p">(</span>  <span class="c1"># type: ignore[attr-defined]</span>
+        <span class="n">_MouseoverPopup</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">ax</span></div>
 
