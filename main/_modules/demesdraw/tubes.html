@@ -170,18 +170,18 @@ const thebe_selector_output = ".output, .cell_output"
           <div class="body" role="main">
             
   <h1>Source code for demesdraw.tubes</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">demes</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="kn">import</span> <span class="nn">matplotlib.patheffects</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">demes</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.patheffects</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 
 
-<span class="k">class</span> <span class="nc">Tube</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Tube</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A deme represented as a tube. The tube has a length along the time</span>
 <span class="sd">    dimension and a width equal to the deme&#39;s population size, which may</span>
@@ -194,7 +194,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="sd">        corresponding to the second side of the tube.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">deme</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Deme</span><span class="p">,</span>
         <span class="n">mid</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -212,7 +212,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="bp">self</span><span class="o">.</span><span class="n">mid</span> <span class="o">=</span> <span class="n">mid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_coords</span><span class="p">(</span><span class="n">deme</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">inf_start_time</span><span class="p">,</span> <span class="n">log_time</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_coords</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_coords</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">deme</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Deme</span><span class="p">,</span>
         <span class="n">mid</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -275,14 +275,14 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="bp">self</span><span class="o">.</span><span class="n">size1</span> <span class="o">=</span> <span class="n">size1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size2</span> <span class="o">=</span> <span class="n">size2</span>
 
-    <span class="k">def</span> <span class="nf">sizes_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sizes_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the size coordinates of the tube at the given time.&quot;&quot;&quot;</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deme</span><span class="o">.</span><span class="n">size_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
         <span class="n">N1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid</span> <span class="o">-</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="n">N2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid</span> <span class="o">+</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="k">return</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span>
 
-    <span class="k">def</span> <span class="nf">to_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a matplotlib.path.Path for the tube outline.&quot;&quot;&quot;</span>
         <span class="c1"># Compared with separately drawing each side of the tube,</span>
         <span class="c1"># drawing a path that includes both sides of the tube means:</span>
@@ -300,7 +300,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="k">return</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">codes</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">find_positions</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_positions</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find optimal deme positions along a single dimension by:</span>
 
@@ -327,7 +327,7 @@ const thebe_selector_output = ".output, .cell_output"
     <span class="p">)</span>
 
 
-<div class="viewcode-block" id="tubes"><a class="viewcode-back" href="../../api.html#demesdraw.tubes">[docs]</a><span class="k">def</span> <span class="nf">tubes</span><span class="p">(</span>
+<div class="viewcode-block" id="tubes"><a class="viewcode-back" href="../../api.html#demesdraw.tubes">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">tubes</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">ax</span><span class="p">:</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">colours</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">ColourOrColourMapping</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -561,7 +561,7 @@ const thebe_selector_output = ".output, .cell_output"
     <span class="n">xlim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
     <span class="n">offset</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">migration_line</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="o">**</span><span class="n">mig_kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">migration_line</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="o">**</span><span class="n">mig_kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Draw a migration line from source to dest at the given time.&quot;&quot;&quot;</span>
         <span class="n">source_size1</span><span class="p">,</span> <span class="n">source_size2</span> <span class="o">=</span> <span class="n">tubes</span><span class="p">[</span><span class="n">source</span><span class="p">]</span><span class="o">.</span><span class="n">sizes_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
         <span class="n">dest_size1</span><span class="p">,</span> <span class="n">dest_size2</span> <span class="o">=</span> <span class="n">tubes</span><span class="p">[</span><span class="n">dest</span><span class="p">]</span><span class="o">.</span><span class="n">sizes_at</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
@@ -601,7 +601,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
             <span class="n">line</span><span class="o">.</span><span class="n">_demesdraw_data</span> <span class="o">=</span> <span class="n">metadata</span>
 
-    <span class="k">def</span> <span class="nf">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">log_scale</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">random_migration_time</span><span class="p">(</span><span class="n">migration</span><span class="p">,</span> <span class="n">log_scale</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">migration</span><span class="o">.</span><span class="n">start_time</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">start_time</span><span class="p">):</span>
             <span class="n">start_time</span> <span class="o">=</span> <span class="n">inf_start_time</span>
@@ -722,7 +722,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="n">ax_sb</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s2">&quot;bottom&quot;</span><span class="p">)</span>
 
     <span class="c1"># Status bar text when in interactive mode.</span>
-    <span class="k">def</span> <span class="nf">format_coord</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_coord</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;time=</span><span class="si">{</span><span class="n">y</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">format_coord</span> <span class="o">=</span> <span class="n">format_coord</span>
@@ -737,8 +737,8 @@ const thebe_selector_output = ".output, .cell_output"
 
 <span class="c1"># Copied and modified from:</span>
 <span class="c1"># https://matplotlib.org/stable/tutorials/advanced/blitting.html</span>
-<span class="k">class</span> <span class="nc">_BlitManager</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">animated_artists</span><span class="o">=</span><span class="p">()):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_BlitManager</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">animated_artists</span><span class="o">=</span><span class="p">()):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -767,7 +767,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="c1"># grab the background on every draw</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cid</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s2">&quot;draw_event&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_draw</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">on_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Callback to register with &#39;draw_event&#39;.&quot;&quot;&quot;</span>
         <span class="n">cv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span>
         <span class="k">if</span> <span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -776,7 +776,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="bp">self</span><span class="o">.</span><span class="n">_bg</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">copy_from_bbox</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">bbox</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_draw_animated</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">add_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">art</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_artist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">art</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add an artist to be managed.</span>
 
@@ -793,13 +793,13 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="n">art</span><span class="o">.</span><span class="n">set_animated</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_artists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">art</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_draw_animated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_animated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Draw all of the animated artists.&quot;&quot;&quot;</span>
         <span class="n">fig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">figure</span>
         <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_artists</span><span class="p">:</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the screen with animated artists.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">supports_blit</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw_idle</span><span class="p">()</span>
@@ -818,8 +818,8 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="n">cv</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">fig</span><span class="o">.</span><span class="n">bbox</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">_MouseoverPopup</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_MouseoverPopup</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Setup interactive mouseover annotations.&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span>
@@ -851,7 +851,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="c1"># Save a reference to the callback so that it doesn&#39;t get garbage collected.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cid</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s2">&quot;motion_notify_event&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">motion_callback</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">motion_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">motion_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="n">visible</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">popup</span><span class="o">.</span><span class="n">get_visible</span><span class="p">()</span>
         <span class="n">mouse_inside_artist</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">inaxes</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">:</span>
@@ -880,7 +880,7 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="bp">self</span><span class="o">.</span><span class="n">popup</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bm</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">get_arrow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_arrow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">lr</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
         <span class="n">arrow</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$\rightarrow$&quot;</span> <span class="k">if</span> <span class="n">lr</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span> <span class="k">else</span> <span class="sa">r</span><span class="s2">&quot;$\leftarrow$&quot;</span>
         <span class="k">if</span> <span class="n">lr</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
@@ -888,7 +888,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dest</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">arrow</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="k">def</span> <span class="nf">get_mouseover_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mouseover_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;deme&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="n">deme</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">]</span>
             <span class="n">time</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">ydata</span><span class="p">,</span> <span class="n">deme</span><span class="o">.</span><span class="n">start_time</span> <span class="o">-</span> <span class="mf">1e-6</span><span class="p">),</span> <span class="n">deme</span><span class="o">.</span><span class="n">end_time</span><span class="p">)</span>
