@@ -60,8 +60,8 @@ class Tube:
 
             if epoch.size_function == "constant":
                 t = np.array([start_time, end_time])
-                N1 = [mid - epoch.start_size / 2] * 2
-                N2 = [mid + epoch.end_size / 2] * 2
+                N1 = np.array([mid - epoch.start_size / 2] * 2)
+                N2 = np.array([mid + epoch.end_size / 2] * 2)
             elif epoch.size_function == "exponential":
                 if log_time:
                     t = np.exp(
@@ -307,7 +307,7 @@ def tubes(
                 alpha=0.5,
                 zorder=1,
             )
-            poly._demesdraw_data = dict(deme=deme)
+            poly._demesdraw_data = dict(deme=deme)  # type: ignore[attr-defined]
 
         # Indicate ancestry from ancestor demes.
         tube_frac = np.linspace(
@@ -375,7 +375,7 @@ def tubes(
             (x2, time),
             connectionstyle=f"arc3,rad={radius}",
             edgecolor=colour,
-            **arrow_kwargs,
+            **arrow_kwargs,  # type: ignore[arg-type]
         )
         arr.set_sketch_params(1, 100, 2)
         # Ignore potential overflow when using log scale. Infinity is fine.
@@ -483,9 +483,11 @@ def tubes(
             handles=[
                 matplotlib.patches.Patch(
                     edgecolor=matplotlib.colors.to_rgba(colours[deme_name], 1.0),
-                    facecolor=matplotlib.colors.to_rgba(colours[deme_name], 0.3)
-                    if fill
-                    else None,
+                    facecolor=(
+                        matplotlib.colors.to_rgba(colours[deme_name], 0.3)
+                        if fill
+                        else None
+                    ),
                     label=deme_name,
                 )
                 for deme_name in deme_labels
@@ -536,7 +538,7 @@ def tubes(
             ax.transData, ax.transAxes
         )
         x_offset = min(min(t.size1) for t in tubes.values())
-        ax_sb = ax.inset_axes([x_offset, -0.16, width, 1e-6], transform=transform)
+        ax_sb = ax.inset_axes((x_offset, -0.16, width, 1e-6), transform=transform)
 
         ax_sb.yaxis.set_major_locator(matplotlib.ticker.NullLocator())
         ax_sb.spines[["left", "right", "top"]].set_visible(False)
@@ -553,12 +555,14 @@ def tubes(
     def format_coord(x, y):
         return f"time={y:.1f}"
 
-    ax.format_coord = format_coord
+    ax.format_coord = format_coord  # type: ignore[method-assign]
 
     # Note: we must hold a reference to the motion_notify_event callback,
     # or the callback will get garbage collected and thus disabled.
     # So we just add an attribute to the returned Axes object.
-    ax._demesdraw_mouseoverpopup = _MouseoverPopup(ax.figure, ax)
+    ax._demesdraw_mouseoverpopup = (  # type: ignore[attr-defined]
+        _MouseoverPopup(ax.figure, ax)
+    )
 
     return ax
 

@@ -1,8 +1,10 @@
 import warnings
-
 import demes
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
+from typing import cast
+import numpy as np
+import matplotlib
 
 import demesdraw
 from demesdraw import utils
@@ -25,7 +27,8 @@ with PdfPages("spacing.pdf") as pdf:
             colours = "black"
         ax = demesdraw.tubes(graph, colours=colours)
         pdf.savefig(ax.figure)
-        plt.close(ax.figure)
+        # Ensure mypy sees a concrete Figure (SubFigure may be present at runtime).
+        plt.close(cast(matplotlib.figure.Figure, ax.figure))
 
 with PdfPages("examples.pdf") as pdf:
     for filename in sorted(example_files()):
@@ -35,9 +38,16 @@ with PdfPages("examples.pdf") as pdf:
             warnings.filterwarnings("ignore", "Multiple pulses", UserWarning, "demes")
             graph = demes.load(filename)
 
-        fig, (ax1, ax2) = utils.get_fig_axes(
-            scale=1.5, nrows=2, constrained_layout=True
-        )
+        fig, ax = utils.get_fig_axes(scale=1.5, nrows=2, constrained_layout=True)
+        # ax may be a single Axes or an array/sequence of Axes (depending on kwargs).
+        if isinstance(ax, (list, tuple, np.ndarray)):
+            ax1, ax2 = ax
+        else:
+            ax1 = ax2 = ax
+        # Help mypy by casting to a concrete Axes type.
+        ax1 = cast(matplotlib.axes.Axes, ax1)
+        ax2 = cast(matplotlib.axes.Axes, ax2)
+
         log_size = utils.log_size_heuristic(graph)
         log_time = utils.log_time_heuristic(graph)
 
