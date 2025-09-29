@@ -109,6 +109,7 @@ def _get_colours(
           colour, all demes will be drawn with this colour.
     :type: dict or str
     """
+    new_colours: Dict[str, Colour]  # Stop mypy from complaining.
     if colours is None:
         if len(graph.demes) <= 10:
             cmap = plt.get_cmap("tab10")
@@ -127,7 +128,7 @@ def _get_colours(
                 "not found in the graph."
             )
         new_colours = {deme.name: default_colour for deme in graph.demes}
-        new_colours.update(**colours)
+        new_colours.update(colours)
     else:
         # Try to interpret as a matplotlib colour.
         try:

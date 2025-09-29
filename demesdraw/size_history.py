@@ -99,7 +99,9 @@ def size_history(
         # Line2D and Patch use different keywords for the capstyle. *Sigh*
         legend_kwargs.update(solid_capstyle=legend_kwargs.pop("capstyle"))
 
-        legend_handles.append(matplotlib.lines.Line2D([], [], **legend_kwargs))
+        legend_handles.append(
+            matplotlib.lines.Line2D([], [], **legend_kwargs)  # type: ignore[arg-type]
+        )
 
         # Path for the main line (solid).
         vertices_main = []
