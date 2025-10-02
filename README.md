@@ -27,13 +27,40 @@ The CLI can be used to quickly plot a Demes YAML file.
 Any file format supported by matplotlib can be specified,
 but a vector format such as svg or pdf is recommended.
 
-```
-$ demesdraw tubes --log-time \
+```sh
+demesdraw tubes --log-time \
 	examples/stdpopsim/HomSap__AmericanAdmixture_4B11.yaml \
 	AmericanAdmixture_4B11_tubes.svg
 ```
 
 ![stdpopsim/AmericanAdmixture_4B11 as tubes](https://raw.githubusercontent.com/grahamgower/demesdraw/main/docs/_static/AmericanAdmixture_4B11_tubes.svg)
+
+
+## Interactive plots
+
+If an output file is not specified, then an interactive plotting window will
+be shown. Hovering the mouse over parts of the plot will show an annotation.
+The example below combines this with `demes` CLI support for `ms` commands,
+to to visualise a command from the
+[`ms` manual](http://home.uchicago.edu/~rhudson1/source/mksamples.html).
+
+```sh
+# Figure 2 from the ms manual (pp. 17 & 18 of msdoc.pdf):
+# Calculate N0, the scaling parameter to convert coalescent units into
+# generation times and population sizes.
+N0=`python -c 'theta=11.2; mu=1e-8; length=7000; print(theta/(4*mu*length))'`
+demes ms \
+    -N0 $N0 \
+    -I 2 3 12 \
+    -g 1 44.36 \
+    -n 2 0.125 \
+    -eg 0.03125 1 0.0 \
+    -en 0.0625 2 0.05 \
+    -ej 0.09375 2 1 \
+| demesdraw tubes --scale-bar -
+```
+
+![ms_manual/Figure_2](https://raw.githubusercontent.com/grahamgower/demesdraw/main/docs/_static/ms_manual_figure_2.svg)
 
 
 ## Python API
