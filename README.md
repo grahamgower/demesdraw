@@ -41,7 +41,7 @@ demesdraw tubes --log-time \
 If an output file is not specified, then an interactive plotting window will
 be shown. Hovering the mouse over parts of the plot will show an annotation.
 The example below combines this with `demes` CLI support for `ms` commands,
-to to visualise a command from the
+to visualise a command from the
 [`ms` manual](http://home.uchicago.edu/~rhudson1/source/mksamples.html).
 
 ```sh
