@@ -18,7 +18,7 @@ import demesdraw
 
 # When plotting inside a notebook, it's best to use the vector format SVG,
 # instead of the ipython default (PNG, a raster format).
-from IPython.display import set_matplotlib_formats
+from matplotlib_inline.backend_inline import set_matplotlib_formats
 set_matplotlib_formats("svg")
 ```
 

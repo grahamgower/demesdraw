@@ -1,49 +1,42 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Layout algorithm &#8212; DemesDraw</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/basic_mod.css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/basic_mod.css?v=9b2032db" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=905acdad" />
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js"></script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <script src="_static/js/petite-vue.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Changelog" href="CHANGELOG.html" />
+    <link rel="next" title="Citing DemesDraw" href="CITATION.html" />
     <link rel="prev" title="Examples" href="examples.html" /> 
   </head><body data-dark_mode_code_blocks="true">
 
@@ -138,7 +131,7 @@ const thebe_selector_output = ".output, .cell_output"
 
         <div class="searchbox_wrapper">
             
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -146,22 +139,21 @@ const thebe_selector_output = ".output, .cell_output"
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
     </nav>
 </div>
 
     
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html#population-size-history">Population size history</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html#demes-as-tubes">Demes as tubes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">CLI reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Layout algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CITATION.html">Citing DemesDraw</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
 </ul>
 
@@ -175,7 +167,7 @@ const thebe_selector_output = ".output, .cell_output"
           <div class="body" role="main">
             
   <section class="tex2jax_ignore mathjax_ignore" id="layout-algorithm">
-<h1>Layout algorithm<a class="headerlink" href="#layout-algorithm" title="Permalink to this heading">¶</a></h1>
+<h1>Layout algorithm<a class="headerlink" href="#layout-algorithm" title="Link to this heading">¶</a></h1>
 <p>This page describes <code class="docutils literal notranslate"><span class="pre">demesdraw</span></code> implementation details that affect
 the layout of tubes plots.
 The <a class="reference internal" href="api.html#demesdraw.tubes" title="demesdraw.tubes"><code class="xref py py-func docutils literal notranslate"><span class="pre">tubes()</span></code></a> function attempts to construct a visually-appealing
@@ -187,7 +179,7 @@ and instantaneous pulses of migration.
 A concerted effort is made to produce a layout that makes each
 of these features visible, for arbitrarily complex input models.</p>
 <section id="infinite-start-times">
-<h2>Infinite start times<a class="headerlink" href="#infinite-start-times" title="Permalink to this heading">¶</a></h2>
+<h2>Infinite start times<a class="headerlink" href="#infinite-start-times" title="Link to this heading">¶</a></h2>
 <p>In any Demes model, there must be at least one deme with an infinite
 <code class="docutils literal notranslate"><span class="pre">start_time</span></code>. Clearly, drawing infinitely long lines is not practical.
 However, there is only a finite period of time in which demes and
@@ -201,10 +193,10 @@ The proportion of the time axis that is used for times &gt; <span class="math no
 can be configured via the <code class="docutils literal notranslate"><span class="pre">inf_ratio</span></code> parameter.
 For the model below, <span class="math notranslate nohighlight">\(t=100\)</span>.</p>
 <div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
+<details class="admonition hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model1</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
@@ -241,11 +233,12 @@ For the model below, <span class="math notranslate nohighlight">\(t=100\)</span>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/f524466bbdf7f2f745bb72e455592b58f71e623b2fe9698a545ee9b0897626be.svg" src="_images/f524466bbdf7f2f745bb72e455592b58f71e623b2fe9698a545ee9b0897626be.svg" /></div>
+<img alt="_images/609f720abc14d03d42be64ce1ca36563c1bccdfc0271e65e7a4e402de16b59f6.svg" src="_images/609f720abc14d03d42be64ce1ca36563c1bccdfc0271e65e7a4e402de16b59f6.svg" />
+</div>
 </div>
 </section>
 <section id="deme-positions">
-<h2>Deme positions<a class="headerlink" href="#deme-positions" title="Permalink to this heading">¶</a></h2>
+<h2>Deme positions<a class="headerlink" href="#deme-positions" title="Link to this heading">¶</a></h2>
 <p>The vertical axis in tubes plots has a single interpretation as the time axis.
 In contrast, the horizontal axis has a dual purpose:</p>
 <ul class="simple">
@@ -262,7 +255,8 @@ of each deme.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/49fcbc3535652fb8e2b21e2b1808f6bb88e8dee58bef6c19b6a93d8cf49036b9.svg" src="_images/49fcbc3535652fb8e2b21e2b1808f6bb88e8dee58bef6c19b6a93d8cf49036b9.svg" /></div>
+<img alt="_images/b370bec9b5d867e776cb810bf4f52deeceaf9d51914344bd588c7638093f7135.svg" src="_images/b370bec9b5d867e776cb810bf4f52deeceaf9d51914344bd588c7638093f7135.svg" />
+</div>
 </div>
 <p>However if the width of the demes are not taken into account when
 choosing positions, the resulting figure may look strange.</p>
@@ -274,20 +268,21 @@ choosing positions, the resulting figure may look strange.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/7732c920e84f0c844821437c08cae7bd3dfd14d7adf0fe2f8d0e0e0926778734.svg" src="_images/7732c920e84f0c844821437c08cae7bd3dfd14d7adf0fe2f8d0e0e0926778734.svg" /></div>
+<img alt="_images/daf592cd5cf0f5a794a48a057a91c3d8c4c874984ba650c701cc583da3bf4fe4.svg" src="_images/daf592cd5cf0f5a794a48a057a91c3d8c4c874984ba650c701cc583da3bf4fe4.svg" />
+</div>
 </div>
 </section>
 <section id="blank-space">
-<h2>Blank space<a class="headerlink" href="#blank-space" title="Permalink to this heading">¶</a></h2>
+<h2>Blank space<a class="headerlink" href="#blank-space" title="Link to this heading">¶</a></h2>
 <p>While the width of tubes provides information about population sizes,
 the relative position of distinct demes has no meaningful interpretation.
 But the amount of blank space between demes can be important for
 producing an aesthetically pleasing figure. Compare the two plots below.</p>
 <div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
+<details class="admonition hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">island_model</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
@@ -317,7 +312,9 @@ producing an aesthetically pleasing figure. Compare the two plots below.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/f2a718c56eaed4f2f13b7372b16b61b58f04326bb226261049bae564a033b086.svg" src="_images/f2a718c56eaed4f2f13b7372b16b61b58f04326bb226261049bae564a033b086.svg" /><img alt="_images/bdcc332bb3a44bc1af127de18aac435b1fa6cc757d2436d7b362e3cf35278891.svg" src="_images/bdcc332bb3a44bc1af127de18aac435b1fa6cc757d2436d7b362e3cf35278891.svg" /></div>
+<img alt="_images/90e9800362965aac8ce3f522e760bb811c0649f363eaa76372acb0e680152c00.svg" src="_images/90e9800362965aac8ce3f522e760bb811c0649f363eaa76372acb0e680152c00.svg" />
+<img alt="_images/d7ec0ccaaa7c09fbf4e25073fd34ea9eef5ceead0aefe5074475eff5339fcd86.svg" src="_images/d7ec0ccaaa7c09fbf4e25073fd34ea9eef5ceead0aefe5074475eff5339fcd86.svg" />
+</div>
 </div>
 <p>Finding a good separation distance is dependent on the
 number of demes and their sizes. To avoid having to find a good
@@ -334,7 +331,10 @@ which looks reasonable in most cases.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/73a4881c3b37768a298d229f3188f7bdf6b3455687e6b1379da584a8f1bab8e1.svg" src="_images/73a4881c3b37768a298d229f3188f7bdf6b3455687e6b1379da584a8f1bab8e1.svg" /><img alt="_images/a33cbb42283e0cf9dbe4e250d21bc25ae8124c76c66438840a6b180c50766c87.svg" src="_images/a33cbb42283e0cf9dbe4e250d21bc25ae8124c76c66438840a6b180c50766c87.svg" /><img alt="_images/9a9b18fbb720334d0abc971d73bc46fb7c7b6e19e1d837bcd9b8cf7409037f28.svg" src="_images/9a9b18fbb720334d0abc971d73bc46fb7c7b6e19e1d837bcd9b8cf7409037f28.svg" /></div>
+<img alt="_images/2b4be9d5f9343affc83ffaf20469a8a76a110e318cff4310cb7c45b7aac9e48a.svg" src="_images/2b4be9d5f9343affc83ffaf20469a8a76a110e318cff4310cb7c45b7aac9e48a.svg" />
+<img alt="_images/b18b6998c5f04304fb91a953f526e1117dd36a15d3a82138f3f54d9904d4d652.svg" src="_images/b18b6998c5f04304fb91a953f526e1117dd36a15d3a82138f3f54d9904d4d652.svg" />
+<img alt="_images/4fe508c57666b92457e37e844e8dda6269e2063b4b759a53541af6b0aa0a41ee.svg" src="_images/4fe508c57666b92457e37e844e8dda6269e2063b4b759a53541af6b0aa0a41ee.svg" />
+</div>
 </div>
 <p>The equation used by the <a class="reference internal" href="api.html#demesdraw.utils.separation_heuristic" title="demesdraw.utils.separation_heuristic"><code class="xref py py-func docutils literal notranslate"><span class="pre">utils.separation_heuristic()</span></code></a> function is</p>
 <div class="math notranslate nohighlight">
@@ -346,16 +346,16 @@ given time,
 and <span class="math notranslate nohighlight">\(\max(size)\)</span> is the maximum deme size in the model.</p>
 </section>
 <section id="left-to-right-ordering-of-demes">
-<h2>Left-to-right ordering of demes<a class="headerlink" href="#left-to-right-ordering-of-demes" title="Permalink to this heading">¶</a></h2>
+<h2>Left-to-right ordering of demes<a class="headerlink" href="#left-to-right-ordering-of-demes" title="Link to this heading">¶</a></h2>
 <p>For a variety of models, a simple ordering of demes along the
 horizontal axis doesn’t produce a good layout.
 In the model below, the line indicating the ancestor/descendant
 relationship between A and C crosses the deme B.</p>
 <div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
+<details class="admonition hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model2</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
@@ -388,7 +388,8 @@ relationship between A and C crosses the deme B.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/403c3057aa04ffff3839252e648c99fe3b81d9f9a0921507344fd97c8714fd58.svg" src="_images/403c3057aa04ffff3839252e648c99fe3b81d9f9a0921507344fd97c8714fd58.svg" /></div>
+<img alt="_images/19e0f8207f0a3bbec454b105d5c90e74aa5608054405728e2842c7d62f79bcaf.svg" src="_images/19e0f8207f0a3bbec454b105d5c90e74aa5608054405728e2842c7d62f79bcaf.svg" />
+</div>
 </div>
 <p>For this particular model, we could just draw deme C on the left of deme A.
 However, the best choice is not always so obvious.
@@ -406,7 +407,8 @@ there is no way to draw the graph without having lines cross.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/c3391cec488cbbb333bc07b5de5fc88a589dd72b4c501eaa3606a36e07b715ab.svg" src="_images/c3391cec488cbbb333bc07b5de5fc88a589dd72b4c501eaa3606a36e07b715ab.svg" /></div>
+<img alt="_images/638f7856ad2bc2b165d25ed5ae5b89fa77c8593753ae581cb2b17d95bc1c1518.svg" src="_images/638f7856ad2bc2b165d25ed5ae5b89fa77c8593753ae581cb2b17d95bc1c1518.svg" />
+</div>
 </div>
 <p>While it may not be possible to prevent lines from crossing,
 it certainly is possible to limit the number of crossings.
@@ -422,7 +424,8 @@ ordering.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/84974ba3a02b7b49d86eac6e5c13135c6ec6bbe3de9de75665a269e89661da83.svg" src="_images/84974ba3a02b7b49d86eac6e5c13135c6ec6bbe3de9de75665a269e89661da83.svg" /></div>
+<img alt="_images/3365bd29d3f14f757e1fe0c027d5dd3cbf088bc727190807fbc5be45f4c40763.svg" src="_images/3365bd29d3f14f757e1fe0c027d5dd3cbf088bc727190807fbc5be45f4c40763.svg" />
+</div>
 </div>
 <p>What we would like, is to use a left-to-right ordering that <em>minimizes</em>
 the number of lines crossing.</p>
@@ -436,7 +439,8 @@ the number of lines crossing.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/254158a98acddd84e3a24079300f24b5de49fce09fb9ead34dcfbf21064da38d.svg" src="_images/254158a98acddd84e3a24079300f24b5de49fce09fb9ead34dcfbf21064da38d.svg" /></div>
+<img alt="_images/f3e8140caaa4846681e7f66b2e7364ea3fad064e91d0f0e588c6460ad67cc21a.svg" src="_images/f3e8140caaa4846681e7f66b2e7364ea3fad064e91d0f0e588c6460ad67cc21a.svg" />
+</div>
 </div>
 <p>The <a class="reference internal" href="api.html#demesdraw.utils.minimal_crossing_positions" title="demesdraw.utils.minimal_crossing_positions"><code class="xref py py-func docutils literal notranslate"><span class="pre">utils.minimal_crossing_positions()</span></code></a> function is not perfect.
 Actually, the problem of finding the
@@ -462,7 +466,7 @@ if <span class="math notranslate nohighlight">\(n!\)</span> &lt; 1 million, i.e.
 1 million random orderings are proposed to identify a good ordering.</p>
 </section>
 <section id="optimising-positions">
-<h2>Optimising positions<a class="headerlink" href="#optimising-positions" title="Permalink to this heading">¶</a></h2>
+<h2>Optimising positions<a class="headerlink" href="#optimising-positions" title="Link to this heading">¶</a></h2>
 <p>Given an ordering for the demes, the positions could yet be improved
 by using less horizontal space.
 In particular, when two demes do not coexist, it may be possible to
@@ -487,7 +491,8 @@ when none are specified.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/b1dc01457b8eacfe89bc7dcd4b8fcbbd9ae66c5e4e45cc1b7538c61e45dcc7ad.svg" src="_images/b1dc01457b8eacfe89bc7dcd4b8fcbbd9ae66c5e4e45cc1b7538c61e45dcc7ad.svg" /></div>
+<img alt="_images/7346e0845a4a49eaba3572416c32ec5c9f63f4e06c470bdf07128bda50665c56.svg" src="_images/7346e0845a4a49eaba3572416c32ec5c9f63f4e06c470bdf07128bda50665c56.svg" />
+</div>
 </div>
 <p>The <a class="reference internal" href="api.html#demesdraw.utils.optimise_positions" title="demesdraw.utils.optimise_positions"><code class="xref py py-func docutils literal notranslate"><span class="pre">utils.optimise_positions()</span></code></a> function minimises the
 squared distances</p>
@@ -570,7 +575,7 @@ using the “trust-constr” method.</p>
 
             <div class="right">
                 
-                    <a href="CHANGELOG.html"><span>Changelog</span><span class="icon">&gt;</span></a>
+                    <a href="CITATION.html"><span>Citing DemesDraw</span><span class="icon">&gt;</span></a>
                 
             </div>
         </div>
@@ -578,7 +583,7 @@ using the “trust-constr” method.</p>
 
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021-2023.
+    &#169; Copyright 2021-2023.
     </div>
 
 <p id="theme_credit">Styled using the <a href="https://github.com/piccolo-orm/piccolo_theme">Piccolo Theme</a></p>
