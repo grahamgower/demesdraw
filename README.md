@@ -24,7 +24,7 @@ $ conda install -c conda-forge demesdraw
 ## Command line interface (CLI)
 
 The CLI can be used to quickly plot a Demes YAML file.
-Any file format supported by matplotlib can be specified,
+Any image format supported by matplotlib can be specified as the output,
 but a vector format such as svg or pdf is recommended.
 
 ```sh
