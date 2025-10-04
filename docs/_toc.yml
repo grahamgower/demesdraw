@@ -6,4 +6,5 @@ sections:
 - file: cli
 - file: examples
 - file: layout
+- file: CITATION
 - file: CHANGELOG
