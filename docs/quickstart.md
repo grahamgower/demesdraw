@@ -18,7 +18,7 @@ import demesdraw
 
 # When plotting inside a notebook, it's best to use the vector format SVG,
 # instead of the ipython default (PNG, a raster format).
-from IPython.display import set_matplotlib_formats
+from matplotlib_inline.backend_inline import set_matplotlib_formats
 set_matplotlib_formats("svg")
 ```
 
@@ -36,7 +36,7 @@ Or with conda.
 conda install -c conda-forge demesdraw
 ```
 
-# Population size history
+## Population size history
 
 The {func}`.size_history` function plots the population size as a
 function of time for each deme in the graph. This is great for single-deme
@@ -62,7 +62,7 @@ gutenkunst_ooa = demes.load("../examples/stdpopsim/HomSap__OutOfAfrica_3G09.yaml
 demesdraw.size_history(gutenkunst_ooa, invert_x=True, log_size=True);
 ```
 
-# Demes as tubes
+## Demes as tubes
 
 The {func}`.tubes()` function plots a "demes as tubes"-style schematic
 overview. Compared with the size-history figure above, this more fully

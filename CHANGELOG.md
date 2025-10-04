@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.4.1] - 2025-10-04
+
+* Fix convergence of the layout algorithm for some Demes models.
+  Optimising the horizontal positions of demes is a quadratic
+  optimisation problem, subject to linear inequality constraints,
+  and has a global optimum.
+  To optimise our objective function, we use scipy, and we were letting scipy
+  calculate the Hessian (matrix of second partial derivatives of our objective
+  function) using a 2-point finite-difference approximation.
+  This approximation wasn't very accurate, but didn't noticeably affect the
+  layout positions. However, it did lead to very slow convergence in some
+  circumstances (e.g. see #287).
+  This fix calculates the Hessian analytically, which results in very fast
+  convergence. The vast majority of users shouldn't notice any change.
+
 ## [0.4.0] - 2023-05-03
 
 * Documented the layout algorithm used in tubes plots.
