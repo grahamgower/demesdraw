@@ -67,6 +67,10 @@ jobs:
   pypi_upload:
     runs-on: ubuntu-latest
     needs: ['wheel_test']
+    permissions:
+      # for Trusted Publishing
+      id-token: write
+    environment: pypi
     steps:
       - name: download wheel
         uses: actions/download-artifact@v4
