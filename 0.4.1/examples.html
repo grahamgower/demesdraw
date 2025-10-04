@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Examples &#8212; DemesDraw</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/basic_mod.css?v=9b2032db" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=905acdad" />
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="_static/js/theme.js"></script>
+    <script src="_static/js/petite-vue.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Layout algorithm" href="layout.html" />
+    <link rel="prev" title="CLI reference" href="cli.html" /> 
+  </head><body data-dark_mode_code_blocks="true">
+
+<div id="top_nav">
+    
+
+    <nav>
+        
+            
+        
+
+        <p id="toggle_sidebar">
+            <a href="#" title="Toggle sidebar">|||</a>
+        </p>
+        <h1><a href="index.html" title="Go to homepage">DemesDraw</a></h1>
+            <a id="source_link" href="https://github.com/grahamgower/demesdraw">
+    
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+            <path fill="white" d="M 244.8,8 C 106.1,8 0,113.3 0,252 c 0,110.9 69.8,205.8 169.5,239.2 12.8,2.3 17.3,-5.6 17.3,-12.1 0,-6.2 -0.3,-40.4 -0.3,-61.4 0,0 -70,15 -84.7,-29.8 0,0 -11.4,-29.1 -27.8,-36.6 0,0 -22.9,-15.7 1.6,-15.4 0,0 24.9,2 38.6,25.8 21.9,38.6 58.6,27.5 72.9,20.9 2.3,-16 8.8,-27.1 16,-33.7 -55.9,-6.2 -112.3,-14.3 -112.3,-110.5 0,-27.5 7.6,-41.3 23.6,-58.9 -2.6,-6.5 -11.1,-33.3 2.6,-67.9 20.9,-6.5 69,27 69,27 20,-5.6 41.5,-8.5 62.8,-8.5 21.3,0 42.8,2.9 62.8,8.5 0,0 48.1,-33.6 69,-27 13.7,34.7 5.2,61.4 2.6,67.9 16,17.7 25.8,31.5 25.8,58.9 0,96.5 -58.9,104.2 -114.8,110.5 9.2,7.9 17,22.9 17,46.4 0,33.7 -0.3,75.4 -0.3,83.6 0,6.5 4.6,14.4 17.3,12.1 C 428.2,457.8 496,362.9 496,252 496,113.3 383.5,8 244.8,8 Z"/>
+        </svg>
+    
+</a>
+        
+
+        <a id="mode_toggle" href="#" @click.prevent="handleClick" :title="mode">
+    <template v-if="mode == 'light'">
+        <svg width="100%" height="100%" viewBox="0 0 79 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="mode_light"><rect id="Bounds" x="0" y="-0" width="78.623" height="79.049" style="fill:none;"/><circle cx="39.311" cy="39.524" r="15.734" style="fill:#fff;"/><g id="beams"><g id="beam"><path id="beam1" serif:id="beam" d="M44.212,4.901c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.9,2.196 -4.9,4.901l-0,9.614c-0,2.705 2.196,4.901 4.9,4.901c2.705,0 4.901,-2.196 4.901,-4.901l0,-9.614Z" style="fill:#fff;"/></g><g id="beam2" serif:id="beam"><path id="beam3" serif:id="beam" d="M67.48,18.073c1.913,-1.912 1.913,-5.018 0,-6.931c-1.912,-1.912 -5.018,-1.912 -6.931,0l-6.798,6.799c-1.912,1.912 -1.912,5.018 0,6.931c1.913,1.912 5.018,1.912 6.931,-0l6.798,-6.799Z" style="fill:#fff;"/></g><g id="beam4" serif:id="beam"><path id="beam5" serif:id="beam" d="M25.728,61.108c1.912,-1.913 1.912,-5.018 -0,-6.931c-1.913,-1.913 -5.019,-1.913 -6.931,-0l-6.799,6.798c-1.912,1.913 -1.912,5.019 0,6.931c1.913,1.913 5.019,1.913 6.931,0l6.799,-6.798Z" style="fill:#fff;"/></g><g id="beam6" serif:id="beam"><path id="beam7" serif:id="beam" d="M60.682,54.177c-1.913,-1.913 -5.018,-1.913 -6.931,-0c-1.912,1.913 -1.912,5.018 0,6.931l6.798,6.798c1.913,1.913 5.019,1.913 6.931,0c1.913,-1.912 1.913,-5.018 0,-6.931l-6.798,-6.798Z" style="fill:#fff;"/></g><g id="beam8" serif:id="beam"><path id="beam9" serif:id="beam" d="M4.901,34.623c-2.705,0 -4.901,2.196 -4.901,4.901c0,2.705 2.196,4.901 4.901,4.901l9.614,0c2.705,0 4.901,-2.196 4.901,-4.901c0,-2.705 -2.196,-4.901 -4.901,-4.901l-9.614,0Z" style="fill:#fff;"/></g><g id="beam10" serif:id="beam"><path id="beam11" serif:id="beam" d="M44.212,64.534c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.9,2.196 -4.9,4.901l-0,9.614c-0,2.705 2.196,4.901 4.9,4.901c2.705,-0 4.901,-2.196 4.901,-4.901l0,-9.614Z" style="fill:#fff;"/></g><g id="beam12" serif:id="beam"><path id="beam13" serif:id="beam" d="M18.929,11.142c-1.912,-1.912 -5.018,-1.912 -6.931,0c-1.912,1.913 -1.912,5.019 0,6.931l6.799,6.799c1.912,1.912 5.018,1.912 6.931,-0c1.912,-1.913 1.912,-5.019 -0,-6.931l-6.799,-6.799Z" style="fill:#fff;"/></g><g id="beam14" serif:id="beam"><path id="beam15" serif:id="beam" d="M64.108,34.623c-2.705,0 -4.901,2.196 -4.901,4.901c-0,2.705 2.196,4.901 4.901,4.901l9.614,0c2.705,0 4.901,-2.196 4.901,-4.901c-0,-2.705 -2.196,-4.901 -4.901,-4.901l-9.614,0Z" style="fill:#fff;"/></g></g></g></svg>
+    </template>
+
+    <template v-if="mode == 'dark'">
+        <svg width="100%" height="100%" viewBox="0 0 79 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="mode_dark"><rect id="Bounds" x="0" y="-0" width="78.623" height="79.049" style="fill:none;"/><circle cx="39.311" cy="39.524" r="15.734" style="fill:#fff;"/><g id="beams"><g id="beam"><path id="beam1" serif:id="beam" d="M44.212,14.515c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,0 -4.901,2.196 -4.901,4.901c0,2.705 2.197,4.901 4.901,4.901c2.705,0 4.901,-2.196 4.901,-4.901Z" style="fill:#fff;"/></g><g id="beam2" serif:id="beam"><path id="beam3" serif:id="beam" d="M60.662,24.892c1.902,-1.902 1.902,-4.99 0,-6.892l-0.04,-0.039c-1.901,-1.902 -4.989,-1.902 -6.891,-0c-1.901,1.901 -1.901,4.989 0,6.891l0.04,0.04c1.902,1.901 4.989,1.901 6.891,-0Z" style="fill:#fff;"/></g><g id="beam4" serif:id="beam"><path id="beam5" serif:id="beam" d="M25.732,61.103c1.91,-1.91 1.91,-5.011 0,-6.921l-0.009,-0.01c-1.91,-1.91 -5.012,-1.91 -6.921,-0c-1.91,1.91 -1.91,5.011 -0,6.921l0.01,0.01c1.909,1.91 5.011,1.91 6.92,-0Z" style="fill:#fff;"/></g><g id="beam6" serif:id="beam"><path id="beam7" serif:id="beam" d="M60.672,54.167c-1.907,-1.907 -5.004,-1.907 -6.911,0l-0.02,0.02c-1.907,1.907 -1.907,5.004 0,6.911c1.907,1.907 5.004,1.907 6.911,-0l0.02,-0.02c1.907,-1.907 1.907,-5.004 0,-6.911Z" style="fill:#fff;"/></g><g id="beam8" serif:id="beam"><path id="beam9" serif:id="beam" d="M14.52,34.623c-2.702,0 -4.896,2.194 -4.896,4.896l0,0.01c0,2.702 2.194,4.896 4.896,4.896c2.702,0 4.896,-2.194 4.896,-4.896l-0,-0.01c-0,-2.702 -2.194,-4.896 -4.896,-4.896Z" style="fill:#fff;"/></g><g id="beam10" serif:id="beam"><path id="beam11" serif:id="beam" d="M44.212,64.534c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.901,2.196 -4.901,4.901c0,2.704 2.197,4.9 4.901,4.9c2.705,0 4.901,-2.196 4.901,-4.9Z" style="fill:#fff;"/></g><g id="beam12" serif:id="beam"><path id="beam13" serif:id="beam" d="M25.73,17.943c-1.911,-1.911 -5.015,-1.911 -6.926,0l-0.005,0.005c-1.911,1.911 -1.911,5.015 0,6.926c1.911,1.911 5.015,1.911 6.926,0l0.005,-0.005c1.911,-1.911 1.911,-5.014 -0,-6.926Z" style="fill:#fff;"/></g><g id="beam14" serif:id="beam"><path id="beam15" serif:id="beam" d="M64.098,34.623c-2.699,0 -4.891,2.192 -4.891,4.892l-0,0.019c-0,2.699 2.192,4.891 4.891,4.891c2.7,0 4.892,-2.192 4.892,-4.891l0,-0.019c0,-2.7 -2.192,-4.892 -4.892,-4.892Z" style="fill:#fff;"/></g></g></g></svg>
+    </template>
+
+    <template v-if="mode == 'darkest'">
+        <svg width="100%" height="100%" viewBox="0 0 79 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="mode_darkest"><rect id="Bounds" x="0" y="-0" width="78.623" height="79.049" style="fill:none;"/><path d="M39.315,23.791c8.684,-0 15.734,7.05 15.734,15.733c0,8.684 -7.05,15.734 -15.734,15.734c-8.683,0 -15.733,-7.05 -15.733,-15.734c-0,-8.683 7.05,-15.733 15.733,-15.733Zm0,4.737c6.069,0 10.997,4.927 10.997,10.996c-0,6.069 -4.928,10.996 -10.997,10.996c-6.068,0 -10.996,-4.927 -10.996,-10.996c0,-6.069 4.928,-10.996 10.996,-10.996Z" style="fill:#fff;"/><g id="beams"><g id="beam"><path id="beam1" serif:id="beam" d="M44.216,14.515c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,0 -4.9,2.196 -4.9,4.901c-0,2.705 2.196,4.901 4.9,4.901c2.705,0 4.901,-2.196 4.901,-4.901Z" style="fill:#fff;"/></g><g id="beam2" serif:id="beam"><path id="beam3" serif:id="beam" d="M60.666,24.892c1.902,-1.902 1.902,-4.99 0,-6.892l-0.04,-0.039c-1.901,-1.902 -4.989,-1.902 -6.891,-0c-1.901,1.901 -1.901,4.989 0,6.891l0.04,0.04c1.902,1.901 4.99,1.901 6.891,-0Z" style="fill:#fff;"/></g><g id="beam4" serif:id="beam"><path id="beam5" serif:id="beam" d="M25.737,61.103c1.909,-1.91 1.909,-5.011 -0,-6.921l-0.01,-0.01c-1.91,-1.91 -5.011,-1.91 -6.921,-0c-1.91,1.91 -1.91,5.011 -0,6.921l0.01,0.01c1.91,1.91 5.011,1.91 6.921,-0Z" style="fill:#fff;"/></g><g id="beam6" serif:id="beam"><path id="beam7" serif:id="beam" d="M60.676,54.167c-1.907,-1.907 -5.004,-1.907 -6.911,0l-0.02,0.02c-1.907,1.907 -1.907,5.004 0,6.911c1.907,1.907 5.004,1.907 6.911,-0l0.02,-0.02c1.907,-1.907 1.907,-5.004 0,-6.911Z" style="fill:#fff;"/></g><g id="beam8" serif:id="beam"><path id="beam9" serif:id="beam" d="M14.524,34.623c-2.702,0 -4.896,2.194 -4.896,4.896l0,0.01c0,2.702 2.194,4.896 4.896,4.896c2.702,0 4.896,-2.194 4.896,-4.896l0,-0.01c0,-2.702 -2.194,-4.896 -4.896,-4.896Z" style="fill:#fff;"/></g><g id="beam10" serif:id="beam"><path id="beam11" serif:id="beam" d="M44.216,64.534c0,-2.705 -2.196,-4.901 -4.901,-4.901c-2.704,-0 -4.9,2.196 -4.9,4.901c-0,2.704 2.196,4.9 4.9,4.9c2.705,0 4.901,-2.196 4.901,-4.9Z" style="fill:#fff;"/></g><g id="beam12" serif:id="beam"><path id="beam13" serif:id="beam" d="M25.734,17.943c-1.911,-1.911 -5.015,-1.911 -6.926,0l-0.005,0.005c-1.911,1.911 -1.911,5.015 0,6.926c1.911,1.911 5.015,1.911 6.926,0l0.005,-0.005c1.911,-1.911 1.911,-5.014 0,-6.926Z" style="fill:#fff;"/></g><g id="beam14" serif:id="beam"><path id="beam15" serif:id="beam" d="M64.103,34.623c-2.7,0 -4.892,2.192 -4.892,4.892l-0,0.019c-0,2.699 2.192,4.891 4.892,4.891c2.699,0 4.891,-2.192 4.891,-4.891l0,-0.019c0,-2.7 -2.192,-4.892 -4.891,-4.892Z" style="fill:#fff;"/></g></g></g></svg>
+    </template>
+</a>
+
+<script>
+(function() {
+    const LOCAL_STORAGE_KEY = 'piccoloThemeMode'
+
+    var initialMode = localStorage.getItem(LOCAL_STORAGE_KEY)
+
+    if (initialMode) {
+        // Make sure the value in local storage is valid
+        if (['light', 'dark', 'darkest'].indexOf(initialMode) == -1) {
+            initialMode = 'light'
+            localStorage.setItem(LOCAL_STORAGE_KEY, initialMode)
+        }
+    } else {
+        // Check if the client prefers dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            initialMode = 'dark'
+        } else {
+            initialMode = 'light'
+        }
+        localStorage.setItem(LOCAL_STORAGE_KEY, initialMode)
+    }
+
+    document.documentElement.dataset.mode = initialMode
+
+    PetiteVue.createApp({
+        'mode': initialMode,
+        handleClick() {
+            let currentMode = this.mode
+
+            if (currentMode == 'light') {
+                this.mode = 'dark'
+            } else if (currentMode == 'dark') {
+                this.mode = 'darkest'
+            } else if (currentMode == 'darkest') {
+                this.mode = 'light'
+            }
+
+            document.documentElement.dataset.mode = this.mode
+            localStorage.setItem(LOCAL_STORAGE_KEY, this.mode)
+
+            console.log(this.mode)
+        }
+    }).mount('#mode_toggle')
+})()
+</script>
+            <p class="mobile_search_link">
+                <a href="search.html" title="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 65 64" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2">
+                        <path d="M14.873 40.009c-2.315-3.943-3.642-8.532-3.642-13.429C11.231 11.91 23.141 0 37.811 0s26.58 11.91 26.58 26.58-11.91 26.58-26.58 26.58a26.44 26.44 0 0 1-14.277-4.161L9.739 62.794a3.12 3.12 0 0 1-4.413 0L.913 58.382c-1.217-1.218-1.217-3.196 0-4.413l13.96-13.96zM37.811 8.054c10.225 0 18.526 8.301 18.526 18.526s-8.301 18.526-18.526 18.526-18.526-8.301-18.526-18.526S27.586 8.054 37.811 8.054z" fill="#fff" />
+                    </svg>
+                </a>
+            </p>
+        
+
+        <div class="searchbox_wrapper">
+            
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">CLI reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layout.html">Layout algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CITATION.html">Citing DemesDraw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">demes</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">demesdraw</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">demesdraw.utils</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="c1"># Output SVG.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib_inline.backend_inline</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
+<span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Ignore warnings about simultaneous pulses in our examples.</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="s2">&quot;Multiple pulses&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">,</span> <span class="s2">&quot;demes&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_from_yaml</span><span class="p">(</span><span class="n">yaml_filename</span><span class="p">):</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">yaml_filename</span><span class="p">)</span>
+    <span class="n">log_time</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log_time_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">log_size</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log_size_heuristic</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">size_history</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span>
+        <span class="n">invert_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_time</span><span class="o">=</span><span class="n">log_time</span><span class="p">,</span>
+        <span class="n">log_size</span><span class="o">=</span><span class="n">log_size</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span>
+        <span class="n">log_time</span><span class="o">=</span><span class="n">log_time</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ax1</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ax2</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">ax1</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">ax2</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+
+    
+<span class="c1"># Plot each example yaml in the examples folder.</span>
+<span class="n">cwd</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">examples</span> <span class="o">=</span> <span class="nb">list</span><span class="p">((</span><span class="n">cwd</span> <span class="o">/</span> <span class="s2">&quot;..&quot;</span> <span class="o">/</span> <span class="s2">&quot;examples&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;**/*.yaml&quot;</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">examples</span><span class="p">):</span>
+    <span class="n">plot_from_yaml</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/9cdc8c631a6c1a6ed2f9662c5f36f56fc45f8569bf3e6b719b0c1fdfb4e70b3b.svg" src="_images/9cdc8c631a6c1a6ed2f9662c5f36f56fc45f8569bf3e6b719b0c1fdfb4e70b3b.svg" />
+<img alt="_images/fd89a08081d317a0a79b13edca5f2de90de5fe934a537d5dcc3a159515a4ec50.svg" src="_images/fd89a08081d317a0a79b13edca5f2de90de5fe934a537d5dcc3a159515a4ec50.svg" />
+<img alt="_images/ff07e7f2aee1bdd583942eeeae33a843ca9748ef26e0818a6c1b7ed7303e5ca7.svg" src="_images/ff07e7f2aee1bdd583942eeeae33a843ca9748ef26e0818a6c1b7ed7303e5ca7.svg" />
+<img alt="_images/3a4548f6d3e5b4d08e3494575459b029d2db6f16de18dde4b5bf745c5f799df2.svg" src="_images/3a4548f6d3e5b4d08e3494575459b029d2db6f16de18dde4b5bf745c5f799df2.svg" />
+<img alt="_images/d76b7bbf3790a173f081159bef95bfc9a51356b192844421cfb08c30aede1437.svg" src="_images/d76b7bbf3790a173f081159bef95bfc9a51356b192844421cfb08c30aede1437.svg" />
+<img alt="_images/c805fc05e14bbdb3254261cbc07866092b3162a91a652a7e42692a62a08fad35.svg" src="_images/c805fc05e14bbdb3254261cbc07866092b3162a91a652a7e42692a62a08fad35.svg" />
+<img alt="_images/c88349812eaa3482dcb2b06498519f518d5d26ad61046fbed8752a788aa5e783.svg" src="_images/c88349812eaa3482dcb2b06498519f518d5d26ad61046fbed8752a788aa5e783.svg" />
+<img alt="_images/bfe1c6df3359ef64248bfbc305a364fd29d04366edb3e6e535e0376704aca275.svg" src="_images/bfe1c6df3359ef64248bfbc305a364fd29d04366edb3e6e535e0376704aca275.svg" />
+<img alt="_images/ea8089ddc2bd8fbd579c43860c42dfeb5203966d16e7170070b05acc58ecc400.svg" src="_images/ea8089ddc2bd8fbd579c43860c42dfeb5203966d16e7170070b05acc58ecc400.svg" />
+<img alt="_images/e32bf49ccb2c8359aea7c6108128b21ff8646f54f75ba55b4f607d7581797e99.svg" src="_images/e32bf49ccb2c8359aea7c6108128b21ff8646f54f75ba55b4f607d7581797e99.svg" />
+<img alt="_images/1272366f2ec96639b7d244afba82b0a7df9aab7261afaf177e2cdec306066577.svg" src="_images/1272366f2ec96639b7d244afba82b0a7df9aab7261afaf177e2cdec306066577.svg" />
+<img alt="_images/618171a993d25b59679a3b2d20dc2a990e39c5a4fa7be7dad921c7c861794e29.svg" src="_images/618171a993d25b59679a3b2d20dc2a990e39c5a4fa7be7dad921c7c861794e29.svg" />
+<img alt="_images/b8077997295000e93cfaa13a5922e3e0a41d3bb18b424c4cae602a5164961048.svg" src="_images/b8077997295000e93cfaa13a5922e3e0a41d3bb18b424c4cae602a5164961048.svg" />
+<img alt="_images/a4d782180fc6ac8c14b4ab26a2c9c40318c2c76699b82f684e1f460a21a1bb29.svg" src="_images/a4d782180fc6ac8c14b4ab26a2c9c40318c2c76699b82f684e1f460a21a1bb29.svg" />
+<img alt="_images/fb52ccac4dae4f885eee494a236815355bba52b4f224867bc7d3b0e4fc8ce2c3.svg" src="_images/fb52ccac4dae4f885eee494a236815355bba52b4f224867bc7d3b0e4fc8ce2c3.svg" />
+<img alt="_images/1c75082791dfa5198abd9db213d06bcf41b3587a42b3295ff21cfa6d26c07a47.svg" src="_images/1c75082791dfa5198abd9db213d06bcf41b3587a42b3295ff21cfa6d26c07a47.svg" />
+<img alt="_images/3c005307b3da2b88bdc1e66f5983e3ed5eeae814c82d6aceaf36d6cdd3349776.svg" src="_images/3c005307b3da2b88bdc1e66f5983e3ed5eeae814c82d6aceaf36d6cdd3349776.svg" />
+<img alt="_images/10ff725df712eeddc43c0cf25a08606b42bb2e2399ced2d37b3249307fe29a39.svg" src="_images/10ff725df712eeddc43c0cf25a08606b42bb2e2399ced2d37b3249307fe29a39.svg" />
+<img alt="_images/aaf4513cce0c535fdf37d2c73d0cebdf65efff2e8a9407023f4f3b281dcadd73.svg" src="_images/aaf4513cce0c535fdf37d2c73d0cebdf65efff2e8a9407023f4f3b281dcadd73.svg" />
+<img alt="_images/78fb15f2a130f45e4ca31b98be27484ff5241dd42e17ba961a019d54ef153754.svg" src="_images/78fb15f2a130f45e4ca31b98be27484ff5241dd42e17ba961a019d54ef153754.svg" />
+<img alt="_images/72461d7279763a5ca0000d75d21354c5e222ff6cdef3b0c810faa774b9e39634.svg" src="_images/72461d7279763a5ca0000d75d21354c5e222ff6cdef3b0c810faa774b9e39634.svg" />
+<img alt="_images/9959eae676979c4ed027c570443d6bfe890d71b5f772a889725572d35a439380.svg" src="_images/9959eae676979c4ed027c570443d6bfe890d71b5f772a889725572d35a439380.svg" />
+<img alt="_images/13f4e2d3dd97e9cd761d6527d70e53aeca6f5ed5c14ce4b353dfa16b5369f1a6.svg" src="_images/13f4e2d3dd97e9cd761d6527d70e53aeca6f5ed5c14ce4b353dfa16b5369f1a6.svg" />
+<img alt="_images/49fa227cca9793f36898772415b8eef78794c3d9a332250177ed51ca8051e399.svg" src="_images/49fa227cca9793f36898772415b8eef78794c3d9a332250177ed51ca8051e399.svg" />
+<img alt="_images/814e7069eec33c1e2e04b72abcf23aa95d6c46f55b013238f337488d2e4f2b54.svg" src="_images/814e7069eec33c1e2e04b72abcf23aa95d6c46f55b013238f337488d2e4f2b54.svg" />
+<img alt="_images/a70800956d7276294fb1980adbdc29dae1542dce73ac9b25e18dbdd7ae70cd7f.svg" src="_images/a70800956d7276294fb1980adbdc29dae1542dce73ac9b25e18dbdd7ae70cd7f.svg" />
+<img alt="_images/6b6141e167cb2f8000d7335e3079ed28798870ddb9454c6023340a60e1699181.svg" src="_images/6b6141e167cb2f8000d7335e3079ed28798870ddb9454c6023340a60e1699181.svg" />
+<img alt="_images/8d29a7cb414d9a8f7e2d7f9a33306c9c7a69453d269f8772a02c440c9f333581.svg" src="_images/8d29a7cb414d9a8f7e2d7f9a33306c9c7a69453d269f8772a02c440c9f333581.svg" />
+<img alt="_images/5d4a37edb4c7645de99ad28565ea27946a830bcab778916b9041d9ad2de1e207.svg" src="_images/5d4a37edb4c7645de99ad28565ea27946a830bcab778916b9041d9ad2de1e207.svg" />
+<img alt="_images/c3d77f3acfdd28a07861bd5a8f9615d6b68a30dcfe1ea7df981e5c0ca8396a1a.svg" src="_images/c3d77f3acfdd28a07861bd5a8f9615d6b68a30dcfe1ea7df981e5c0ca8396a1a.svg" />
+<img alt="_images/398980c216f384e32b9f2ff19a3b3c5d1c6e004f8428ba84ded21509e72ea42d.svg" src="_images/398980c216f384e32b9f2ff19a3b3c5d1c6e004f8428ba84ded21509e72ea42d.svg" />
+<img alt="_images/e521a65f006c7f4169ff4f70f4ffea185e0e930074b8d97414058a5164956bea.svg" src="_images/e521a65f006c7f4169ff4f70f4ffea185e0e930074b8d97414058a5164956bea.svg" />
+<img alt="_images/cffa4a132e05f8757186e98c96ec32fe7254c3570d6d753a1797c3854355ed56.svg" src="_images/cffa4a132e05f8757186e98c96ec32fe7254c3570d6d753a1797c3854355ed56.svg" />
+<img alt="_images/ee40d496547e26a2d283c050fdbc886a63cf5d58d4aa61817f5ad4ed907b9568.svg" src="_images/ee40d496547e26a2d283c050fdbc886a63cf5d58d4aa61817f5ad4ed907b9568.svg" />
+<img alt="_images/b3321f99c1e80bee80383019e1555b347bf1c1fe1721ce2a8b427ad952e12161.svg" src="_images/b3321f99c1e80bee80383019e1555b347bf1c1fe1721ce2a8b427ad952e12161.svg" />
+<img alt="_images/d5dbaf1d2526fcda1fa7d3dcc4904217180faf72805631da3061a5bfc85be6df.svg" src="_images/d5dbaf1d2526fcda1fa7d3dcc4904217180faf72805631da3061a5bfc85be6df.svg" />
+<img alt="_images/3c159d05372b57a5a483e0a5ae199e29dc0ec5ef17df44e8d8c3d9f8f023d009.svg" src="_images/3c159d05372b57a5a483e0a5ae199e29dc0ec5ef17df44e8d8c3d9f8f023d009.svg" />
+<img alt="_images/e05a1026132fb76f860eabf9ebc4fe28c3859395307e730a762869b2faa89644.svg" src="_images/e05a1026132fb76f860eabf9ebc4fe28c3859395307e730a762869b2faa89644.svg" />
+<img alt="_images/f863f4ebd1c9a61f3423a3b41f6bc3e6bc87df6cde1c987c60a42b7aaf3c4b5d.svg" src="_images/f863f4ebd1c9a61f3423a3b41f6bc3e6bc87df6cde1c987c60a42b7aaf3c4b5d.svg" />
+<img alt="_images/4957a4c5f9f4b03c49a8d1f8cbbdf24bd59d8b14604616adfa950f0d19f11c6c.svg" src="_images/4957a4c5f9f4b03c49a8d1f8cbbdf24bd59d8b14604616adfa950f0d19f11c6c.svg" />
+<img alt="_images/0318718188de3be4d5f1f0dcf2809cbef16485dde679f6c8f3c5dc858fff8a15.svg" src="_images/0318718188de3be4d5f1f0dcf2809cbef16485dde679f6c8f3c5dc858fff8a15.svg" />
+<img alt="_images/31c56ad8002c91f55e2020b922dcc8b33254199084b8f95349b5a36d2c676a35.svg" src="_images/31c56ad8002c91f55e2020b922dcc8b33254199084b8f95349b5a36d2c676a35.svg" />
+<img alt="_images/976f74a4477592bcbfe41d233c4e7f643c502815757128514cac13aa3ca9f35b.svg" src="_images/976f74a4477592bcbfe41d233c4e7f643c502815757128514cac13aa3ca9f35b.svg" />
+<img alt="_images/40be8d6137ae3912f27cb285163bfd5879d3b676883362f16cb429e1e0db92e6.svg" src="_images/40be8d6137ae3912f27cb285163bfd5879d3b676883362f16cb429e1e0db92e6.svg" />
+<img alt="_images/f96423df6e253944adbeec1663d4a1b072b30708d0271913cf84f3cbc2ae085c.svg" src="_images/f96423df6e253944adbeec1663d4a1b072b30708d0271913cf84f3cbc2ae085c.svg" />
+<img alt="_images/025e81e5bae6bc9ccf199785fa795faa0300fb5c8f9a155d83a1117742889aa4.svg" src="_images/025e81e5bae6bc9ccf199785fa795faa0300fb5c8f9a155d83a1117742889aa4.svg" />
+<img alt="_images/426001b1f18e2c8df8e7597b785793e197c2e710f4c51205654acd43288f4dc0.svg" src="_images/426001b1f18e2c8df8e7597b785793e197c2e710f4c51205654acd43288f4dc0.svg" />
+<img alt="_images/0d17f3203433db55951ccd7f102100c7fad26615fb88f88048fd48da4edb091e.svg" src="_images/0d17f3203433db55951ccd7f102100c7fad26615fb88f88048fd48da4edb091e.svg" />
+<img alt="_images/47c2710fa707b69bba4ccab350572dc8e21187bbdb1cdbc3d944101236ecda81.svg" src="_images/47c2710fa707b69bba4ccab350572dc8e21187bbdb1cdbc3d944101236ecda81.svg" />
+<img alt="_images/330d7d5263a226179226f60df4bfabf4b9e1598dca04d88b32f58ecf78fd1927.svg" src="_images/330d7d5263a226179226f60df4bfabf4b9e1598dca04d88b32f58ecf78fd1927.svg" />
+<img alt="_images/9ebfad9a94051fa600cbec93a116b3c512957489600d01d5cba7b29bb2f3da3d.svg" src="_images/9ebfad9a94051fa600cbec93a116b3c512957489600d01d5cba7b29bb2f3da3d.svg" />
+<img alt="_images/cb548ea4400b5b9e3326b2ea9a2159fe6d70c989cff573908326064f8990242d.svg" src="_images/cb548ea4400b5b9e3326b2ea9a2159fe6d70c989cff573908326064f8990242d.svg" />
+<img alt="_images/b37f7bf5910513ceb5e6d54f65fae48a155afebe2b246d416b97efc9322e07a1.svg" src="_images/b37f7bf5910513ceb5e6d54f65fae48a155afebe2b246d416b97efc9322e07a1.svg" />
+<img alt="_images/79ff3affeccb23e41380d9b68bebb147ba819d4f88c6b5bdc60956da8b6507c6.svg" src="_images/79ff3affeccb23e41380d9b68bebb147ba819d4f88c6b5bdc60956da8b6507c6.svg" />
+<img alt="_images/c412a842edcaf109f09c06da2ca717e67b93e899f2d65eeae9ab056758b18022.svg" src="_images/c412a842edcaf109f09c06da2ca717e67b93e899f2d65eeae9ab056758b18022.svg" />
+<img alt="_images/2450679464c3a71d8683b74285730e1bb08c2a01cb70633848438fba1372e52d.svg" src="_images/2450679464c3a71d8683b74285730e1bb08c2a01cb70633848438fba1372e52d.svg" />
+<img alt="_images/ceadcdc6e722f8ae81b73d9dd25617bac300814aa5e6e988565e72391b248f69.svg" src="_images/ceadcdc6e722f8ae81b73d9dd25617bac300814aa5e6e988565e72391b248f69.svg" />
+<img alt="_images/ccf8e6be43eb36cff36b5a8a0ce814f8253e944e469a61eab3ed2404bd795b63.svg" src="_images/ccf8e6be43eb36cff36b5a8a0ce814f8253e944e469a61eab3ed2404bd795b63.svg" />
+<img alt="_images/555abbc395a682315d7e9b01c5d79027d283d69cf26b9483ebf8947054389a35.svg" src="_images/555abbc395a682315d7e9b01c5d79027d283d69cf26b9483ebf8947054389a35.svg" />
+<img alt="_images/8bea6c40eebd4fe04d034145044d54aeb9e7130999d42b57198271dc1e78b29d.svg" src="_images/8bea6c40eebd4fe04d034145044d54aeb9e7130999d42b57198271dc1e78b29d.svg" />
+<img alt="_images/453ad93ca449b1c58fe183076b84476bd706a1afc42e6e1463a28c491e65cfe2.svg" src="_images/453ad93ca449b1c58fe183076b84476bd706a1afc42e6e1463a28c491e65cfe2.svg" />
+<img alt="_images/e2e8cb5300a555f543600c2de224ee7fb53597ac1a44b7d4f1d90f04fda564b2.svg" src="_images/e2e8cb5300a555f543600c2de224ee7fb53597ac1a44b7d4f1d90f04fda564b2.svg" />
+<img alt="_images/7491358ae54bb0ee0e2b3ec4f95cc3243fe8e9a192e440d48d38f8cb72aebcf9.svg" src="_images/7491358ae54bb0ee0e2b3ec4f95cc3243fe8e9a192e440d48d38f8cb72aebcf9.svg" />
+<img alt="_images/df13b7a2e88f4293d4dc8c10264388e8058a73ef7ca052a80c16ac0dfa9ee77f.svg" src="_images/df13b7a2e88f4293d4dc8c10264388e8058a73ef7ca052a80c16ac0dfa9ee77f.svg" />
+<img alt="_images/7ea8163590319edb282bd05c6d7dd6d26237a9965844c09f98fa6eb3e77f72a3.svg" src="_images/7ea8163590319edb282bd05c6d7dd6d26237a9965844c09f98fa6eb3e77f72a3.svg" />
+<img alt="_images/9c0513665d9cde8757c2030ad5edee391c391c6bcafc5c6e20109c97eeb1dff5.svg" src="_images/9c0513665d9cde8757c2030ad5edee391c391c6bcafc5c6e20109c97eeb1dff5.svg" />
+<img alt="_images/def15a0a85abede066ba530bef0cd38e1ad9594edc51612bc0a5ab57117cc967.svg" src="_images/def15a0a85abede066ba530bef0cd38e1ad9594edc51612bc0a5ab57117cc967.svg" />
+<img alt="_images/dd37ccf0d9a0ef91e2a48de9fd668928138b3435fdbcabfd885c420442a8a856.svg" src="_images/dd37ccf0d9a0ef91e2a48de9fd668928138b3435fdbcabfd885c420442a8a856.svg" />
+<img alt="_images/1bd5f3012c3aa5f3126a2047a9b9158968849d4f02e0b85e0284c790d32586e3.svg" src="_images/1bd5f3012c3aa5f3126a2047a9b9158968849d4f02e0b85e0284c790d32586e3.svg" />
+<img alt="_images/e327bd15aa9263ce884ab871600d739420b6caab11e717d19bf0a6c3702cb87c.svg" src="_images/e327bd15aa9263ce884ab871600d739420b6caab11e717d19bf0a6c3702cb87c.svg" />
+<img alt="_images/6662a363e9dc229174f8a76f0798c72e41a8f0f58f81ec8067175aaca0a81c1c.svg" src="_images/6662a363e9dc229174f8a76f0798c72e41a8f0f58f81ec8067175aaca0a81c1c.svg" />
+<img alt="_images/0fa07583bb2b6423d9bc7fd659f96f2cdee79b97eb7579bc074444fb5505c51e.svg" src="_images/0fa07583bb2b6423d9bc7fd659f96f2cdee79b97eb7579bc074444fb5505c51e.svg" />
+<img alt="_images/752702630c2b298aba2eef79b652f5955e09a11ca0f8388662fa42b1b162d2d9.svg" src="_images/752702630c2b298aba2eef79b652f5955e09a11ca0f8388662fa42b1b162d2d9.svg" />
+<img alt="_images/0e18c130226e49bf9705729a8a9adffe6222b8b258e84c8b92954186f8f95812.svg" src="_images/0e18c130226e49bf9705729a8a9adffe6222b8b258e84c8b92954186f8f95812.svg" />
+<img alt="_images/8dc9f2699cc5199c61ce26a0cee47fc9db7490d0cce8f312826bb34f79b01233.svg" src="_images/8dc9f2699cc5199c61ce26a0cee47fc9db7490d0cce8f312826bb34f79b01233.svg" />
+<img alt="_images/720f1552d5fbaa88b74d2b0016f4ed0af86cc8f341f046dcfe7c13a3ff8a61d7.svg" src="_images/720f1552d5fbaa88b74d2b0016f4ed0af86cc8f341f046dcfe7c13a3ff8a61d7.svg" />
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+    
+
+      <div class="clearer"></div>
+    </div>
+    <div class="button_nav_wrapper">
+        <div class="button_nav">
+            <div class="left">
+                
+                <a href="cli.html">
+                    <span class="icon">&lt;</span><span>CLI reference</span></a>
+                
+            </div>
+
+            <div class="right">
+                
+                    <a href="layout.html"><span>Layout algorithm</span><span class="icon">&gt;</span></a>
+                
+            </div>
+        </div>
+    </div>
+
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2021-2023.
+    </div>
+
+<p id="theme_credit">Styled using the <a href="https://github.com/piccolo-orm/piccolo_theme">Piccolo Theme</a></p>
+  </body>
+</html>
