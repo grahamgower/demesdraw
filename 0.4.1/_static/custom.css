@@ -1,0 +1,26 @@
+/*
+ * Fixes for images with transparent backgrounds and notebook output
+ * when using dark mode with piccolo_theme.
+ */
+.cell_output img {
+    background-color: white !important;
+}
+section img {
+    background-color: white !important;
+}
+div.cell summary {
+    background-color: #eeffcc !important;
+    color: #252630 !important;
+}
+div.cell_output,
+div.cell_input
+{
+    background: inherit !important;
+}
+
+.cell_output .output.text_plain,
+.cell_output .output.traceback,
+.cell_output .output.stream,
+.cell_output .output.stderr {
+    background: inherit !important;
+}
