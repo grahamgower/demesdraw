@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - name: download wheel
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: wheel-and-sdist
           path: dist/
@@ -73,7 +73,7 @@ jobs:
     environment: pypi
     steps:
       - name: download wheel
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: wheel-and-sdist
           path: dist/
